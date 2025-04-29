@@ -1,0 +1,872 @@
+{
+  "login": [
+    {
+      "admin": [
+        {
+          "username": "admin",
+          "password": "000000"
+        }
+      ],
+      "user": [
+        { "id": "user1", "username": "user", "password": "000000" },
+        { "id": "user2", "username": "user2", "password": "000000" }
+      ]
+    }
+  ],
+  "user_update": [
+    {
+      "id": "02",
+      "user_name": "Maybe",
+      "user_gender": "女",
+      "user_email": "123456@qq.com",
+      "user_phone": "12345678901",
+      "user_avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T21:56:28.881Z",
+      "updated_at": "2025-04-25T22:58:11.068Z"
+    },
+    {
+      "id": "03",
+      "user_name": "chris",
+      "user_password": "123456",
+      "user_gender": "女",
+      "user_email": "123456@qq.com",
+      "user_phone": "12345678901",
+      "user_avatar": "/images/users/avater/user1.png",
+      "updated_at": "2025-04-25T17:51:56.908Z",
+      "created_at": "2025-04-25T17:51:56.908Z"
+    }
+  ],
+  "product_list": [
+    {
+      "id": "P01",
+      "main_category": "热销",
+      "images": "/public/images/products_list/p01.png",
+      "title": "玫与蝶",
+      "price_info": {
+        "original_price": 399,
+        "current_price": 260
+      },
+      "sale_rate": 3,
+      "promotion": {
+        "is_hot": true,
+        "main_description": "[红玫瑰和香槟玫瑰的搭配 ] 红玫瑰14枝 香槟玫瑰5枝",
+        "keywords": ["玫瑰", "情人节", "蝴蝶"],
+        "flower_language": "爱你不止三千遍。"
+      }
+    },
+    {
+      "id": "P02",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p02/01.jpg",
+        "public/images/products_list/p02/02.jpg",
+        "public/images/products_list/p02/03.jpg",
+        "public/images/products_list/p02/04.jpg"
+      ],
+      "title": "星辰大海",
+      "price_info": {
+        "original_price": 380,
+        "current_price": 380
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": true,
+        "main_description": "[密西根碎冰蓝，清新而高雅] 碎冰蓝玫瑰52枝",
+        "keywords": ["蓝玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": "送给你的希望是星辰和大海"
+      }
+    },
+    {
+      "id": "P03",
+      "main_category": "上新",
+      "images": [
+        "public/images/products_list/p03/01.jpg",
+        "public/images/products_list/p03/02.jpg",
+        "public/images/products_list/p03/03.jpg",
+        "public/images/products_list/p03/04.jpg"
+      ],
+      "title": "灿烂阳光/鲜花抱抱桶",
+      "price_info": {
+        "original_price": 298,
+        "current_price": 298
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[热烈灿烂氛围抱抱桶] 向日葵2枝、橙色玫瑰国王日5枝、香槟玫瑰7枝",
+        "keywords": ["香槟玫瑰", "向日葵", "橙色玫瑰", "生日", "情人节"],
+        "flower_language": "坚强、阳光、希望和爱"
+      }
+    },
+    {
+      "id": "P04",
+      "main_category": "上新",
+      "images": [
+        "public/images/products_list/p04/01.jpg",
+        "public/images/products_list/p04/02.jpg",
+        "public/images/products_list/p04/03.jpg",
+        "public/images/products_list/p04/04.jpg"
+      ],
+      "title": "幸福时光/鲜花抱抱桶",
+      "price_info": {
+        "original_price": 460,
+        "current_price": 460
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[温柔又热烈配色] 红玫瑰11枝，粉色及红色康乃馨多枝",
+        "keywords": ["红玫瑰", "玫瑰", "生日", "母亲节", "康乃馨"],
+        "flower_language": "幸福美好时光、珍惜眼前人"
+      }
+    },
+    {
+      "id": "P05",
+      "main_category": "上新",
+      "images": [
+        "public/images/products_list/p05/01.jpg",
+        "public/images/products_list/p05/02.jpg",
+        "public/images/products_list/p05/03.jpg",
+        "public/images/products_list/p05/04.jpg"
+      ],
+      "title": "星河谜底/鲜花抱抱桶",
+      "price_info": {
+        "original_price": 420,
+        "current_price": 420
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[梦幻搭配蓝白色系] 骄傲白玫瑰15枝",
+        "keywords": ["白玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": "你是银河万顷之中最温柔的谜底。"
+      }
+    },
+    {
+      "id": "P06",
+      "main_category": "上新",
+      "images": [
+        "public/images/products_list/p06/01.jpg",
+        "public/images/products_list/p06/02.jpg",
+        "public/images/products_list/p06/03.jpg",
+        "public/images/products_list/p06/04.jpg"
+      ],
+      "title": "花漾甜蜜/鲜花抱抱桶",
+      "price_info": {
+        "original_price": 430,
+        "current_price": 430
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[粉色系花束融合] 粉玫瑰荔枝11枝、粉康乃馨5枝",
+        "keywords": ["粉红玫瑰", "玫瑰", "生日", "情人节"],
+        "flower_language": "甜蜜的爱恋、铭记于心"
+      }
+    },
+    {
+      "id": "P07",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p07/01.jpg",
+        "public/images/products_list/p07/02.jpg",
+        "public/images/products_list/p07/03.jpg",
+        "public/images/products_list/p07/04.jpg"
+      ],
+      "title": "有幸相郁/粉白郁金香",
+      "price_info": {
+        "original_price": 160,
+        "current_price": 160
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": true,
+        "main_description": "[清新搭配 颜值担当] 郁金香白色9枝，浅粉色郁金香10枝",
+        "keywords": ["郁金香", "生日"],
+        "flower_language": "有幸相遇，感恩有你"
+      }
+    },
+    {
+      "id": "P08",
+      "main_category": "热销",
+      "images": [
+        "public/images/products_list/p08/01.jpg",
+        "public/images/products_list/p08/02.jpg",
+        "public/images/products_list/p08/03.jpg",
+        "public/images/products_list/p08/04.jpg"
+      ],
+      "title": "心湖微蓝",
+      "price_info": {
+        "original_price": 99,
+        "current_price": 99
+      },
+      "sale_rate": 0,
+      "promotion": {
+        "is_hot": true,
+        "main_description": "[静谧、纯净、温柔] 白色骄傲11枝，康乃馨4枝，搭配桔梗、蝴蝶兰等",
+        "keywords": ["桔梗", "生日", "康乃馨"],
+        "flower_language": "献给静谧而温柔的你"
+      }
+    },
+    {
+      "id": "P09",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p09/01.jpg",
+        "public/images/products_list/p09/02.jpg",
+        "public/images/products_list/p09/03.jpg",
+        "public/images/products_list/p09/04.jpg"
+      ],
+      "title": "韩式系列/绽放",
+      "price_info": {
+        "original_price": 510,
+        "current_price": 460
+      },
+      "sale_rate": 10,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "向日葵+香槟玫瑰+多头玫瑰",
+        "keywords": ["向日葵", "玫瑰", "生日", "母亲节", "香槟玫瑰"],
+        "flower_language": "元气满满，永远向着太阳"
+      }
+    },
+    {
+      "id": "P10",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p10/01.jpg",
+        "public/images/products_list/p10/02.jpg",
+        "public/images/products_list/p10/03.jpg",
+        "public/images/products_list/p10/04.jpg"
+      ],
+      "title": "香妃",
+      "price_info": {
+        "original_price": 520,
+        "current_price": 400
+      },
+      "sale_rate": 23,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[清新脱俗] 香槟玫瑰9枝",
+        "keywords": ["香槟玫瑰", "玫瑰", "生日"],
+        "flower_language": "你的香气，是我思念的味道，那是最独特的。9朵香槟玫瑰，是天长地久的爱情，专属你我之间的真爱，无期限，永不凋零！"
+      }
+    },
+    {
+      "id": "P11",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p11/01.jpg",
+        "public/images/products_list/p11/02.jpg",
+        "public/images/products_list/p11/03.jpg",
+        "public/images/products_list/p11/04.jpg"
+      ],
+      "title": "真挚祝福",
+      "price_info": {
+        "original_price": 530,
+        "current_price": 420
+      },
+      "sale_rate": 21,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[暖阳系列] 红康乃馨33枝、香槟玫瑰9枝、向日葵3枝",
+        "keywords": ["香槟玫瑰", "玫瑰", "生日", "母亲节", "康乃馨", "向日葵"],
+        "flower_language": "一生中有很多祝福，最真挚的祝福送给你"
+      }
+    },
+    {
+      "id": "P12",
+      "main_category": "特价出售",
+      "images": [
+        "public/images/products_list/p12/01.jpg",
+        "public/images/products_list/p12/02.jpg",
+        "public/images/products_list/p12/03.jpg",
+        "public/images/products_list/p12/04.jpg"
+      ],
+      "title": "向日葵之歌",
+      "price_info": {
+        "original_price": 540,
+        "current_price": 430
+      },
+      "sale_rate": 20,
+      "promotion": {
+        "is_hot": false,
+        "main_description": "[心向暖阳，快乐相伴] 向日葵6枝",
+        "keywords": ["向日葵", "生日"],
+        "flower_language": "采一束阳光，制成书签，每一天都有温暖入怀。"
+      }
+    }
+  ],
+  "carts": [
+    {
+      "id": "C01",
+      "user_id": "1",
+      "created_at": "2023-04-13T10:30:00Z",
+      "items": [
+        {
+          "item_id": "item_01",
+          "product_id": "prod_658",
+          "sku_id": "sku_658_black_xl",
+          "quantity": 2,
+          "selected": true
+        }
+      ],
+      "total": 299,
+      "summary": {
+        "total_items": 3,
+        "total_quantity": 5,
+        "total_amount": 896
+      }
+    }
+  ],
+  "product_comments": [
+    {
+      "id": "bd9e",
+      "product_id": "P01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "没错",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:51:56.908Z",
+      "is_audited": true
+    },
+    {
+      "id": "1256",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "好烦啊，我好讨厌这个",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:53:27.907Z",
+      "is_audited": true
+    },
+    {
+      "id": "34cb",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "难过",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:53:35.099Z",
+      "is_audited": true
+    },
+    {
+      "id": "60f1",
+      "product_id": "P02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "12",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T20:21:45.747Z",
+      "is_audited": true
+    },
+    {
+      "id": "e6b5",
+      "product_id": "P02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "烦死了，讨厌代码",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-26T06:26:30.522Z",
+      "is_audited": true
+    },
+    {
+      "id": "9189",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "哈哈哈哈",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T09:45:34.357Z",
+      "is_audited": true
+    },
+    {
+      "id": "f246",
+      "product_id": "P07",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "哈哈哈",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T12:02:04.634Z",
+      "is_audited": true
+    },
+    {
+      "id": "b985",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T12:14:24.121Z",
+      "is_audited": true
+    },
+    {
+      "id": "5827",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T12:23:38.369Z",
+      "is_audited": true
+    },
+    {
+      "id": "5012",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "12",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T12:25:09.634Z",
+      "is_audited": true
+    },
+    {
+      "id": "197e",
+      "product_id": "P03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "害",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T12:25:21.284Z",
+      "is_audited": true
+    }
+  ],
+  "article_comments": [
+    {
+      "id": "ace5",
+      "article_id": "A02",
+      "content": "123",
+      "user_id": "2",
+      "avatar": "/images/users/avater/user1.png",
+      "user_name": "Maybe",
+      "created_at": "2025-04-25T16:01:24.724Z",
+      "is_audited": true
+    },
+    {
+      "id": "d32a",
+      "article_id": "A02",
+      "content": "123",
+      "user_id": "2",
+      "avatar": "/images/users/avater/user1.png",
+      "user_name": "Maybe",
+      "created_at": "2025-04-25T16:01:36.163Z",
+      "is_audited": true
+    },
+    {
+      "id": "7a9a",
+      "article_id": "A04",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:04:09.468Z",
+      "is_audited": true
+    },
+    {
+      "id": "e98b",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:19:49.135Z",
+      "is_audited": true
+    },
+    {
+      "id": "6e30",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:20:46.749Z",
+      "is_audited": true
+    },
+    {
+      "id": "623c",
+      "article_id": "A03",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "AI",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:21:15.511Z",
+      "is_audited": true
+    },
+    {
+      "id": "cd59",
+      "article_id": "A01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "牛思瑶",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:22:57.143Z",
+      "is_audited": true
+    },
+    {
+      "id": "4c96",
+      "article_id": "A01",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123456",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T16:32:19.689Z",
+      "is_audited": true
+    },
+    {
+      "id": "31b2",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "1234",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:04:15.754Z",
+      "is_audited": true
+    },
+    {
+      "id": "c220",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "123456",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:06:59.872Z",
+      "is_audited": true
+    },
+    {
+      "id": "092c",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "234567",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T17:17:59.859Z",
+      "is_audited": true
+    },
+    {
+      "id": "213d",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "好",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T20:14:43.003Z",
+      "is_audited": true
+    },
+    {
+      "id": "307e",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "你是对的",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-25T21:56:28.881Z",
+      "is_audited": true
+    },
+    {
+      "id": "20e6",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "12455",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T09:55:00.328Z",
+      "is_audited": true
+    },
+    {
+      "id": "3c6b",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "3333",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T09:56:04.166Z",
+      "is_audited": true
+    },
+    {
+      "id": "7a73",
+      "article_id": "A02",
+      "user_id": "2",
+      "user_name": "Maybe",
+      "content": "4444",
+      "avatar": "/images/users/avater/user1.png",
+      "created_at": "2025-04-27T09:56:28.844Z",
+      "is_audited": true
+    }
+  ],
+  "articles": [
+    {
+      "id": "A01",
+      "title": "给爷爷送花有哪些选择？给老人送花推荐！",
+      "cover_img": "/images/articles/A01/cover.jpg",
+      "content": "<p>爷爷今年70岁生日，如果要给他老人家送花，一般是怎么选择？有哪些寓意比较吉利的花适合送给老人，给爷爷送花有哪些选择？给老人送花推荐！</p><p>送长辈，当然是希望长辈身体健康，所以可以送盆长寿花。长寿花花期能持续好几个月，又比较耐旱，不怎么管就能开花多！</p><p>龟背竹叶片宽大，叶形像是乌龟的背部，而在中国，乌龟又寓意着长寿，所以也很适合给老人送一盆。龟背竹要勤浇水，春秋大概3-5天浇1次，保证湿度就能长得旺！</p><p>万年青常用来形容老人，所以适合送给长辈，希望他们寿比南山。一般放在室内客厅等散射光好的地方养护即可，平常看到土干了后再浇，别让盆里积水烂根。</p><p>如果不想送上边那些花，也可以选择送一些盆景类，像是松柏、银杏、红枫等，从而表达对长辈的崇敬之情。</p><p>蝴蝶兰看上去像是一只只小蝴蝶在飞，而且颜色又是紫红色的，非常适合送老人家。蝴蝶兰平常有散射光就能长，但是想要开花，还是得多晒太阳。</p><p>既然是新装修的房子，那肯定还是要送盆吊兰来净化空气啦！吊兰可以吸收空气中的苯、甲醛等有害物质，而且还是特别好养的花，非常适合送给老人~</p>",
+      "related_products": ["P02", "P03"],
+      "view_count": 6,
+      "tags": ["爷爷", "送花"],
+      "status": "published",
+      "publish_time": "2018-10-10T09:00:00Z"
+    },
+    {
+      "id": "A02",
+      "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
+      "cover_img": "/images/articles/A02/cover.jpg",
+      "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫\"除\"，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
+      "related_products": ["P02", "P03"],
+      "view_count": 2,
+      "tags": ["送花", "鲜花生活"],
+      "status": "published",
+      "publish_time": "2023-02-13T09:00:00Z"
+    },
+    {
+      "id": "A03",
+      "title": "绣球脱水如何急救？绣球保水措施揭秘！",
+      "cover_img": "/images/articles/A03/cover.jpg",
+      "content": "<p>绣球很需要水，这是对绣球的最基本的认知，但是也别担心承受不了损耗风险而不敢选购，万事都是相对的，绣球脱水了我们可以挽救，或者提前预防，绣球脱水如何急救？绣球保水措施揭秘！</p><p>保水管。网上有均码带杆的和不带杆的保水管，带杆比较适合运用在手捧花或花束里，不带杆的适合运用在架构花艺或花束以及平时的花艺布置及花盒中。</p><p>大家可以根据作品情况来选择合适的保水管，没用过的朋友可能还不知道保水管的开口处是有弹性的，虽然看着洞口小，但是比较粗的枝条也可以放进去，这样会更稳固。</p><p>可利鲜或者花之寿品牌都有喷剂，是液体的，这些材料在某宝都有，价格美丽，无需亲自跑当地资材店买，这个方法适用场景很多，平时做婚礼宴会或者打花束及手捧，在客人看到之前都可以先喷喷，尤其手捧花，如果枝条底部没有保水管，在送出之前最好喷几下。</p><p>保鲜膜就类似市面上包在半个西瓜表面的，棉布就类似街边卖水果的喜欢盖在上面的那种，只要能保湿就行，包括用卫生纸都可以。</p><p>同样的办法，在把这些介质盖在绣球作品表面前，可以先在绣球表面喷点营养液。所以除了在花瓶内装满水，还要时不时在花头上喷水。</p>",
+      "related_products": ["P02", "P03"],
+      "view_count": 56,
+      "tags": ["鲜花生活"],
+      "status": "published",
+      "publish_time": "2016-03-10T09:00:00Z"
+    },
+    {
+      "id": "A04",
+      "title": "奶油春天在花艺中的运用！",
+      "cover_img": "/images/articles/A04/cover.jpg",
+      "content": "<p>奶油春天的这种「粉」是偏低饱和度的粉色，和其他大黄、大橙、大红的高饱和色彩比，天然自带性冷淡属性，因此但看就已比一般的非洲菊高大上太多。</p><p>其次是花瓣造型的不同，传统非洲菊花瓣整齐，一瓣一瓣非常捋顺，奶油春天的花瓣就像爆炸头，乱蓬蓬的，花瓣细窄而尖，乍一看还以为是纸剪成的呢。</p><p>奶油春天适合与粉色、浅色系花材搭配，选用沉色包装纸，可以突出它的粉色，若用浅色包装纸，配材上选择黄白色系，更有春天的感觉。</p><p>不过如果只是单插，没有配花，也略微单调。</p><p>几乎所有的花艺师都不会多用，1-3朵足矣，数量不多，足够吸睛。除了甜美，若使用大量自然系花材搭配，它也颇能胜任乡村风。</p><p>如果包装纸是透明色，会增强轻盈感一些，比较空灵哦。</p>",
+      "related_products": ["P02", "P03"],
+      "view_count": 16,
+      "tags": ["鲜花生活"],
+      "status": "published",
+      "publish_time": "2025-04-01T09:00:00Z"
+    }
+  ],
+  "normal_orders": [
+    {
+      "id": "U1",
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P02",
+          "quantity": 1,
+          "single_price": 399
+        }
+      ],
+      "status": "进行中",
+      "created_at": "2025-04-13T10:15:00Z"
+    },
+    {
+      "id": "U2",
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P03",
+          "quantity": 1,
+          "single_price": 100
+        }
+      ],
+      "status": "已完成",
+      "created_at": "2025-04-01T10:15:00Z"
+    },
+    {
+      "id": "U3",
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P06",
+          "quantity": 1,
+          "single_price": 299
+        }
+      ],
+      "status": "已取消",
+      "created_at": "2025-02-13T09:15:00Z"
+    }
+  ],
+  "addresses": [
+    {
+      "id": "1",
+      "user_id": "1",
+      "consignee": "李女士",
+      "phone": "13800138000",
+      "region": ["上海市", "浦东新区", "陆家嘴街道"],
+      "detail": "世纪大道100号",
+      "is_default": false
+    },
+    {
+      "id": "2",
+      "user_id": "2",
+      "consignee": "陈先生",
+      "phone": "13800138001",
+      "region": ["北京市", "海淀区", "中关村街道"],
+      "detail": "中关村大街1号",
+      "is_default": false
+    },
+    {
+      "user_id": "02",
+      "consignee": "555",
+      "phone": "13800138003",
+      "region": "成都市/青羊区",
+      "detail": "55",
+      "is_default": false,
+      "id": "4"
+    },
+    {
+      "user_id": "02",
+      "consignee": "1111111",
+      "phone": "147777777",
+      "region": ["成都市/金牛区"],
+      "detail": "1111111",
+      "is_default": false,
+      "id": "6004"
+    },
+    {
+      "user_id": "02",
+      "consignee": "1111",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "1111",
+      "is_default": false,
+      "id": "a09b"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "14726839224",
+      "region": ["成都市/青羊区"],
+      "detail": "11",
+      "is_default": false,
+      "id": "0dea"
+    },
+    {
+      "user_id": "02",
+      "consignee": "11",
+      "phone": "11111111111",
+      "region": "成都市/成华区",
+      "detail": "111",
+      "is_default": false,
+      "id": "fc3d"
+    },
+    {
+      "user_id": "02",
+      "consignee": "14",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "444",
+      "is_default": false,
+      "id": "5f12"
+    },
+    {
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "12",
+      "is_default": false,
+      "id": "ace0"
+    },
+    {
+      "id": "1af1",
+      "user_id": "02",
+      "consignee": "111",
+      "phone": "1111111111",
+      "region": "成都市/郫都区",
+      "detail": "1111",
+      "is_default": false
+    },
+    {
+      "id": "b497",
+      "user_id": "02",
+      "consignee": "刘盈盈",
+      "phone": "14726839224",
+      "region": "成都市/郫都区",
+      "detail": "成都锦城学院",
+      "is_default": true
+    }
+  ],
+  "carousel": [
+    {
+      "id": "1",
+      "img": "/public/images/carousel-img/carousel-1.png"
+    },
+    {
+      "id": "2",
+      "img": "/public/images/carousel-img/carousel-2.png"
+    },
+    {
+      "id": "3",
+      "img": "/public/images/carousel-img/carousel-3.png"
+    },
+    {
+      "id": "4",
+      "img": "/public/images/carousel-img/carousel-4.png"
+    }
+  ],
+  "cart": [
+    {
+      "id": "P01",
+      "quantity": 9
+    },
+    {
+      "id": "P02",
+      "quantity": 29
+    },
+    {
+      "id": "P04",
+      "quantity": 1
+    }
+  ],
+  "custom": [
+    {
+      "id": "1",
+      "user_id": "02",
+      "custom_img": "",
+      "email": "123456@qq.com",
+      "phone": "12345678901",
+      "custom_message": "贺卡写上生日快乐",
+      "created_at": "2025-04-25T17:51:56.908Z"
+    },
+    {
+      "id": "0ad7",
+      "user_id": "02",
+      "custom_img": "",
+      "email": "maybe3340458807@163.com",
+      "phone": "111111",
+      "custom_message": "哈哈哈哈",
+      "created_at": "2025-04-25T18:11:43.222Z"
+    }
+  ],
+  "feedback": [
+    {
+      "id": "1",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "123456@qq.com",
+      "phone": "12345678901",
+      "feedback_message": "花布很好看，我很喜欢",
+      "created_at": "2025-04-25T17:51:56.908Z"
+    },
+    {
+      "id": "4eb5",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.com",
+      "phone": "14726839224",
+      "feedback_message": "12",
+      "created_at": "2025-04-25T18:08:17.845Z"
+    },
+    {
+      "id": "bc47",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.com",
+      "phone": "14726839224",
+      "feedback_message": "1",
+      "created_at": "2025-04-25T18:15:35.320Z"
+    },
+    {
+      "id": "14ee",
+      "user_id": "02",
+      "name": "刘盈盈",
+      "email": "maybe3340458807@163.co",
+      "phone": "14726839224",
+      "feedback_message": "123",
+      "created_at": "2025-04-25T18:15:40.526Z"
+    }
+  ]
+}

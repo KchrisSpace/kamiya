@@ -1,0 +1,106 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 主色调 */
+  --primary-color: #ffb6c1; /* 浅粉色 */
+  --secondary-color: #fff5ee; /* 贝壳白 */
+  --accent-color: #deb887; /* 浅棕色 */
+  --text-color: #4a4a4a; /* 深灰色 */
+  --light-text: #ffffff; /* 白色 */
+
+  /* 背景色 */
+  --bg-primary: #fff5ee; /* 贝壳白 */
+  --bg-secondary: #ffe4e1; /* 浅玫瑰色 */
+
+  /* 按钮颜色 */
+  --btn-primary: #ffb6c1;
+  --btn-hover: #ffc0cb;
+  --btn-text: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-color);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/* 全局链接样式 */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+/* 全局按钮样式 */
+button {
+  background-color: var(--btn-primary);
+  color: var(--btn-text);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--btn-hover);
+}
+
+/* 全局卡片样式 */
+.card {
+  background-color: var(--light-text);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 8px;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
