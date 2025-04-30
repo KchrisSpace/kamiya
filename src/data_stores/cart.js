@@ -4,11 +4,10 @@ import axios from "axios";
 
 export const useCartStore = defineStore("cart", () => {
   // 从 localStorage 初始化购物车数据
-  const initialCartItems = JSON.parse(
-    localStorage.getItem("cartItems") || "[]"
-  );
+  const initialCartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
   const cartItems = ref(initialCartItems);
   const itemTotals = ref({});
+  const isLoading = ref(false);
 
   // 监听购物车变化并保存到 localStorage
   watch(
@@ -21,6 +20,8 @@ export const useCartStore = defineStore("cart", () => {
 
   // 获取购物车数据
   const fetchCartData = async () => {
+    if (isLoading.value) return;
+    isLoading.value = true;
     try {
       const cartResponse = await axios.get("http://localhost:3001/cart");
       cartItems.value = cartResponse.data;
@@ -43,8 +44,15 @@ export const useCartStore = defineStore("cart", () => {
       });
     } catch (error) {
       console.error("获取购物车数据失败:", error);
+    } finally {
+      isLoading.value = false;
     }
   };
+
+  // 初始化时获取数据
+  if (cartItems.value.length > 0) {
+    fetchCartData();
+  }
 
   // 计算总价
   const total = computed(() => {
@@ -69,15 +77,8 @@ export const useCartStore = defineStore("cart", () => {
       cartItems.value = cartItems.value.filter((item) => item.id !== productId);
       // 删除对应的总价记录
       delete itemTotals.value[productId];
-      // 重新获取购物车数据以确保同步
-      await fetchCartData();
-      // 重新计算总价
-      cartItems.value.forEach((item) => {
-        if (!itemTotals.value[item.id]) {
-          itemTotals.value[item.id] =
-            (item.product?.price_info?.current_price || 0) * item.quantity;
-        }
-      });
+      // 更新本地存储
+      localStorage.setItem("cartItems", JSON.stringify(cartItems.value));
     } catch (error) {
       console.error("删除商品失败:", error);
     }
@@ -149,5 +150,6 @@ export const useCartStore = defineStore("cart", () => {
     updateCartItem,
     clearCart,
     addItem,
+    isLoading
   };
 });

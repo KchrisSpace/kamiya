@@ -28,8 +28,12 @@
           </label>
           <a href="#" class="forgot-password">忘记密码？</a>
         </div>
-        <button type="submit" class="submit-button" @click="handleLogin">
-          登录
+        <button
+          type="submit"
+          class="submit-button"
+          :disabled="userStore.loading"
+        >
+          {{ userStore.loading ? "登录中..." : "登录" }}
         </button>
         <div class="auth-switch">
           还没有账号？
@@ -40,18 +44,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Login",
-};
-</script>
-
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 import { useUserStore } from "../../data_stores/user";
-import { ElMessage } from "element-plus";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -63,62 +59,14 @@ const formData = ref({
 });
 
 const handleLogin = async () => {
-  try {
-    // 验证管理员账号
-    if (
-      formData.value.username === "admin" &&
-      formData.value.password === "000000"
-    ) {
-      // 更新用户状态
-      userStore.setUserInfo({
-        username: "admin",
-        role: "admin",
-      });
-      userStore.setToken("admin-token");
+  const { success, isAdmin } = await userStore.login(
+    formData.value.username,
+    formData.value.password,
+    formData.value.remember
+  );
 
-      // 如果选择记住我，设置更长的过期时间
-      if (formData.value.remember) {
-        localStorage.setItem("remember", "true");
-      }
-
-      ElMessage.success("登录成功");
-      router.push("/admin/dashboard");
-      return;
-    }
-
-    // 验证普通用户账号
-    const response = await axios.get("http://localhost:3001/login");
-    const users = response.data[0].user;
-    const user = users.find(
-      (u) =>
-        u.username === formData.value.username &&
-        u.password === formData.value.password
-    );
-
-    if (user) {
-      // 更新用户状态
-      userStore.setUserInfo({
-        id: user.id,
-        username: user.username,
-        role: "user",
-      });
-      userStore.setToken("user-token");
-
-      // 如果选择记住我，设置更长的过期时间
-      if (formData.value.remember) {
-        localStorage.setItem("remember", "true");
-      }
-
-      ElMessage.success("登录成功");
-      router.push("/");
-      return;
-    }
-
-    // 验证失败
-    ElMessage.error("用户名或密码错误");
-  } catch (error) {
-    console.error("登录失败:", error);
-    ElMessage.error("登录失败，请稍后重试");
+  if (success) {
+    router.push(isAdmin ? "/admin/dashboard" : "/");
   }
 };
 </script>
@@ -210,6 +158,11 @@ const handleLogin = async () => {
 
 .submit-button:hover {
   opacity: 0.9;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .auth-switch {

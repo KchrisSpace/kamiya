@@ -34,14 +34,12 @@
       <template v-else>
         <el-dropdown trigger="hover" @command="handleCommand">
           <span class="menu-item">
-            <el-avatar :size="24" :src="userAvatar" />
-            <span>{{ userStore.userInfo?.username }}</span>
+            <el-avatar :size="24" :src="userStore.userAvatar" />
+            <span>{{ userStore.userNickname }}</span>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="profile">个人中心</el-dropdown-item>
-              <el-dropdown-item command="orders">我的订单</el-dropdown-item>
-              <el-dropdown-item command="favorites">我的收藏</el-dropdown-item>
               <el-dropdown-item divided command="logout"
                 >退出登录</el-dropdown-item
               >
@@ -49,36 +47,34 @@
           </template>
         </el-dropdown>
       </template>
-      <el-badge :value="cartCount" :hidden="cartCount === 0" class="cart-badge">
+      <el-badge class="cart-badge">
         <span class="menu-item" @click="goToCart">
           <el-icon><ShoppingCart /></el-icon>
           <span>购物车</span>
         </span>
       </el-badge>
-      <span class="menu-item" @click="goToFavorites">
-        <el-icon><Star /></el-icon>
-        <span>收藏</span>
-      </span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useUserStore } from "../../data_stores/user";
-import { User, ShoppingCart, Star } from "@element-plus/icons-vue";
+import { useUserStore } from "../../../data_stores/user";
+import { User, ShoppingCart } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const activeIndex = ref(route.path);
-const cartCount = ref(0); // 这里可以从购物车store获取实际数量
 
 const isLoggedIn = computed(() => userStore.isLoggedIn);
-const userAvatar = computed(
-  () => userStore.userInfo?.avatar || "/public/default-avatar.png"
-);
+
+onMounted(async () => {
+  if (userStore.isLoggedIn) {
+    await userStore.getUserInfo();
+  }
+});
 
 const handleCommand = (command) => {
   switch (command) {
@@ -91,12 +87,6 @@ const handleCommand = (command) => {
     case "profile":
       router.push("/profile");
       break;
-    case "orders":
-      router.push("/order");
-      break;
-    case "favorites":
-      router.push("/favorites");
-      break;
     case "logout":
       userStore.logout();
       router.push("/");
@@ -106,10 +96,6 @@ const handleCommand = (command) => {
 
 const goToCart = () => {
   router.push("/cart");
-};
-
-const goToFavorites = () => {
-  router.push("/favorites");
 };
 
 watch(
@@ -147,12 +133,6 @@ watch(
   width: auto;
 }
 
-.logo span {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-}
-
 .el-menu-demo {
   flex: 1;
   max-width: 1200px;
@@ -184,6 +164,7 @@ watch(
   padding: 0;
   height: 100%;
   line-height: 60px;
+  outline: none;
 }
 
 .menu-item:hover {
@@ -199,16 +180,18 @@ watch(
   vertical-align: middle;
 }
 
+.menu-item .el-avatar {
+  margin-right: 4px;
+  width: 24px;
+  height: 24px;
+}
+
 .cart-badge {
   margin-right: 8px;
 }
 
 :deep(.el-badge__content) {
   background-color: #f26371;
-}
-
-:deep(.el-dropdown-menu__item) {
-  padding: 8px 20px;
 }
 
 :deep(.el-dropdown-menu__item:hover) {
@@ -222,11 +205,16 @@ watch(
 
 :deep(.el-dropdown) {
   border: none;
+  outline: none;
 }
 
 :deep(.el-dropdown .el-dropdown-link) {
   color: #424443;
   font-size: 14px;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 :deep(.el-dropdown .el-dropdown-link:hover) {
@@ -240,13 +228,45 @@ watch(
 :deep(.el-menu-item) {
   height: 60px;
   line-height: 60px;
+  outline: none;
+}
+
+:deep(.el-menu-item:hover) {
+  outline: none;
+}
+
+:deep(.el-menu-item:focus) {
+  outline: none;
 }
 
 :deep(.el-dropdown) {
   cursor: pointer;
+  outline: none;
 }
 
 :deep(.el-avatar) {
-  margin-right: 20px;
+  margin-right: 4px;
+  width: 24px;
+  height: 24px;
+}
+
+:deep(.el-dropdown__popper) {
+  outline: none;
+}
+
+:deep(.el-dropdown__popper .el-dropdown-menu) {
+  outline: none;
+}
+
+:deep(.el-dropdown__popper .el-dropdown-menu__item) {
+  outline: none;
+}
+
+:deep(.el-dropdown__popper .el-dropdown-menu__item:focus) {
+  outline: none;
+}
+
+:deep(.el-dropdown__popper .el-dropdown-menu__item:hover) {
+  outline: none;
 }
 </style>

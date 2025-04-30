@@ -104,3 +104,44 @@ button:hover {
     background-color: #f9f9f9;
   }
 }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Harmony Sans";
+  src: url("/fonts/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Alibaba";
+  src: url("/fonts/Alibaba/Alibaba-PuHuiTi-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanazono Mincho";
+  src: url("/fonts/花园明朝体/花园明朝体-HanaMinA.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hanazono";
+  src: url("/fonts/花园明朝体/RiBenHuaYuanMingChaoTi-2.woff2") format("woff2");
+}
+
+/* 自定义选择器样式 */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+ 

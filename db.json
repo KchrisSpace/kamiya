@@ -1,34 +1,31 @@
 {
-  "login": [
+  "users": [
     {
-      "admin": [
-        {
-          "username": "admin",
-          "password": "000000"
-        }
-      ],
-      "user": [
-        {
-          "id": "user1",
-          "username": "user",
-          "password": "000000"
-        },
-        {
-          "id": "user2",
-          "username": "user2",
-          "password": "000000"
-        }
-      ]
-    }
-  ],
-  "user_info": [
+      "id": "admin",
+      "username": "admin",
+      "password": "000000",
+      "user-info": {
+        "nickname": "管理员",
+        "avatar": "https://s1.aigei.com/src/img/jpg/88/883f9f9c8dfd4f8b99cc8abe8c997333.jpg?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:UvSsaPJ453FbKHB7XmV-aIOoww8="
+      }
+    },
     {
       "id": "user1",
-      "avatar": "/public/images/users/avater/user1.png"
+      "username": "user1",
+      "user-info": {
+        "nickname": "花花",
+        "avatar": "https://s1.aigei.com/src/img/jpg/88/883f9f9c8dfd4f8b99cc8abe8c997333.jpg?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:UvSsaPJ453FbKHB7XmV-aIOoww8="
+      },
+      "password": "000000"
     },
     {
       "id": "user2",
-      "avatar": "/public/images/users/avater/user2.png"
+      "username": "user2",
+      "password": "000000",
+      "user-info": {
+        "nickname": "小草",
+        "avatar": "/images/users/avater/user1.png"
+      }
     }
   ],
   "products_list": [
@@ -283,7 +280,8 @@
           "水果",
           "清新"
         ]
-      }
+      },
+      "status": "1"
     }
   ],
   "carts": [
@@ -894,6 +892,10 @@
     {
       "quantity": 1,
       "id": "P02"
+    },
+    {
+      "id": "P11",
+      "quantity": 1
     }
   ],
   "custom": [
