@@ -38,6 +38,18 @@ const router = createRouter({
           name: "contact",
           component: () => import("../views/contact/contact.vue"),
         },
+        {
+          path: "/product/:id",
+          name: "ProductDetail",
+          component: () =>
+            import("../views/store/components/product-detail.vue"),
+          props: true,
+        },
+        {
+          path: "/create-order",
+          name: "CreateOrder",
+          component: () => import("../views/order/components/create-order.vue"),
+        },
       ],
     },
     {
@@ -49,6 +61,41 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: () => import("../views/register/register.vue"),
+    },
+    {
+      path: "/admin",
+      component: () => import("../layout/admin/AdminLayout.vue"),
+      children: [
+        {
+          path: "",
+          redirect: "/admin/dashboard",
+        },
+        {
+          path: "dashboard",
+          name: "adminDashboard",
+          component: () => import("../views/admin/dashboard/dashboard.vue"),
+        },
+        {
+          path: "products",
+          name: "adminProducts",
+          component: () => import("../views/admin/products/products.vue"),
+        },
+        {
+          path: "orders",
+          name: "adminOrders",
+          component: () => import("../views/admin/orders/orders.vue"),
+        },
+        {
+          path: "users",
+          name: "adminUsers",
+          component: () => import("../views/admin/users/users.vue"),
+        },
+        {
+          path: "settings",
+          name: "adminSettings",
+          component: () => import("../views/admin/settings/settings.vue"),
+        },
+      ],
     },
   ],
 });

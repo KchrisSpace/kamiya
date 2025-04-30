@@ -22,14 +22,14 @@ export const useCartStore = defineStore("cart", () => {
   // 获取购物车数据
   const fetchCartData = async () => {
     try {
-      const cartResponse = await axios.get("http://localhost:3000/cart");
+      const cartResponse = await axios.get("http://localhost:3001/cart");
       cartItems.value = cartResponse.data;
 
       // 获取每个商品的详细信息
       for (const item of cartItems.value) {
         try {
           const productResponse = await axios.get(
-            `http://localhost:3000/product_list/${item.id}`
+            `http://localhost:3001/products_list/${item.id}`
           );
           item.product = productResponse.data;
         } catch (error) {
@@ -64,7 +64,7 @@ export const useCartStore = defineStore("cart", () => {
   // 删除商品
   const removeItem = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3000/cart/${productId}`);
+      await axios.delete(`http://localhost:3001/cart/${productId}`);
       // 从本地列表中移除商品
       cartItems.value = cartItems.value.filter((item) => item.id !== productId);
       // 删除对应的总价记录
@@ -86,7 +86,7 @@ export const useCartStore = defineStore("cart", () => {
   // 更新商品数量
   const updateCartItem = async (item) => {
     try {
-      await axios.put(`http://localhost:3000/cart/${item.id}`, {
+      await axios.put(`http://localhost:3001/cart/${item.id}`, {
         quantity: item.quantity,
       });
     } catch (error) {
@@ -105,12 +105,12 @@ export const useCartStore = defineStore("cart", () => {
 
       if (existingItem) {
         // 如果商品已存在，更新数量
-        await axios.put(`http://localhost:3000/cart/${productId}`, {
+        await axios.put(`http://localhost:3001/cart/${productId}`, {
           quantity: existingItem.quantity + quantity,
         });
       } else {
         // 如果商品不存在，添加新商品
-        await axios.post("http://localhost:3000/cart", {
+        await axios.post("http://localhost:3001/cart", {
           id: productId,
           quantity: quantity,
         });

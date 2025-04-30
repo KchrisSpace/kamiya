@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     goToCart() {
-      this.$router.push("/cart"); // 假设购物车的路由是 '/cart'
+      this.$router.push("/cart");  
     },
   },
 };

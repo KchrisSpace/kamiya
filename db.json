@@ -8,8 +8,16 @@
         }
       ],
       "user": [
-        { "id": "user1", "username": "user", "password": "000000" },
-        { "id": "user2", "username": "user2", "password": "000000" }
+        {
+          "id": "user1",
+          "username": "user",
+          "password": "000000"
+        },
+        {
+          "id": "user2",
+          "username": "user2",
+          "password": "000000"
+        }
       ]
     }
   ],
@@ -36,7 +44,7 @@
       "created_at": "2025-04-25T17:51:56.908Z"
     }
   ],
-  "product_list": [
+  "products_list": [
     {
       "id": "P01",
       "main_category": "热销",
@@ -49,174 +57,158 @@
       "sale_rate": 3,
       "promotion": {
         "is_hot": true,
-        "main_description": "[红玫瑰和香槟玫瑰的搭配 ] 红玫瑰14枝 香槟玫瑰5枝",
-        "keywords": ["玫瑰", "情人节", "蝴蝶"],
-        "flower_language": "爱你不止三千遍。"
+        "material": "安佳动物奶油，进口巧克力，装饰纸",
+        "keywords": [
+          "玫瑰",
+          "情人节",
+          "蝴蝶"
+        ]
       }
     },
     {
       "id": "P02",
       "main_category": "热销",
-      "images": [
-        "public/images/products_list/p02/01.jpg",
-        "public/images/products_list/p02/02.jpg",
-        "public/images/products_list/p02/03.jpg",
-        "public/images/products_list/p02/04.jpg"
-      ],
-      "title": "星辰大海",
+      "images": "/public/images/products_list/p02.png",
+      "title": "甜蜜时光",
       "price_info": {
-        "original_price": 380,
-        "current_price": 380
+        "original_price": 299,
+        "current_price": 199
       },
-      "sale_rate": 0,
+      "sale_rate": 2,
       "promotion": {
         "is_hot": true,
-        "main_description": "[密西根碎冰蓝，清新而高雅] 碎冰蓝玫瑰52枝",
-        "keywords": ["蓝玫瑰", "玫瑰", "生日", "情人节"],
-        "flower_language": "送给你的希望是星辰和大海"
+        "material": "新鲜水果，动物奶油，巧克力片",
+        "keywords": [
+          "水果",
+          "生日",
+          "甜蜜"
+        ]
       }
     },
     {
       "id": "P03",
-      "main_category": "上新",
-      "images": [
-        "public/images/products_list/p03/01.jpg",
-        "public/images/products_list/p03/02.jpg",
-        "public/images/products_list/p03/03.jpg",
-        "public/images/products_list/p03/04.jpg"
-      ],
-      "title": "灿烂阳光/鲜花抱抱桶",
+      "main_category": "新品",
+      "images": "/public/images/products_list/p03.png",
+      "title": "春日花园",
       "price_info": {
-        "original_price": 298,
-        "current_price": 298
+        "original_price": 259,
+        "current_price": 199
       },
-      "sale_rate": 0,
+      "sale_rate": 1,
       "promotion": {
         "is_hot": false,
-        "main_description": "[热烈灿烂氛围抱抱桶] 向日葵2枝、橙色玫瑰国王日5枝、香槟玫瑰7枝",
-        "keywords": ["香槟玫瑰", "向日葵", "橙色玫瑰", "生日", "情人节"],
-        "flower_language": "坚强、阳光、希望和爱"
+        "material": "当季鲜花，绿叶植物，装饰丝带",
+        "keywords": [
+          "春天",
+          "花园",
+          "清新"
+        ]
       }
     },
     {
       "id": "P04",
-      "main_category": "上新",
-      "images": [
-        "public/images/products_list/p04/01.jpg",
-        "public/images/products_list/p04/02.jpg",
-        "public/images/products_list/p04/03.jpg",
-        "public/images/products_list/p04/04.jpg"
-      ],
-      "title": "幸福时光/鲜花抱抱桶",
+      "main_category": "新品",
+      "images": "/public/images/products_list/p04.png",
+      "title": "梦幻星空",
       "price_info": {
-        "original_price": 460,
-        "current_price": 460
+        "original_price": 359,
+        "current_price": 299
       },
-      "sale_rate": 0,
+      "sale_rate": 2,
       "promotion": {
         "is_hot": false,
-        "main_description": "[温柔又热烈配色] 红玫瑰11枝，粉色及红色康乃馨多枝",
-        "keywords": ["红玫瑰", "玫瑰", "生日", "母亲节", "康乃馨"],
-        "flower_language": "幸福美好时光、珍惜眼前人"
+        "material": "进口奶油，食用金箔，星空巧克力",
+        "keywords": [
+          "星空",
+          "梦幻",
+          "创意"
+        ]
       }
     },
     {
       "id": "P05",
-      "main_category": "上新",
-      "images": [
-        "public/images/products_list/p05/01.jpg",
-        "public/images/products_list/p05/02.jpg",
-        "public/images/products_list/p05/03.jpg",
-        "public/images/products_list/p05/04.jpg"
-      ],
-      "title": "星河谜底/鲜花抱抱桶",
+      "main_category": "热销",
+      "images": "/public/images/products_list/p05.png",
+      "title": "幸福时刻",
       "price_info": {
-        "original_price": 420,
-        "current_price": 420
+        "original_price": 459,
+        "current_price": 399
       },
-      "sale_rate": 0,
+      "sale_rate": 3,
       "promotion": {
-        "is_hot": false,
-        "main_description": "[梦幻搭配蓝白色系] 骄傲白玫瑰15枝",
-        "keywords": ["白玫瑰", "玫瑰", "生日", "情人节"],
-        "flower_language": "你是银河万顷之中最温柔的谜底。"
+        "is_hot": true,
+        "material": "进口奶油，新鲜水果，巧克力装饰",
+        "keywords": [
+          "幸福",
+          "庆祝",
+          "纪念"
+        ]
       }
     },
     {
       "id": "P06",
-      "main_category": "上新",
-      "images": [
-        "public/images/products_list/p06/01.jpg",
-        "public/images/products_list/p06/02.jpg",
-        "public/images/products_list/p06/03.jpg",
-        "public/images/products_list/p06/04.jpg"
-      ],
-      "title": "花漾甜蜜/鲜花抱抱桶",
+      "main_category": "新品",
+      "images": "/public/images/products_list/p06.png",
+      "title": "海洋之心",
       "price_info": {
-        "original_price": 430,
-        "current_price": 430
+        "original_price": 399,
+        "current_price": 329
       },
-      "sale_rate": 0,
+      "sale_rate": 1,
       "promotion": {
         "is_hot": false,
-        "main_description": "[粉色系花束融合] 粉玫瑰荔枝11枝、粉康乃馨5枝",
-        "keywords": ["粉红玫瑰", "玫瑰", "生日", "情人节"],
-        "flower_language": "甜蜜的爱恋、铭记于心"
+        "material": "蓝莓果酱，动物奶油，海盐巧克力",
+        "keywords": [
+          "海洋",
+          "蓝色",
+          "清新"
+        ]
       }
     },
     {
       "id": "P07",
       "main_category": "热销",
-      "images": [
-        "public/images/products_list/p07/01.jpg",
-        "public/images/products_list/p07/02.jpg",
-        "public/images/products_list/p07/03.jpg",
-        "public/images/products_list/p07/04.jpg"
-      ],
-      "title": "有幸相郁/粉白郁金香",
+      "images": "/public/images/products_list/p07.png",
+      "title": "森林童话",
       "price_info": {
-        "original_price": 160,
-        "current_price": 160
+        "original_price": 299,
+        "current_price": 239
       },
-      "sale_rate": 0,
+      "sale_rate": 2,
       "promotion": {
         "is_hot": true,
-        "main_description": "[清新搭配 颜值担当] 郁金香白色9枝，浅粉色郁金香10枝",
-        "keywords": ["郁金香", "生日"],
-        "flower_language": "有幸相遇，感恩有你"
+        "material": "抹茶奶油，巧克力蘑菇，糖霜装饰",
+        "keywords": [
+          "森林",
+          "童话",
+          "自然"
+        ]
       }
     },
     {
       "id": "P08",
-      "main_category": "热销",
-      "images": [
-        "public/images/products_list/p08/01.jpg",
-        "public/images/products_list/p08/02.jpg",
-        "public/images/products_list/p08/03.jpg",
-        "public/images/products_list/p08/04.jpg"
-      ],
-      "title": "心湖微蓝",
+      "main_category": "新品",
+      "images": "/public/images/products_list/p08.png",
+      "title": "甜蜜告白",
       "price_info": {
-        "original_price": 99,
-        "current_price": 99
+        "original_price": 359,
+        "current_price": 299
       },
-      "sale_rate": 0,
+      "sale_rate": 1,
       "promotion": {
-        "is_hot": true,
-        "main_description": "[静谧、纯净、温柔] 白色骄傲11枝，康乃馨4枝，搭配桔梗、蝴蝶兰等",
-        "keywords": ["桔梗", "生日", "康乃馨"],
-        "flower_language": "献给静谧而温柔的你"
+        "is_hot": false,
+        "material": "草莓果酱，动物奶油，巧克力片",
+        "keywords": [
+          "告白",
+          "甜蜜",
+          "浪漫"
+        ]
       }
     },
     {
       "id": "P09",
       "main_category": "特价出售",
-      "images": [
-        "public/images/products_list/p09/01.jpg",
-        "public/images/products_list/p09/02.jpg",
-        "public/images/products_list/p09/03.jpg",
-        "public/images/products_list/p09/04.jpg"
-      ],
+      "images": "/public/images/products_list/p01.png",
       "title": "韩式系列/绽放",
       "price_info": {
         "original_price": 510,
@@ -226,19 +218,20 @@
       "promotion": {
         "is_hot": false,
         "main_description": "向日葵+香槟玫瑰+多头玫瑰",
-        "keywords": ["向日葵", "玫瑰", "生日", "母亲节", "香槟玫瑰"],
+        "keywords": [
+          "向日葵",
+          "玫瑰",
+          "生日",
+          "母亲节",
+          "香槟玫瑰"
+        ],
         "flower_language": "元气满满，永远向着太阳"
       }
     },
     {
       "id": "P10",
       "main_category": "特价出售",
-      "images": [
-        "public/images/products_list/p10/01.jpg",
-        "public/images/products_list/p10/02.jpg",
-        "public/images/products_list/p10/03.jpg",
-        "public/images/products_list/p10/04.jpg"
-      ],
+      "images": "/public/images/products_list/p01.png",
       "title": "香妃",
       "price_info": {
         "original_price": 520,
@@ -248,19 +241,18 @@
       "promotion": {
         "is_hot": false,
         "main_description": "[清新脱俗] 香槟玫瑰9枝",
-        "keywords": ["香槟玫瑰", "玫瑰", "生日"],
+        "keywords": [
+          "香槟玫瑰",
+          "玫瑰",
+          "生日"
+        ],
         "flower_language": "你的香气，是我思念的味道，那是最独特的。9朵香槟玫瑰，是天长地久的爱情，专属你我之间的真爱，无期限，永不凋零！"
       }
     },
     {
       "id": "P11",
       "main_category": "特价出售",
-      "images": [
-        "public/images/products_list/p11/01.jpg",
-        "public/images/products_list/p11/02.jpg",
-        "public/images/products_list/p11/03.jpg",
-        "public/images/products_list/p11/04.jpg"
-      ],
+      "images": "/public/images/products_list/p01.png",
       "title": "真挚祝福",
       "price_info": {
         "original_price": 530,
@@ -270,19 +262,21 @@
       "promotion": {
         "is_hot": false,
         "main_description": "[暖阳系列] 红康乃馨33枝、香槟玫瑰9枝、向日葵3枝",
-        "keywords": ["香槟玫瑰", "玫瑰", "生日", "母亲节", "康乃馨", "向日葵"],
+        "keywords": [
+          "香槟玫瑰",
+          "玫瑰",
+          "生日",
+          "母亲节",
+          "康乃馨",
+          "向日葵"
+        ],
         "flower_language": "一生中有很多祝福，最真挚的祝福送给你"
       }
     },
     {
       "id": "P12",
       "main_category": "特价出售",
-      "images": [
-        "public/images/products_list/p12/01.jpg",
-        "public/images/products_list/p12/02.jpg",
-        "public/images/products_list/p12/03.jpg",
-        "public/images/products_list/p12/04.jpg"
-      ],
+      "images": "/public/images/products_list/p01.png",
       "title": "向日葵之歌",
       "price_info": {
         "original_price": 540,
@@ -292,7 +286,10 @@
       "promotion": {
         "is_hot": false,
         "main_description": "[心向暖阳，快乐相伴] 向日葵6枝",
-        "keywords": ["向日葵", "生日"],
+        "keywords": [
+          "向日葵",
+          "生日"
+        ],
         "flower_language": "采一束阳光，制成书签，每一天都有温暖入怀。"
       }
     }
@@ -597,9 +594,15 @@
       "title": "给爷爷送花有哪些选择？给老人送花推荐！",
       "cover_img": "/images/articles/A01/cover.jpg",
       "content": "<p>爷爷今年70岁生日，如果要给他老人家送花，一般是怎么选择？有哪些寓意比较吉利的花适合送给老人，给爷爷送花有哪些选择？给老人送花推荐！</p><p>送长辈，当然是希望长辈身体健康，所以可以送盆长寿花。长寿花花期能持续好几个月，又比较耐旱，不怎么管就能开花多！</p><p>龟背竹叶片宽大，叶形像是乌龟的背部，而在中国，乌龟又寓意着长寿，所以也很适合给老人送一盆。龟背竹要勤浇水，春秋大概3-5天浇1次，保证湿度就能长得旺！</p><p>万年青常用来形容老人，所以适合送给长辈，希望他们寿比南山。一般放在室内客厅等散射光好的地方养护即可，平常看到土干了后再浇，别让盆里积水烂根。</p><p>如果不想送上边那些花，也可以选择送一些盆景类，像是松柏、银杏、红枫等，从而表达对长辈的崇敬之情。</p><p>蝴蝶兰看上去像是一只只小蝴蝶在飞，而且颜色又是紫红色的，非常适合送老人家。蝴蝶兰平常有散射光就能长，但是想要开花，还是得多晒太阳。</p><p>既然是新装修的房子，那肯定还是要送盆吊兰来净化空气啦！吊兰可以吸收空气中的苯、甲醛等有害物质，而且还是特别好养的花，非常适合送给老人~</p>",
-      "related_products": ["P02", "P03"],
+      "related_products": [
+        "P02",
+        "P03"
+      ],
       "view_count": 6,
-      "tags": ["爷爷", "送花"],
+      "tags": [
+        "爷爷",
+        "送花"
+      ],
       "status": "published",
       "publish_time": "2018-10-10T09:00:00Z"
     },
@@ -608,9 +611,15 @@
       "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
       "cover_img": "/images/articles/A02/cover.jpg",
       "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫\"除\"，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
-      "related_products": ["P02", "P03"],
+      "related_products": [
+        "P02",
+        "P03"
+      ],
       "view_count": 2,
-      "tags": ["送花", "鲜花生活"],
+      "tags": [
+        "送花",
+        "鲜花生活"
+      ],
       "status": "published",
       "publish_time": "2023-02-13T09:00:00Z"
     },
@@ -619,9 +628,14 @@
       "title": "绣球脱水如何急救？绣球保水措施揭秘！",
       "cover_img": "/images/articles/A03/cover.jpg",
       "content": "<p>绣球很需要水，这是对绣球的最基本的认知，但是也别担心承受不了损耗风险而不敢选购，万事都是相对的，绣球脱水了我们可以挽救，或者提前预防，绣球脱水如何急救？绣球保水措施揭秘！</p><p>保水管。网上有均码带杆的和不带杆的保水管，带杆比较适合运用在手捧花或花束里，不带杆的适合运用在架构花艺或花束以及平时的花艺布置及花盒中。</p><p>大家可以根据作品情况来选择合适的保水管，没用过的朋友可能还不知道保水管的开口处是有弹性的，虽然看着洞口小，但是比较粗的枝条也可以放进去，这样会更稳固。</p><p>可利鲜或者花之寿品牌都有喷剂，是液体的，这些材料在某宝都有，价格美丽，无需亲自跑当地资材店买，这个方法适用场景很多，平时做婚礼宴会或者打花束及手捧，在客人看到之前都可以先喷喷，尤其手捧花，如果枝条底部没有保水管，在送出之前最好喷几下。</p><p>保鲜膜就类似市面上包在半个西瓜表面的，棉布就类似街边卖水果的喜欢盖在上面的那种，只要能保湿就行，包括用卫生纸都可以。</p><p>同样的办法，在把这些介质盖在绣球作品表面前，可以先在绣球表面喷点营养液。所以除了在花瓶内装满水，还要时不时在花头上喷水。</p>",
-      "related_products": ["P02", "P03"],
+      "related_products": [
+        "P02",
+        "P03"
+      ],
       "view_count": 56,
-      "tags": ["鲜花生活"],
+      "tags": [
+        "鲜花生活"
+      ],
       "status": "published",
       "publish_time": "2016-03-10T09:00:00Z"
     },
@@ -630,9 +644,14 @@
       "title": "奶油春天在花艺中的运用！",
       "cover_img": "/images/articles/A04/cover.jpg",
       "content": "<p>奶油春天的这种「粉」是偏低饱和度的粉色，和其他大黄、大橙、大红的高饱和色彩比，天然自带性冷淡属性，因此但看就已比一般的非洲菊高大上太多。</p><p>其次是花瓣造型的不同，传统非洲菊花瓣整齐，一瓣一瓣非常捋顺，奶油春天的花瓣就像爆炸头，乱蓬蓬的，花瓣细窄而尖，乍一看还以为是纸剪成的呢。</p><p>奶油春天适合与粉色、浅色系花材搭配，选用沉色包装纸，可以突出它的粉色，若用浅色包装纸，配材上选择黄白色系，更有春天的感觉。</p><p>不过如果只是单插，没有配花，也略微单调。</p><p>几乎所有的花艺师都不会多用，1-3朵足矣，数量不多，足够吸睛。除了甜美，若使用大量自然系花材搭配，它也颇能胜任乡村风。</p><p>如果包装纸是透明色，会增强轻盈感一些，比较空灵哦。</p>",
-      "related_products": ["P02", "P03"],
+      "related_products": [
+        "P02",
+        "P03"
+      ],
       "view_count": 16,
-      "tags": ["鲜花生活"],
+      "tags": [
+        "鲜花生活"
+      ],
       "status": "published",
       "publish_time": "2025-04-01T09:00:00Z"
     }
@@ -676,6 +695,24 @@
       ],
       "status": "已取消",
       "created_at": "2025-02-13T09:15:00Z"
+    },
+    {
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P01",
+          "quantity": 8
+        },
+        {
+          "product_id": "P02",
+          "quantity": 2
+        }
+      ],
+      "total_price": "2840.00",
+      "shipping_fee": 0,
+      "delivery_time": "2025-04-30Tmorning:00Z",
+      "status": "进行中",
+      "id": "OX49Mvy"
     }
   ],
   "addresses": [
@@ -684,7 +721,11 @@
       "user_id": "1",
       "consignee": "李女士",
       "phone": "13800138000",
-      "region": ["上海市", "浦东新区", "陆家嘴街道"],
+      "region": [
+        "上海市",
+        "浦东新区",
+        "陆家嘴街道"
+      ],
       "detail": "世纪大道100号",
       "is_default": false
     },
@@ -693,7 +734,11 @@
       "user_id": "2",
       "consignee": "陈先生",
       "phone": "13800138001",
-      "region": ["北京市", "海淀区", "中关村街道"],
+      "region": [
+        "北京市",
+        "海淀区",
+        "中关村街道"
+      ],
       "detail": "中关村大街1号",
       "is_default": false
     },
@@ -710,7 +755,9 @@
       "user_id": "02",
       "consignee": "1111111",
       "phone": "147777777",
-      "region": ["成都市/金牛区"],
+      "region": [
+        "成都市/金牛区"
+      ],
       "detail": "1111111",
       "is_default": false,
       "id": "6004"
@@ -728,7 +775,9 @@
       "user_id": "02",
       "consignee": "11",
       "phone": "14726839224",
-      "region": ["成都市/青羊区"],
+      "region": [
+        "成都市/青羊区"
+      ],
       "detail": "11",
       "is_default": false,
       "id": "0dea"
@@ -799,15 +848,15 @@
   ],
   "cart": [
     {
-      "id": "P01",
-      "quantity": 9
+      "quantity": 1,
+      "id": "P01"
     },
     {
       "id": "P02",
-      "quantity": 29
+      "quantity": 1
     },
     {
-      "id": "P04",
+      "id": "P05",
       "quantity": 1
     }
   ],

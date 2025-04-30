@@ -2,7 +2,6 @@
   <div class="header">
     <div class="logo">
       <img src="/public/logo.png" alt="logo" />
-      
     </div>
     <el-menu
       :default-active="activeIndex"
@@ -18,19 +17,45 @@
       <el-menu-item index="/contact">联系我们</el-menu-item>
       <div class="flex-grow" />
       <div class="right-menu">
-        <el-menu-item index="/login">登录</el-menu-item>
-        <el-menu-item index="/register">注册</el-menu-item>
+        <template v-if="!isLoggedIn">
+          <el-menu-item index="/login">登录</el-menu-item>
+          <el-menu-item index="/register">注册</el-menu-item>
+        </template>
+        <template v-else>
+          <el-dropdown>
+            <el-avatar :size="40" :src="userAvatar" />
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>个人中心</el-dropdown-item>
+                <el-dropdown-item @click="handleLogout"
+                  >退出登录</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </template>
       </div>
     </el-menu>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
+import { useUserStore } from "../../data_stores/user"
 
 const route = useRoute();
+const userStore = useUserStore();
 const activeIndex = ref(route.path);
+
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+const userAvatar = computed(
+  () => userStore.userInfo?.avatar || "/public/default-avatar.png"
+);
+
+const handleLogout = () => {
+  userStore.logout();
+};
 
 watch(
   () => route.path,
@@ -60,7 +85,7 @@ watch(
   align-items: center;
   gap: 8px;
 }
- 
+
 .logo img {
   margin-left: 20px;
   height: 40px;
@@ -89,6 +114,7 @@ watch(
 .right-menu {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 :deep(.el-menu--horizontal) {
@@ -98,5 +124,13 @@ watch(
 :deep(.el-menu-item) {
   height: 60px;
   line-height: 60px;
+}
+
+:deep(.el-dropdown) {
+  cursor: pointer;
+}
+
+:deep(.el-avatar) {
+  margin-right: 20px;
 }
 </style>

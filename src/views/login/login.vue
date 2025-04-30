@@ -28,7 +28,9 @@
           </label>
           <a href="#" class="forgot-password">忘记密码？</a>
         </div>
-        <button type="submit" class="submit-button">登录</button>
+        <button type="submit" class="submit-button" @click="handleLogin">
+          登录
+        </button>
         <div class="auth-switch">
           还没有账号？
           <router-link to="/register" class="switch-link">立即注册</router-link>
@@ -48,8 +50,12 @@ export default {
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { useUserStore } from "../../data_stores/user";
+import { ElMessage } from "element-plus";
 
 const router = useRouter();
+const userStore = useUserStore();
+
 const formData = ref({
   username: "",
   password: "",
@@ -63,23 +69,26 @@ const handleLogin = async () => {
       formData.value
     );
     if (response.data.success) {
-      // 存储用户信息和token
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // 更新用户状态
+      userStore.setUserInfo(response.data.user);
+      userStore.setToken(response.data.token);
 
       // 如果选择记住我，设置更长的过期时间
       if (formData.value.remember) {
         localStorage.setItem("remember", "true");
       }
 
+      ElMessage.success("登录成功");
       // 跳转到首页
       router.push("/");
     } else {
-      alert(response.data.message || "登录失败");
+      ElMessage.error(response.data.message || "登录失败");
     }
   } catch (error) {
     console.error("登录失败:", error);
-    alert("登录失败，请检查用户名和密码");
+    ElMessage.error(
+      error.response?.data?.message || "登录失败，请检查用户名和密码"
+    );
   }
 };
 </script>

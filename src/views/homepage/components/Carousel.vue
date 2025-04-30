@@ -1,19 +1,11 @@
 <!-- 轮播图组件 -->
 <template>
   <div class="carousel">
-    <el-carousel
-      indicator-position=""
-      height="260px"
-      width="800px"
-      :autoplay="true"
-      :interval="2000"
-    >
+    <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in carouselList" :key="item.id">
-        <div class="carousel-item">
-          <img :src="item.img" :alt="item.title || '轮播图'" />
-        </div>
-      </el-carousel-item>
-    </el-carousel>
+        <img :src="item.img" alt="activity" />
+    </el-carousel-item>
+  </el-carousel>
   </div>
 </template>
 <script setup>
@@ -28,42 +20,22 @@ axios.get("http://localhost:3001/carousel").then((res) => {
 </script>
 <style scoped>
 .carousel {
-  margin: 0px auto;
-  width: 100%;
-  max-width: 1200px;
+  background-color: inherit;
 }
 
-.carousel-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+ .el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
 }
 
-.carousel-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
 }
 
-.el-carousel__item {
-  background-color: #f5f5f5;
-}
-
-::v-deep .el-carousel__button {
-  background-color: #6c4141 !important;
-  height: 3px;
-  border-radius: 3px;
-}
-
-@media (max-width: 768px) {
-  .carousel {
-    margin: 10px auto;
-  }
-
-  .el-carousel {
-    height: 300px !important;
-  }
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
 }
 </style>

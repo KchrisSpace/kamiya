@@ -39,7 +39,6 @@
     </div>
     <div class="goods-info">
       <h6 class="goods-title">{{ item.title }}</h6>
-      <!-- <span class="sales-count">已售{{ item.sales_data.sales_count }}件</span> -->
     </div>
 
     <div class="price-container">
@@ -73,127 +72,199 @@
 
 <style scoped>
 .goods-item {
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  font-family: var(--font-Alibaba);
+  position: relative;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  transition: all 0.3s;
+  overflow: hidden;
 }
 
 .goods-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .goods-image-container {
   position: relative;
-  width: 224px;
-  background-color: var(--color-bg-thirth);
-}
-
-.discount-tag {
-  position: absolute;
-  top: 8px;
-  width: 40px;
-  height: 20px;
-  background-color: #97b959;
-  color: white;
-  font-weight: 500;
-  text-align: center;
-  line-height: 20px;
-}
-
-.hot-tag {
-  position: absolute;
-  top: 8px;
-  width: 40px;
-  height: 20px;
-  background-color: var(--color-font-primary);
-  color: white;
-  font-weight: 500;
-  text-align: center;
-  line-height: 20px;
+  width: 100%;
+  height: 280px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .goods-image-container img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.goods-item:hover .goods-image-container img {
+  transform: scale(1.05);
+}
+
+.discount-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  background-color: #ff4d4f;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hot-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  background-color: #ff4d4f;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .hover-actions {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
   height: 80px;
-  background-color: rgba(204, 204, 204, 0.28);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.3s;
+  gap: 16px;
+  padding: 0 16px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.goods-image-container:hover .hover-actions {
+  opacity: 1;
 }
 
 .add-to-cart-btn {
-  width: 88px;
-  height: 36px;
-  background-color: var(--color-font-primary);
-  color: white;
+  padding: 8px 20px;
+  background-color: #fff;
+  color: #ff4d4f;
   font-size: 14px;
-  line-height: 36px;
-  text-align: center;
-  cursor: pointer;
+  font-weight: 500;
   border: none;
-  transition: background-color 0.3s;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .add-to-cart-btn:hover {
-  background-color: rgba(242, 99, 113, 0.8);
+  background-color: #ff4d4f;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 77, 79, 0.3);
 }
 
 .details-icon {
-  position: absolute;
-  right: 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-icon:hover {
+  background-color: #ff4d4f;
+  transform: translateX(4px);
+}
+
+.details-icon .el-icon {
+  color: #ff4d4f;
+  transition: all 0.3s ease;
+}
+
+.details-icon:hover .el-icon {
+  color: white;
 }
 
 .goods-info {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  gap: 8px;
-  margin: 8px;
+  margin-top: 16px;
+  padding: 0 8px;
 }
 
 .goods-title {
-  text-align: center;
-  color: var(--color-font-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
   margin: 0;
-}
-
-.sales-count {
-  font-size: 12px;
-  color: var(--color-font-fourth);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .price-container {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 4px;
-  margin: 0 8px;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 0 8px;
 }
 
 .current-price {
-  font-weight: 500;
-  font-size: 16px;
-  color: var(--color-font-primary);
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff4d4f;
 }
 
 .original-price {
-  font-size: 12px;
-  color: var(--color-font-fourth);
+  font-size: 14px;
+  color: #999;
   text-decoration: line-through;
+}
+
+@media (max-width: 768px) {
+  .goods-item {
+    padding: 12px;
+  }
+
+  .goods-image-container {
+    height: 240px;
+  }
+
+  .goods-title {
+    font-size: 15px;
+  }
+
+  .current-price {
+    font-size: 18px;
+  }
+
+  .original-price {
+    font-size: 13px;
+  }
+
+  .add-to-cart-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
 }
 </style>
 
@@ -212,7 +283,7 @@ export default {
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import DetailsEject from "./details-eject.vue";
+import DetailsEject from "./product-detail.vue";
 import JoinCart from "../components/join-cart.vue";
 import { useCartStore } from "../../../data_stores/cart";
 import { ElMessage } from "element-plus";
@@ -264,7 +335,7 @@ const handleShowDetails = (item) => {
 
 const handleToDetails = (itemid) => {
   router.push({
-    name: "ProductDetails",
+    name: "ProductDetail",
     params: { id: itemid },
   });
   window.scrollTo({

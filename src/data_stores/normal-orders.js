@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { API_URL } from '/src/pages/const/index';
+ 
 
 export const useNormalOrdersStore = defineStore('normalOrders', {
   state: () => ({
@@ -23,8 +23,8 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
       this.loading = true;
       try {
         const url = userId
-          ? `${API_URL}/normal_orders?user_id=${userId}`
-          : `${API_URL}/normal_orders`;
+          ? `http://localhost:3001/normal_orders?user_id=${userId}`
+          : `http://localhost:3001/normal_orders`;
         const response = await axios.get(url);
         this.orders = response.data;
         this.error = null;
@@ -41,7 +41,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
       this.loading = true;
       try {
         const response = await axios.post(
-          `${API_URL}/normal_orders`,
+          `http://localhost:3001/normal_orders`,
           orderData
         );
         this.orders.push(response.data);
@@ -62,7 +62,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
       this.loading = true;
       try {
         const response = await axios.put(
-          `${API_URL}/normal_orders/${orderId}`,
+          `http://localhost:3001/normal_orders/${orderId}`,
           orderData
         );
         const index = this.orders.findIndex((order) => order.id === orderId);
@@ -84,7 +84,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
     async deleteOrder(orderId) {
       this.loading = true;
       try {
-        await axios.delete(`${API_URL}/normal_orders/${orderId}`);
+        await axios.delete(`http://localhost:3001/normal_orders/${orderId}`);
         this.orders = this.orders.filter((order) => order.id !== orderId);
         this.error = null;
       } catch (error) {

@@ -167,7 +167,7 @@ const handleSearch = () => {
 
 const getGoods = async () => {
   try {
-    const res = await axios.get(`http://localhost:3001/product_list`);
+    const res = await axios.get(`http://localhost:3001/products_list`);
     goods.value = res.data.map((item) => ({ ...item, showCart: false }));
   } catch (error) {
     console.error("获取商品数据失败:", error);

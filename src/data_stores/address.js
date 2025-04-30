@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { API_URL } from '/src/pages/const/index';
-
+ 
 export const useAddressStore = defineStore('address', {
   state: () => ({
     addresses: [],
@@ -23,7 +22,7 @@ export const useAddressStore = defineStore('address', {
     async fetchAddresses() {
       this.loading = true;
       try {
-        const response = await axios.get(`${API_URL}/addresses`, {
+        const response = await axios.get(`http://localhost:3001/addresses`, {
           params: { user_id: '02' },
         });
         this.addresses = response.data;
@@ -40,7 +39,7 @@ export const useAddressStore = defineStore('address', {
     async addAddress(addressData) {
       this.loading = true;
       try {
-        const response = await axios.post(`${API_URL}/addresses`, addressData);
+        const response = await axios.post(`http://localhost:3001/addresses`, addressData);
         this.addresses.push(response.data);
         this.error = null;
         return response.data;
@@ -58,7 +57,7 @@ export const useAddressStore = defineStore('address', {
       this.loading = true;
       try {
         const response = await axios.put(
-          `${API_URL}/addresses/${addressId}`,
+          `http://localhost:3001/addresses/${addressId}`,
           addressData
         );
         const index = this.addresses.findIndex((addr) => addr.id === addressId);
@@ -80,7 +79,7 @@ export const useAddressStore = defineStore('address', {
     async deleteAddress(addressId) {
       this.loading = true;
       try {
-        await axios.delete(`${API_URL}/addresses/${addressId}`);
+        await axios.delete(`http://localhost:3001/addresses/${addressId}`);
         this.addresses = this.addresses.filter((addr) => addr.id !== addressId);
         this.error = null;
       } catch (error) {

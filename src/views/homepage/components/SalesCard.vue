@@ -52,7 +52,7 @@ import { ElTabPane, ElTabs } from "element-plus";
 import axios from "axios";
 
 const router = useRouter();
-const API_URL = "http://localhost:3001/product_list";
+const API_URL = "http://localhost:3001/products_list";
 const ProductList = ref([]);
 const activeName = ref("全部");
 const productCount = ref(0);
@@ -94,8 +94,7 @@ onMounted(async () => {
 // 跳转到商品详情页
 const goToProductDetails = (productId) => {
   router.push({
-    name: "ProductDetails",
-    params: { id: productId },
+    path: `/product/${productId}`,
   });
   window.scrollTo({
     top: 0,
@@ -104,7 +103,6 @@ const goToProductDetails = (productId) => {
 };
 
 // 标签切换处理
- 
 </script>
 
 <style scoped>
@@ -116,8 +114,8 @@ const goToProductDetails = (productId) => {
 
 .salescards {
   width: 100%;
-  background-color: #f5f5f5;
-  padding: 80px;
+  background-color: var(--bg-primary);
+  padding: 20px 30px;
 }
 
 .demo-tabs {
@@ -135,7 +133,7 @@ const goToProductDetails = (productId) => {
 }
 
 .demo-tabs :deep(.el-tabs__item:hover) {
-  color: rgba(242, 99, 113, 1);
+  color: rgba(208, 168, 74, 0.711);
 }
 
 .demo-tabs :deep(.el-tabs__item.is-active) {
