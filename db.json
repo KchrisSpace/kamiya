@@ -38,7 +38,7 @@
         "original_price": 399,
         "current_price": 259.9
       },
-      "sale_rate": 3,
+      "score": 3,
       "promotion": {
         "is_hot": true,
         "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠",
@@ -60,7 +60,7 @@
         "original_price": 299,
         "current_price": 199
       },
-      "sale_rate": 2,
+      "score": 2,
       "promotion": {
         "is_hot": true,
         "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚",
@@ -81,7 +81,7 @@
         "original_price": 259,
         "current_price": 199
       },
-      "sale_rate": 1,
+      "score": 1,
       "promotion": {
         "is_hot": false,
         "material": "安佳动物奶油，抹茶粉，新鲜薄荷叶，糖霜装饰",
@@ -102,7 +102,7 @@
         "original_price": 359,
         "current_price": 299
       },
-      "sale_rate": 2,
+      "score": 2,
       "promotion": {
         "is_hot": false,
         "material": "红丝绒蛋糕胚，粉色糖霜，食用金箔，巧克力皇冠",
@@ -123,7 +123,7 @@
         "original_price": 459,
         "current_price": 399
       },
-      "sale_rate": 3,
+      "score": 3,
       "promotion": {
         "is_hot": true,
         "material": "比利时巧克力，樱桃果酱，可可粉，慕斯奶油",
@@ -144,7 +144,7 @@
         "original_price": 399,
         "current_price": 329
       },
-      "sale_rate": 1,
+      "score": 1,
       "promotion": {
         "is_hot": false,
         "material": "蓝莓果酱，生乳奶油，戚风蛋糕卷，糖粉装饰",
@@ -165,7 +165,7 @@
         "original_price": 299,
         "current_price": 239
       },
-      "sale_rate": 2,
+      "score": 2,
       "promotion": {
         "is_hot": true,
         "material": "樱花粉，糯米粉，红豆沙，樱花糖浆",
@@ -186,7 +186,7 @@
         "original_price": 359,
         "current_price": 299
       },
-      "sale_rate": 1,
+      "score": 1,
       "promotion": {
         "is_hot": false,
         "material": "杏仁片，核桃仁，黄油酥皮，蜂蜜糖浆",
@@ -207,7 +207,7 @@
         "original_price": 510,
         "current_price": 460
       },
-      "sale_rate": 10,
+      "score": 10,
       "promotion": {
         "is_hot": false,
         "material": "新鲜草莓，香草奶油，酥脆塔皮，糖粉装饰",
@@ -228,7 +228,7 @@
         "original_price": 520,
         "current_price": 400
       },
-      "sale_rate": 23,
+      "score": 23,
       "promotion": {
         "is_hot": false,
         "material": "玫瑰花瓣，杏仁粉，黄油酥皮，糖霜装饰",
@@ -249,7 +249,7 @@
         "original_price": 530,
         "current_price": 420
       },
-      "sale_rate": 21,
+      "score": 21,
       "promotion": {
         "is_hot": false,
         "material": "新鲜草莓，卡仕达酱，酥脆塔皮，糖粉装饰",
@@ -270,7 +270,7 @@
         "original_price": 540,
         "current_price": 430
       },
-      "sale_rate": 20,
+      "score": 20,
       "promotion": {
         "is_hot": false,
         "material": "新鲜芒果，动物奶油，千层饼皮，糖粉装饰",
@@ -896,6 +896,10 @@
     {
       "id": "P11",
       "quantity": 1
+    },
+    {
+      "quantity": 6,
+      "id": "P03"
     }
   ],
   "custom": [

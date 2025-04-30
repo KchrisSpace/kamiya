@@ -4,7 +4,9 @@ import axios from "axios";
 
 export const useCartStore = defineStore("cart", () => {
   // 从 localStorage 初始化购物车数据
-  const initialCartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  const initialCartItems = JSON.parse(
+    localStorage.getItem("cartItems") || "[]"
+  );
   const cartItems = ref(initialCartItems);
   const itemTotals = ref({});
   const isLoading = ref(false);
@@ -150,6 +152,6 @@ export const useCartStore = defineStore("cart", () => {
     updateCartItem,
     clearCart,
     addItem,
-    isLoading
+    isLoading,
   };
 });

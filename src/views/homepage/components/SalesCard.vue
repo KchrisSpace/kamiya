@@ -21,8 +21,12 @@
           </div>
 
           <div class="product-info">
-            <p class="rating">评分：{{ product.sale_rate }}</p>
             <p class="title">{{ product.title }}</p>
+            <p class="rating">
+              <span class="rating-text">评分：</span>
+              <span class="stars" :data-score="product.score"></span>
+            </p>
+
             <hr />
             <div class="price">
               <span class="current-price"
@@ -205,8 +209,38 @@ const goToProductDetails = (productId) => {
 }
 
 .rating {
-  color: #666;
+  color: #ff6b6b;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+}
+
+.rating-text {
+  color: #666;
+}
+
+.stars::before {
+  content: "★★★★★";
+  color: #ffd700;
+  letter-spacing: 2px;
+}
+
+.stars[data-score="4"]::before {
+  content: "★★★★☆";
+}
+
+.stars[data-score="3"]::before {
+  content: "★★★☆☆";
+}
+
+.stars[data-score="2"]::before {
+  content: "★★☆☆☆";
+}
+
+.stars[data-score="1"]::before {
+  content: "★☆☆☆☆";
 }
 
 .title {
