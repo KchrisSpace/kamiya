@@ -64,14 +64,17 @@ const formData = ref({
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post(
-      "http://localhost:3001/login",
-      formData.value
-    );
-    if (response.data.success) {
+    // 验证管理员账号
+    if (
+      formData.value.username === "admin" &&
+      formData.value.password === "000000"
+    ) {
       // 更新用户状态
-      userStore.setUserInfo(response.data.user);
-      userStore.setToken(response.data.token);
+      userStore.setUserInfo({
+        username: "admin",
+        role: "admin",
+      });
+      userStore.setToken("admin-token");
 
       // 如果选择记住我，设置更长的过期时间
       if (formData.value.remember) {
@@ -79,16 +82,43 @@ const handleLogin = async () => {
       }
 
       ElMessage.success("登录成功");
-      // 跳转到首页
-      router.push("/");
-    } else {
-      ElMessage.error(response.data.message || "登录失败");
+      router.push("/admin/dashboard");
+      return;
     }
+
+    // 验证普通用户账号
+    const response = await axios.get("http://localhost:3001/login");
+    const users = response.data[0].user;
+    const user = users.find(
+      (u) =>
+        u.username === formData.value.username &&
+        u.password === formData.value.password
+    );
+
+    if (user) {
+      // 更新用户状态
+      userStore.setUserInfo({
+        id: user.id,
+        username: user.username,
+        role: "user",
+      });
+      userStore.setToken("user-token");
+
+      // 如果选择记住我，设置更长的过期时间
+      if (formData.value.remember) {
+        localStorage.setItem("remember", "true");
+      }
+
+      ElMessage.success("登录成功");
+      router.push("/");
+      return;
+    }
+
+    // 验证失败
+    ElMessage.error("用户名或密码错误");
   } catch (error) {
     console.error("登录失败:", error);
-    ElMessage.error(
-      error.response?.data?.message || "登录失败，请检查用户名和密码"
-    );
+    ElMessage.error("登录失败，请稍后重试");
   }
 };
 </script>
