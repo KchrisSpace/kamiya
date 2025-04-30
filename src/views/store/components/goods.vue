@@ -90,8 +90,8 @@
 
 .goods-image-container {
   position: relative;
-  width: 100%;
-  height: 280px;
+  width: 240px;
+  height: 260px;
   background-color: #f8f9fa;
   border-radius: 8px;
   overflow: hidden;

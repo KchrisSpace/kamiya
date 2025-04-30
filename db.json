@@ -24,14 +24,10 @@
   "user_info": [
     {
       "id": "user1",
-      "username": "user",
-      "password": "000000",
       "avatar": "/public/images/users/avater/user1.png"
     },
     {
       "id": "user2",
-      "username": "user2",
-      "password": "000000",
       "avatar": "/public/images/users/avater/user2.png"
     }
   ],
@@ -39,8 +35,8 @@
     {
       "id": "P01",
       "main_category": "热销",
-      "images": "/public/images/products_list/p01.png",
-      "title": "玫与蝶",
+      "images": "https://photo.yannick.com.tw/photo/0201039/%E7%94%9F%E6%97%A5%E8%9B%8B%E7%B3%95_%E6%88%80%E8%8E%93%E7%99%BD%E7%99%BD.jpg",
+      "title": "星与你皆浪漫",
       "price_info": {
         "original_price": 399,
         "current_price": 260
@@ -48,19 +44,20 @@
       "sale_rate": 3,
       "promotion": {
         "is_hot": true,
-        "material": "安佳动物奶油，进口巧克力，装饰纸",
+        "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠",
         "keywords": [
-          "玫瑰",
+          "星空",
+          "浪漫",
           "情人节",
-          "蝴蝶"
+          "告白"
         ]
       }
     },
     {
       "id": "P02",
       "main_category": "热销",
-      "images": "/public/images/products_list/p02.png",
-      "title": "甜蜜时光",
+      "images": "https://photo.yannick.com.tw/photo/0201139/%E6%B3%95%E5%BC%8F%E8%8D%89%E8%8E%93%E8%8A%99%E8%93%AE.jpg",
+      "title": "莓*夹心蛋糕*少奶油",
       "price_info": {
         "original_price": 299,
         "current_price": 199
@@ -68,19 +65,20 @@
       "sale_rate": 2,
       "promotion": {
         "is_hot": true,
-        "material": "新鲜水果，动物奶油，巧克力片",
+        "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚",
         "keywords": [
           "水果",
-          "生日",
-          "甜蜜"
+          "低脂",
+          "健康",
+          "清新"
         ]
       }
     },
     {
       "id": "P03",
-      "main_category": "新品",
-      "images": "/public/images/products_list/p03.png",
-      "title": "春日花园",
+      "main_category": "上新",
+      "images": "https://photo.yannick.com.tw/photo/0201185/%E7%8E%AB%E7%91%B0%E9%A6%A8%E6%A8%82%E5%9C%92(1).jpg",
+      "title": "奶油小清新",
       "price_info": {
         "original_price": 259,
         "current_price": 199
@@ -88,19 +86,20 @@
       "sale_rate": 1,
       "promotion": {
         "is_hot": false,
-        "material": "当季鲜花，绿叶植物，装饰丝带",
+        "material": "安佳动物奶油，抹茶粉，新鲜薄荷叶，糖霜装饰",
         "keywords": [
-          "春天",
-          "花园",
-          "清新"
+          "清新",
+          "自然",
+          "简约",
+          "抹茶"
         ]
       }
     },
     {
       "id": "P04",
-      "main_category": "新品",
-      "images": "/public/images/products_list/p04.png",
-      "title": "梦幻星空",
+      "main_category": "上新",
+      "images": "https://photo.yannick.com.tw/photo/0201186/%E7%B4%85%E5%BF%83%E5%A5%B3%E7%8E%8B(1).jpg",
+      "title": "紅心女王-粉糖霜款",
       "price_info": {
         "original_price": 359,
         "current_price": 299
@@ -108,19 +107,20 @@
       "sale_rate": 2,
       "promotion": {
         "is_hot": false,
-        "material": "进口奶油，食用金箔，星空巧克力",
+        "material": "红丝绒蛋糕胚，粉色糖霜，食用金箔，巧克力皇冠",
         "keywords": [
-          "星空",
-          "梦幻",
-          "创意"
+          "女王",
+          "奢华",
+          "高贵",
+          "粉色"
         ]
       }
     },
     {
       "id": "P05",
       "main_category": "热销",
-      "images": "/public/images/products_list/p05.png",
-      "title": "幸福时刻",
+      "images": "https://photo.yannick.com.tw/photo/0606024/2.jpg",
+      "title": "黑森林慕斯",
       "price_info": {
         "original_price": 459,
         "current_price": 399
@@ -128,19 +128,20 @@
       "sale_rate": 3,
       "promotion": {
         "is_hot": true,
-        "material": "进口奶油，新鲜水果，巧克力装饰",
+        "material": "比利时巧克力，樱桃果酱，可可粉，慕斯奶油",
         "keywords": [
-          "幸福",
-          "庆祝",
-          "纪念"
+          "经典",
+          "巧克力",
+          "慕斯",
+          "樱桃"
         ]
       }
     },
     {
       "id": "P06",
-      "main_category": "新品",
-      "images": "/public/images/products_list/p06.png",
-      "title": "海洋之心",
+      "main_category": "上新",
+      "images": "https://photo.yannick.com.tw/photo/0101303/1.jpg",
+      "title": "美安限定-俏‧美莓生乳捲",
       "price_info": {
         "original_price": 399,
         "current_price": 329
@@ -148,19 +149,20 @@
       "sale_rate": 1,
       "promotion": {
         "is_hot": false,
-        "material": "蓝莓果酱，动物奶油，海盐巧克力",
+        "material": "蓝莓果酱，生乳奶油，戚风蛋糕卷，糖粉装饰",
         "keywords": [
-          "海洋",
-          "蓝色",
-          "清新"
+          "限定",
+          "生乳卷",
+          "蓝莓",
+          "日式"
         ]
       }
     },
     {
       "id": "P07",
       "main_category": "热销",
-      "images": "/public/images/products_list/p07.png",
-      "title": "森林童话",
+      "images": "https://img.enjoy-osaka-kyoto-kobe.com/wp-content/uploads/2023/04/11231035/sakura_goods_11-1024x978.webp",
+      "title": "樱花限定-樱花凝糕",
       "price_info": {
         "original_price": 299,
         "current_price": 239
@@ -168,19 +170,20 @@
       "sale_rate": 2,
       "promotion": {
         "is_hot": true,
-        "material": "抹茶奶油，巧克力蘑菇，糖霜装饰",
+        "material": "樱花粉，糯米粉，红豆沙，樱花糖浆",
         "keywords": [
-          "森林",
-          "童话",
-          "自然"
+          "樱花",
+          "限定",
+          "日式",
+          "春季"
         ]
       }
     },
     {
       "id": "P08",
-      "main_category": "新品",
-      "images": "/public/images/products_list/p08.png",
-      "title": "甜蜜告白",
+      "main_category": "上新",
+      "images": "https://m.media-amazon.com/images/I/61lFEhDEuBL._AC_.jpg",
+      "title": "坚果小船酥",
       "price_info": {
         "original_price": 359,
         "current_price": 299
@@ -188,19 +191,20 @@
       "sale_rate": 1,
       "promotion": {
         "is_hot": false,
-        "material": "草莓果酱，动物奶油，巧克力片",
+        "material": "杏仁片，核桃仁，黄油酥皮，蜂蜜糖浆",
         "keywords": [
-          "告白",
-          "甜蜜",
-          "浪漫"
+          "坚果",
+          "酥脆",
+          "下午茶",
+          "手工"
         ]
       }
     },
     {
       "id": "P09",
       "main_category": "特价出售",
-      "images": "/public/images/products_list/p01.png",
-      "title": "韩式系列/绽放",
+      "images": "https://s.yimg.com/ut/api/res/1.2/kdl.L6ACNDv97XZdX768sg--~B/YXBwaWQ9eXR3bWFsbDtjYz0zMTUzNjAwMDtoPTYwMDtxPTEwMDt3PTYwMA--/https://s.yimg.com/fy/47ce/item/p0084224280761-item-5019xf4x0601x0600-m.jpg",
+      "title": "草莓蕾塔",
       "price_info": {
         "original_price": 510,
         "current_price": 460
@@ -208,22 +212,20 @@
       "sale_rate": 10,
       "promotion": {
         "is_hot": false,
-        "main_description": "向日葵+香槟玫瑰+多头玫瑰",
+        "material": "新鲜草莓，香草奶油，酥脆塔皮，糖粉装饰",
         "keywords": [
-          "向日葵",
-          "玫瑰",
-          "生日",
-          "母亲节",
-          "香槟玫瑰"
-        ],
-        "flower_language": "元气满满，永远向着太阳"
+          "草莓",
+          "法式",
+          "甜点",
+          "下午茶"
+        ]
       }
     },
     {
       "id": "P10",
       "main_category": "特价出售",
-      "images": "/public/images/products_list/p01.png",
-      "title": "香妃",
+      "images": "https://mi-journey.jp/foodie/wp-content/uploads/2025/04/250410hahanohi1.jpg",
+      "title": "花甜酥酥",
       "price_info": {
         "original_price": 520,
         "current_price": 400
@@ -231,20 +233,20 @@
       "sale_rate": 23,
       "promotion": {
         "is_hot": false,
-        "main_description": "[清新脱俗] 香槟玫瑰9枝",
+        "material": "玫瑰花瓣，杏仁粉，黄油酥皮，糖霜装饰",
         "keywords": [
-          "香槟玫瑰",
-          "玫瑰",
-          "生日"
-        ],
-        "flower_language": "你的香气，是我思念的味道，那是最独特的。9朵香槟玫瑰，是天长地久的爱情，专属你我之间的真爱，无期限，永不凋零！"
+          "花朵",
+          "酥脆",
+          "浪漫",
+          "手工"
+        ]
       }
     },
     {
       "id": "P11",
       "main_category": "特价出售",
-      "images": "/public/images/products_list/p01.png",
-      "title": "真挚祝福",
+      "images": "https://img.cloudimg.in/uploads/shops/27978/products/76/76c01e68c8e256440f596808cd9bb485.jpg",
+      "title": "草莓塔",
       "price_info": {
         "original_price": 530,
         "current_price": 420
@@ -252,23 +254,20 @@
       "sale_rate": 21,
       "promotion": {
         "is_hot": false,
-        "main_description": "[暖阳系列] 红康乃馨33枝、香槟玫瑰9枝、向日葵3枝",
+        "material": "新鲜草莓，卡仕达酱，酥脆塔皮，糖粉装饰",
         "keywords": [
-          "香槟玫瑰",
-          "玫瑰",
-          "生日",
-          "母亲节",
-          "康乃馨",
-          "向日葵"
-        ],
-        "flower_language": "一生中有很多祝福，最真挚的祝福送给你"
+          "草莓",
+          "法式",
+          "甜点",
+          "下午茶"
+        ]
       }
     },
     {
       "id": "P12",
       "main_category": "特价出售",
-      "images": "/public/images/products_list/p01.png",
-      "title": "向日葵之歌",
+      "images": "https://img.hua9.net/img/400_400/237/2023281291.jpg",
+      "title": "芒果千层",
       "price_info": {
         "original_price": 540,
         "current_price": 430
@@ -276,12 +275,13 @@
       "sale_rate": 20,
       "promotion": {
         "is_hot": false,
-        "main_description": "[心向暖阳，快乐相伴] 向日葵6枝",
+        "material": "新鲜芒果，动物奶油，千层饼皮，糖粉装饰",
         "keywords": [
-          "向日葵",
-          "生日"
-        ],
-        "flower_language": "采一束阳光，制成书签，每一天都有温暖入怀。"
+          "芒果",
+          "千层",
+          "水果",
+          "清新"
+        ]
       }
     }
   ],
@@ -704,6 +704,44 @@
       "delivery_time": "2025-04-30Tmorning:00Z",
       "status": "进行中",
       "id": "OX49Mvy"
+    },
+    {
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P01",
+          "quantity": 2
+        },
+        {
+          "product_id": "P02",
+          "quantity": 4
+        },
+        {
+          "product_id": "P05",
+          "quantity": 2
+        },
+        {
+          "product_id": "P10",
+          "quantity": 1
+        },
+        {
+          "product_id": "P11",
+          "quantity": 1
+        },
+        {
+          "product_id": "P07",
+          "quantity": 1
+        },
+        {
+          "product_id": "P12",
+          "quantity": 1
+        }
+      ],
+      "total_price": "3603.00",
+      "shipping_fee": 0,
+      "delivery_time": "2025-05-01Tafternoon:00Z",
+      "status": "进行中",
+      "id": "okognVZ"
     }
   ],
   "addresses": [
@@ -839,16 +877,36 @@
   ],
   "cart": [
     {
-      "quantity": 1,
+      "quantity": 2,
       "id": "P01"
     },
     {
-      "id": "P02",
+      "quantity": 4,
+      "id": "P02"
+    },
+    {
+      "quantity": 2,
+      "id": "P05"
+    },
+    {
+      "id": "P10",
       "quantity": 1
     },
     {
-      "id": "P05",
+      "id": "P11",
       "quantity": 1
+    },
+    {
+      "id": "P07",
+      "quantity": 1
+    },
+    {
+      "id": "P12",
+      "quantity": 1
+    },
+    {
+      "quantity": 4,
+      "id": "P04"
     }
   ],
   "custom": [

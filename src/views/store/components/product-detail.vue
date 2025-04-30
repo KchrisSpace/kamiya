@@ -201,7 +201,7 @@ onMounted(() => {
   min-height: calc(100vh - 100px);
   padding: 40px 220px;
   box-sizing: border-box;
-  background-color: #f8f9fa;
+  background-color: var(--bg-primary);
 }
 
 .product-content {
@@ -210,7 +210,7 @@ onMounted(() => {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #eee;
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -218,7 +218,7 @@ onMounted(() => {
 
 .product-image {
   flex: 1;
-  max-width: 500px;
+  max-width: 400px;
   position: relative;
 }
 

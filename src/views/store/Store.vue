@@ -185,7 +185,7 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 <style scoped>
 .store-container {
-  margin-top: 40px;
+  /* margin-top: 0px; */
   margin-left: 96px;
   margin-right: 96px;
   font-family: var(--font-Alibaba);
@@ -198,7 +198,7 @@ const debouncedSearch = debounce(handleSearch, 500);
 }
 
 .sidebar {
-  width: 33.33%;
+  width: 20%;
   margin-right: 40px;
 }
 
@@ -224,6 +224,8 @@ const debouncedSearch = debounce(handleSearch, 500);
   height: 40px;
   width: 100%;
   outline: none;
+  border: none;
+  background: none;
 }
 
 .search-input::placeholder {

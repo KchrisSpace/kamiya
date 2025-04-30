@@ -13,7 +13,7 @@
             class="order-item"
           >
             <img
-              :src="item.product?.images[0]"
+              :src="item.product?.images"
               :alt="item.product?.title"
               class="item-image"
             />
