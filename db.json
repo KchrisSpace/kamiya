@@ -39,7 +39,7 @@
       "title": "星与你皆浪漫",
       "price_info": {
         "original_price": 399,
-        "current_price": 260
+        "current_price": 259.9
       },
       "sale_rate": 3,
       "promotion": {
@@ -51,7 +51,8 @@
           "情人节",
           "告白"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P02",
@@ -742,6 +743,20 @@
       "delivery_time": "2025-05-01Tafternoon:00Z",
       "status": "进行中",
       "id": "okognVZ"
+    },
+    {
+      "user_id": "02",
+      "items": [
+        {
+          "product_id": "P02",
+          "quantity": 1
+        }
+      ],
+      "total_price": "199.00",
+      "shipping_fee": 0,
+      "delivery_time": "2025-04-30Tmorning:00Z",
+      "status": "进行中",
+      "id": "rbfhbJR"
     }
   ],
   "addresses": [
@@ -877,36 +892,8 @@
   ],
   "cart": [
     {
-      "quantity": 2,
-      "id": "P01"
-    },
-    {
-      "quantity": 4,
+      "quantity": 1,
       "id": "P02"
-    },
-    {
-      "quantity": 2,
-      "id": "P05"
-    },
-    {
-      "id": "P10",
-      "quantity": 1
-    },
-    {
-      "id": "P11",
-      "quantity": 1
-    },
-    {
-      "id": "P07",
-      "quantity": 1
-    },
-    {
-      "id": "P12",
-      "quantity": 1
-    },
-    {
-      "quantity": 4,
-      "id": "P04"
     }
   ],
   "custom": [

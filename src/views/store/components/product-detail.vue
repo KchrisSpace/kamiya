@@ -43,15 +43,22 @@
 
         <!-- 商品描述 -->
         <div class="description">
-          <!-- 花语 -->
+          <!-- 主要材料 -->
           <div
             class="flower-language"
-            v-if="product?.promotion?.flower_language"
+            v-if="product?.promotion?.material"
           >
-            <span class="label">花语：</span>
-            <span class="content">{{ product.promotion.flower_language }}</span>
+            <span class="label">材料：</span>
+            <span class="content">{{ product.promotion.material }}</span>
           </div>
-
+          <!-- 关键词 -->
+          <div
+            class="keywords"
+            v-if="product?.promotion?.keywords"
+          >
+            <span class="label">关键词：</span>
+            <span class="content">{{ product.promotion.keywords }}</span>
+          </div>
           <!-- 主体 -->
           <div
             class="main_description"
@@ -210,7 +217,7 @@ onMounted(() => {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background-color: #eee;
+  background-color: #fff7f7;
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -303,30 +310,7 @@ onMounted(() => {
   border-bottom: none;
   margin-bottom: 0;
 }
-
-.description .label {
-  min-width: 60px;
-  color: #666;
-  font-size: 15px;
-  margin-right: 12px;
-  flex-shrink: 0;
-  font-weight: 500;
-}
-
-.description .content {
-  color: #2c3e50;
-  font-size: 15px;
-  line-height: 1.6;
-  flex: 1;
-}
-
-.flower-language .label {
-  color: #ff6b6b;
-}
-
-.main_description .label {
-  color: #1890ff;
-}
+ 
 
 .action-buttons {
   display: flex;

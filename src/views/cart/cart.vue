@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="cart">
-    <div class="cart-container">
+    <div class="cart-container" v-if="cartStore.cartItems.length > 0">
       <div class="cart-item" v-for="item in cartStore.cartItems" :key="item.id">
         <button class="remove-btn" @click="removeItem(item.id)">X</button>
         <img
@@ -32,8 +32,11 @@
         <p class="total-price">¥{{ calculateItemTotal(item).toFixed(2) }}</p>
       </div>
     </div>
+    <div v-else class="empty-cart">
+      <p>购物车是空的</p>
+    </div>
     <!-- 合计付款 -->
-    <div class="checkout-area">
+    <div class="checkout-area" v-if="cartStore.cartItems.length > 0">
       <p class="total">
         订单总计：<i>￥{{ lastTotalPrice.toFixed(2) }}</i>
       </p>
@@ -67,9 +70,7 @@ const calculateTotal = () => {
 watch(
   () => calculateTotal(),
   (newTotal) => {
-    if (newTotal > 0) {
-      lastTotalPrice.value = newTotal;
-    }
+    lastTotalPrice.value = newTotal;
   },
   { immediate: true }
 );
@@ -110,7 +111,14 @@ const updateCartItem = (item) => {
 
 const removeItem = async (itemId) => {
   try {
+    // 先保存当前总价
+    const currentTotal = lastTotalPrice.value;
+    // 移除商品
     await cartStore.removeItem(itemId);
+    // 如果移除后购物车为空，总价设为0
+    if (cartStore.cartItems.length === 0) {
+      lastTotalPrice.value = 0;
+    }
     ElMessage.success("商品已从购物车移除");
   } catch (error) {
     console.error("删除商品失败:", error);
@@ -282,5 +290,14 @@ onMounted(async () => {
 
 .pay-button:hover {
   background-color: #ff5252;
+}
+
+.empty-cart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #666;
 }
 </style>
