@@ -1,8 +1,7 @@
-import { defineStore } from 'pinia';
-import axios from 'axios';
- 
+import { defineStore } from "pinia";
+import axios from "axios";
 
-export const useNormalOrdersStore = defineStore('normalOrders', {
+export const useNormalOrdersStore = defineStore("normalOrders", {
   state: () => ({
     orders: [],
     loading: false,
@@ -30,7 +29,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
         this.error = null;
       } catch (error) {
         this.error = error.message;
-        console.error('获取订单失败:', error);
+        console.error("获取订单失败:", error);
       } finally {
         this.loading = false;
       }
@@ -46,11 +45,11 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
         );
         this.orders.push(response.data);
         this.error = null;
-        console.log('添加订单后', this.orders);
+        console.log("添加订单后", this.orders);
         return response.data;
       } catch (error) {
         this.error = error.message;
-        console.error('添加订单失败:', error);
+        console.error("添加订单失败:", error);
         throw error;
       } finally {
         this.loading = false;
@@ -61,10 +60,24 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
     async updateOrder(orderId, orderData) {
       this.loading = true;
       try {
+        // 先获取当前订单的完整信息
+        const currentOrder = this.orders.find((order) => order.id === orderId);
+        if (!currentOrder) {
+          throw new Error("订单不存在");
+        }
+
+        // 只更新状态，保留其他信息
+        const updatedOrder = {
+          ...currentOrder,
+          ...orderData,
+        };
+
         const response = await axios.put(
           `http://localhost:3001/normal_orders/${orderId}`,
-          orderData
+          updatedOrder
         );
+
+        // 更新本地订单列表
         const index = this.orders.findIndex((order) => order.id === orderId);
         if (index !== -1) {
           this.orders[index] = response.data;
@@ -73,7 +86,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
         return response.data;
       } catch (error) {
         this.error = error.message;
-        console.error('更新订单失败:', error);
+        console.error("更新订单失败:", error);
         throw error;
       } finally {
         this.loading = false;
@@ -89,7 +102,7 @@ export const useNormalOrdersStore = defineStore('normalOrders', {
         this.error = null;
       } catch (error) {
         this.error = error.message;
-        console.error('删除订单失败:', error);
+        console.error("删除订单失败:", error);
         throw error;
       } finally {
         this.loading = false;

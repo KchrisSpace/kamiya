@@ -131,6 +131,10 @@ export const useCartStore = defineStore("cart", () => {
   // 清空购物车
   const clearCart = async () => {
     try {
+      // 清空服务器数据
+      for (const item of cartItems.value) {
+        await axios.delete(`http://localhost:3001/cart/${item.id}`);
+      }
       // 清空本地状态
       cartItems.value = [];
       itemTotals.value = {};

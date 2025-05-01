@@ -2,7 +2,7 @@
    创建订单
    -->
 <template>
-   <div class="payment-container">
+  <div class="payment-container">
     <div class="payment-left">
       <div class="order-items">
         <h3>当前订单商品</h3>
@@ -122,100 +122,80 @@
     class="modal-overlay"
     @click="showNewAddressModal = false"
   >
-    <div class="modal-content text-right px-4 py-10" @click.stop>
-      <h5 class="text-left">添加收货地址</h5>
-      <form @submit.prevent="addNewAddress" class="py-6">
-        <div class="flex flex-col gap-6">
-          <!-- 地址信息 -->
-          <div class="flex">
-            <label for="region" class="shrink-0 w-23"
-              ><span class="text-font-primary">*</span>地址信息:</label
+    <div class="modal-content" @click.stop>
+      <h5>添加收货地址</h5>
+      <form @submit.prevent="addNewAddress">
+        <div class="form-group">
+          <label for="region"
+            >地址信息 <span class="text-font-primary">*</span></label
+          >
+          <select v-model="newAddress.region" required>
+            <option value="" disabled>请选择省/市/区/街道</option>
+            <option
+              v-for="option in addressOptions"
+              :key="option"
+              :value="option"
             >
-            <select v-model="newAddress.region" required class="mr-[20px]">
-              <option value="" disabled class="text-font-primary">
-                请选择省/市/区/街道
-              </option>
-              <option
-                v-for="option in addressOptions"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </option>
-            </select>
-          </div>
-          <!-- 详细地址 -->
-          <div class="flex">
-            <label for="address" class="shrink-0 w-23"
-              ><span class="text-font-primary">*</span>详细信息:</label
-            >
-            <span class="w-full mr-[20px]">
-              <textarea
-                class="h-24 resize-none outline-none"
-                placeholder="请输入详细地址信息，如道路，门牌号，小区，楼栋号，单元等信息"
-                v-model="newAddress.address"
-                @blur="validateAddress"
-                required
-              />
-              <p class="text-xs text-font-primary text-left">
-                详细地址长度需要在2-120个汉字或字符，不能包含表情符号
-              </p>
-            </span>
-          </div>
-          <!-- 收货人 -->
-          <div class="flex items-center">
-            <label for="address" class="shrink-0 w-23"
-              ><span class="text-font-primary">*</span>收货人姓名:</label
-            >
-            <input
-              type="text"
-              placeholder="长度不超过25字符"
-              v-model="newAddress.name"
-              @input="validateName"
-              required
-            />
-          </div>
-          <div class="flex">
-            <label for="address" class="shrink-0 w-23"
-              ><span class="text-font-primary">*</span>手机号码:</label
-            >
-            <span class="w-full mr-[20px]">
-              <input
-                type="tel"
-                placeholder="必填"
-                v-model="newAddress.phone"
-                @input="validatePhone"
-                required
-              />
-              <p v-if="phoneError" class="text-red-500">{{ phoneError }}</p>
-              <!-- 设置为默认地址 -->
-
-              <div class="py-2 flex items-center">
-                <input
-                  type="checkbox"
-                  v-model="newAddress.isDefault"
-                  id="defaultAddress"
-                />
-                <label for="defaultAddress" class="ml-2">设为默认地址</label>
-              </div>
-            </span>
-          </div>
+              {{ option }}
+            </option>
+          </select>
         </div>
 
-        <div class="flex justify-evenly pt-2">
-          <button
-            type="button"
-            @click="showNewAddressModal = false"
-            class="border-[1px] border-bg-primary text-font-thirth w-20 h-8 rounded-1"
+        <div class="form-group">
+          <label for="address"
+            >详细信息 <span class="text-font-primary">*</span></label
           >
+          <textarea
+            placeholder="请输入详细地址信息，如道路，门牌号，小区，楼栋号，单元等信息"
+            v-model="newAddress.address"
+            @blur="validateAddress"
+            required
+          ></textarea>
+          <p class="error-message" v-if="addressError">{{ addressError }}</p>
+        </div>
+
+        <div class="form-group">
+          <label for="name"
+            >收货人姓名 <span class="text-font-primary">*</span></label
+          >
+          <input
+            type="text"
+            placeholder="长度不超过25字符"
+            v-model="newAddress.name"
+            @input="validateName"
+            required
+          />
+          <p class="error-message" v-if="nameError">{{ nameError }}</p>
+        </div>
+
+        <div class="form-group">
+          <label for="phone"
+            >手机号码 <span class="text-font-primary">*</span></label
+          >
+          <input
+            type="tel"
+            placeholder="请输入手机号码"
+            v-model="newAddress.phone"
+            @input="validatePhone"
+            required
+          />
+          <p class="error-message" v-if="phoneError">{{ phoneError }}</p>
+        </div>
+
+        <div class="checkbox-group">
+          <input
+            type="checkbox"
+            v-model="newAddress.isDefault"
+            id="defaultAddress"
+          />
+          <label for="defaultAddress">设为默认地址</label>
+        </div>
+
+        <div class="modal-buttons">
+          <button type="button" @click="showNewAddressModal = false">
             取消
           </button>
-          <button
-            type="submit"
-            class="bg-font-primary text-white w-20 h-8 rounded-1"
-          >
-            确认
-          </button>
+          <button type="submit">确认</button>
         </div>
       </form>
     </div>
@@ -343,16 +323,20 @@ const createOrder = async () => {
       status: "进行中",
     };
 
+    // 先创建订单
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
-      ElMessage.success("订单创建成功");
-      // 清空购物车
+      // 等待购物车清空完成
       await cartStore.clearCart();
+      // 重新获取购物车数据以确保同步
+      await cartStore.fetchCartData();
+
+      ElMessage.success("订单创建成功");
       // 清空配送时间
       selectedDate.value = "";
       selectedTime.value = "";
       // 跳转到订单列表页
-      // router.push('/order');
+      router.push("/order");
     }
   } catch (error) {
     console.error("创建订单失败:", error);
@@ -803,7 +787,7 @@ async function addNewAddress() {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(66, 68, 67, 0.15);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -812,57 +796,125 @@ async function addNewAddress() {
 
 .modal-content {
   background-color: white;
-  border-radius: 34px;
-  width: 660px;
-  height: 500px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
 }
-textarea {
-  border: 1px solid #e5e5e5;
-  border-radius: 7px;
-  margin: 0 10px;
-  padding: 0 10px;
-  width: 100%;
+
+.modal-content h5 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
-span > p {
-  margin: 0 10px;
+
+.form-group {
+  margin-bottom: 1.5rem;
 }
-input {
-  border: 1px solid #e5e5e5;
-  border-radius: 7px;
-  height: 36px;
-  margin: 0 10px;
-  padding: 0 10px;
-  outline: none;
-  width: 100%;
-}
-select {
-  border: 1px solid #e5e5e5;
-  border-radius: 7px;
-  height: 36px;
-  margin: 0 10px;
-  padding: 0 10px;
-  outline: none;
-  width: 100%;
-}
-input::placeholder {
-  color: #d2d2d2;
-  font-size: 14px;
-}
-textarea::placeholder {
-  color: #d2d2d2;
-  font-size: 14px;
-}
+
 label {
-  color: #424443;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
 }
+
+input[type="text"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #f26371;
+  box-shadow: 0 0 0 2px rgba(242, 99, 113, 0.1);
+  outline: none;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
 input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  margin: 0 10px;
-  outline: none;
+  margin-right: 0.5rem;
+  accent-color: #f26371;
 }
-button:hover {
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-buttons button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons button[type="button"] {
+  background: white;
+  border: 1px solid #e5e5e5;
+  color: #666;
+}
+
+.modal-buttons button[type="submit"] {
+  background: #f26371;
+  border: none;
+  color: white;
+}
+
+.modal-buttons button:hover {
+  transform: translateY(-2px);
+}
+
+.modal-buttons button[type="button"]:hover {
+  background: #f9f9f9;
+  border-color: #f26371;
   color: #f26371;
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background: #fbe4e9;
+  color: #f26371;
+}
+
+.error-message {
+  color: #f26371;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .modal-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
 }
 </style>

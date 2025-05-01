@@ -648,61 +648,18 @@
   ],
   "normal_orders": [
     {
-      "id": "U1",
-      "user_id": "02",
-      "items": [
-        {
-          "product_id": "P02",
-          "quantity": 1,
-          "single_price": 399
-        }
-      ],
-      "status": "进行中",
-      "created_at": "2025-04-13T10:15:00Z"
-    },
-    {
-      "id": "U2",
-      "user_id": "02",
-      "items": [
-        {
-          "product_id": "P03",
-          "quantity": 1,
-          "single_price": 100
-        }
-      ],
-      "status": "已完成",
-      "created_at": "2025-04-01T10:15:00Z"
-    },
-    {
-      "id": "U3",
-      "user_id": "02",
-      "items": [
-        {
-          "product_id": "P06",
-          "quantity": 1,
-          "single_price": 299
-        }
-      ],
-      "status": "已取消",
-      "created_at": "2025-02-13T09:15:00Z"
-    },
-    {
       "user_id": "02",
       "items": [
         {
           "product_id": "P01",
-          "quantity": 8
-        },
-        {
-          "product_id": "P02",
-          "quantity": 2
+          "quantity": 1
         }
       ],
-      "total_price": "2840.00",
+      "total_price": "259.90",
       "shipping_fee": 0,
-      "delivery_time": "2025-04-30Tmorning:00Z",
+      "delivery_time": "2025-05-28Tmorning:00Z",
       "status": "进行中",
-      "id": "OX49Mvy"
+      "id": 1
     },
     {
       "user_id": "02",
@@ -713,48 +670,28 @@
         },
         {
           "product_id": "P02",
-          "quantity": 4
-        },
-        {
-          "product_id": "P05",
-          "quantity": 2
-        },
-        {
-          "product_id": "P10",
-          "quantity": 1
-        },
-        {
-          "product_id": "P11",
-          "quantity": 1
-        },
-        {
-          "product_id": "P07",
-          "quantity": 1
-        },
-        {
-          "product_id": "P12",
           "quantity": 1
         }
       ],
-      "total_price": "3603.00",
+      "total_price": "718.80",
       "shipping_fee": 0,
-      "delivery_time": "2025-05-01Tafternoon:00Z",
+      "delivery_time": "2025-05-28Tmorning:00Z",
       "status": "进行中",
-      "id": "okognVZ"
+      "id": 2
     },
     {
       "user_id": "02",
       "items": [
         {
-          "product_id": "P02",
+          "product_id": "P08",
           "quantity": 1
         }
       ],
-      "total_price": "199.00",
+      "total_price": "299.00",
       "shipping_fee": 0,
-      "delivery_time": "2025-04-30Tmorning:00Z",
+      "delivery_time": "2025-05-28Tmorning:00Z",
       "status": "进行中",
-      "id": "rbfhbJR"
+      "id": 3
     }
   ],
   "addresses": [
@@ -888,20 +825,7 @@
       "img": "/public/images/carousel-img/carousel-4.png"
     }
   ],
-  "cart": [
-    {
-      "quantity": 1,
-      "id": "P02"
-    },
-    {
-      "id": "P11",
-      "quantity": 1
-    },
-    {
-      "quantity": 6,
-      "id": "P03"
-    }
-  ],
+  "cart": [],
   "custom": [
     {
       "id": "1",
