@@ -14,7 +14,7 @@
       <el-menu-item index="/customize">定制</el-menu-item>
       <el-menu-item index="/cart">购物车</el-menu-item>
       <el-menu-item index="/order">订单</el-menu-item>
-      <el-menu-item index="/contact">联系我们</el-menu-item>
+      <el-menu-item index="/about">关于我们</el-menu-item>
     </el-menu>
     <div class="right-menu">
       <template v-if="!isLoggedIn">

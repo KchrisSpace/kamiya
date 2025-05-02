@@ -124,7 +124,13 @@ onMounted(async () => {
 });
 
 // 订单列表
-const orders = computed(() => normalOrdersStore.orders);
+const orders = computed(() => {
+  return [...normalOrdersStore.orders].sort((a, b) => {
+    const dateA = new Date(a.created_at);
+    const dateB = new Date(b.created_at);
+    return dateB - dateA; // 降序排序，最新的在前面
+  });
+});
 
 // 删除订单
 async function deleteOrder(orderId) {

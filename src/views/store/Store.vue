@@ -185,39 +185,65 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 <style scoped>
 .store-container {
-  /* margin-top: 0px; */
   margin-left: 96px;
   margin-right: 96px;
   font-family: var(--font-Alibaba);
+  height: 100vh;
+  overflow: hidden;
 }
 
 .store-content {
   display: flex;
   color: var(--color-font-secondary);
   text-align: left;
+  height: 100%;
 }
 
 .sidebar {
   width: 20%;
   margin-right: 40px;
+  border: 2px solid var(--color-bg-primary);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(242, 99, 113, 0.1);
+  background-color: white;
+  padding: 22px;
+  transform: translateY(-8px);
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #fff5f6);
+  z-index: -1;
 }
 
 .sticky-sidebar {
   position: sticky;
   top: 40px;
+  padding: 8px;
 }
 
 .search-container {
-  padding-left: 16px;
-  padding-right: 8px;
+  padding: 12px 16px;
   border: 2px solid var(--color-bg-primary);
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background-color: #fff5f6;
 }
 
 .search-container:hover {
   border-color: var(--color-font-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(242, 99, 113, 0.1);
 }
 
 .search-input {
@@ -226,6 +252,7 @@ const debouncedSearch = debounce(handleSearch, 500);
   outline: none;
   border: none;
   background: none;
+  font-size: 16px;
 }
 
 .search-input::placeholder {
@@ -234,7 +261,14 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 .search-icon {
   cursor: pointer;
-  transition: color 0.3s;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.search-icon:hover {
+  background-color: rgba(242, 99, 113, 0.1);
+  transform: scale(1.1);
 }
 
 .search-icon.active {
@@ -250,6 +284,8 @@ const debouncedSearch = debounce(handleSearch, 500);
   padding-bottom: 8px;
   border-bottom: 2px solid var(--color-bg-primary);
   font-size: 24px;
+  color: var(--color-font-primary);
+  font-weight: 600;
 }
 
 .price-range {
@@ -281,22 +317,29 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 .category-btn {
   font-size: 20px;
-  padding-top: 16px;
+  padding: 12px 16px;
   color: var(--color-font-thirth);
   font-weight: 500;
-  margin-bottom: 0;
+  margin-bottom: 4px;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: all 0.3s ease;
   background: none;
   border: none;
+  border-radius: 12px;
+  width: 100%;
+  text-align: left;
 }
 
 .category-btn:hover {
-  color: rgba(242, 99, 113, 0.4);
+  background-color: rgba(242, 99, 113, 0.1);
+  color: var(--color-font-primary);
+  transform: translateX(8px);
 }
 
 .category-btn.active {
-  color: rgba(242, 99, 113, 0.6);
+  background-color: rgba(242, 99, 113, 0.15);
+  color: var(--color-font-primary);
+  transform: translateX(8px);
 }
 
 .product-grid {
@@ -304,6 +347,28 @@ const debouncedSearch = debounce(handleSearch, 500);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 16px;
+}
+
+/* 自定义滚动条样式 */
+.product-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.product-grid::-webkit-scrollbar-track {
+  background: #fff5f6;
+  border-radius: 8px;
+}
+
+.product-grid::-webkit-scrollbar-thumb {
+  background: rgba(242, 99, 113, 0.3);
+  border-radius: 8px;
+}
+
+.product-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(242, 99, 113, 0.5);
 }
 
 .loading-message {
@@ -341,7 +406,8 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 /* Element Plus Slider 样式覆盖 */
 :deep(.el-slider__bar) {
-  background-color: var(--color-font-primary);
+  background-color: var(--btn-primary);
+  top: -50%;
   height: 12px;
   border-radius: 6px;
 }

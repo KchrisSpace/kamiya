@@ -25,7 +25,18 @@ export const useNormalOrdersStore = defineStore("normalOrders", {
           ? `http://localhost:3001/normal_orders?user_id=${userId}`
           : `http://localhost:3001/normal_orders`;
         const response = await axios.get(url);
-        this.orders = response.data;
+
+        // 为没有创建时间的订单添加创建时间
+        this.orders = response.data.map((order) => {
+          if (!order.created_at) {
+            return {
+              ...order,
+              created_at: new Date().toISOString(), // 为历史订单设置当前时间
+            };
+          }
+          return order;
+        });
+
         this.error = null;
       } catch (error) {
         this.error = error.message;

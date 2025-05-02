@@ -284,28 +284,6 @@
       "status": "1"
     }
   ],
-  "carts": [
-    {
-      "id": "C01",
-      "user_id": "1",
-      "created_at": "2023-04-13T10:30:00Z",
-      "items": [
-        {
-          "item_id": "item_01",
-          "product_id": "prod_658",
-          "sku_id": "sku_658_black_xl",
-          "quantity": 2,
-          "selected": true
-        }
-      ],
-      "total": 299,
-      "summary": {
-        "total_items": 3,
-        "total_quantity": 5,
-        "total_amount": 896
-      }
-    }
-  ],
   "product_comments": [
     {
       "id": "bd9e",
@@ -418,280 +396,25 @@
       "is_audited": true
     }
   ],
-  "article_comments": [
-    {
-      "id": "ace5",
-      "article_id": "A02",
-      "content": "123",
-      "user_id": "2",
-      "avatar": "/images/users/avater/user1.png",
-      "user_name": "Maybe",
-      "created_at": "2025-04-25T16:01:24.724Z",
-      "is_audited": true
-    },
-    {
-      "id": "d32a",
-      "article_id": "A02",
-      "content": "123",
-      "user_id": "2",
-      "avatar": "/images/users/avater/user1.png",
-      "user_name": "Maybe",
-      "created_at": "2025-04-25T16:01:36.163Z",
-      "is_audited": true
-    },
-    {
-      "id": "7a9a",
-      "article_id": "A04",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "123",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:04:09.468Z",
-      "is_audited": true
-    },
-    {
-      "id": "e98b",
-      "article_id": "A03",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "123",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:19:49.135Z",
-      "is_audited": true
-    },
-    {
-      "id": "6e30",
-      "article_id": "A03",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "123",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:20:46.749Z",
-      "is_audited": true
-    },
-    {
-      "id": "623c",
-      "article_id": "A03",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "AI",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:21:15.511Z",
-      "is_audited": true
-    },
-    {
-      "id": "cd59",
-      "article_id": "A01",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "牛思瑶",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:22:57.143Z",
-      "is_audited": true
-    },
-    {
-      "id": "4c96",
-      "article_id": "A01",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "123456",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T16:32:19.689Z",
-      "is_audited": true
-    },
-    {
-      "id": "31b2",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "1234",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T17:04:15.754Z",
-      "is_audited": true
-    },
-    {
-      "id": "c220",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "123456",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T17:06:59.872Z",
-      "is_audited": true
-    },
-    {
-      "id": "092c",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "234567",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T17:17:59.859Z",
-      "is_audited": true
-    },
-    {
-      "id": "213d",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "好",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T20:14:43.003Z",
-      "is_audited": true
-    },
-    {
-      "id": "307e",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "你是对的",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-25T21:56:28.881Z",
-      "is_audited": true
-    },
-    {
-      "id": "20e6",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "12455",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-27T09:55:00.328Z",
-      "is_audited": true
-    },
-    {
-      "id": "3c6b",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "3333",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-27T09:56:04.166Z",
-      "is_audited": true
-    },
-    {
-      "id": "7a73",
-      "article_id": "A02",
-      "user_id": "2",
-      "user_name": "Maybe",
-      "content": "4444",
-      "avatar": "/images/users/avater/user1.png",
-      "created_at": "2025-04-27T09:56:28.844Z",
-      "is_audited": true
-    }
-  ],
-  "articles": [
-    {
-      "id": "A01",
-      "title": "给爷爷送花有哪些选择？给老人送花推荐！",
-      "cover_img": "/images/articles/A01/cover.jpg",
-      "content": "<p>爷爷今年70岁生日，如果要给他老人家送花，一般是怎么选择？有哪些寓意比较吉利的花适合送给老人，给爷爷送花有哪些选择？给老人送花推荐！</p><p>送长辈，当然是希望长辈身体健康，所以可以送盆长寿花。长寿花花期能持续好几个月，又比较耐旱，不怎么管就能开花多！</p><p>龟背竹叶片宽大，叶形像是乌龟的背部，而在中国，乌龟又寓意着长寿，所以也很适合给老人送一盆。龟背竹要勤浇水，春秋大概3-5天浇1次，保证湿度就能长得旺！</p><p>万年青常用来形容老人，所以适合送给长辈，希望他们寿比南山。一般放在室内客厅等散射光好的地方养护即可，平常看到土干了后再浇，别让盆里积水烂根。</p><p>如果不想送上边那些花，也可以选择送一些盆景类，像是松柏、银杏、红枫等，从而表达对长辈的崇敬之情。</p><p>蝴蝶兰看上去像是一只只小蝴蝶在飞，而且颜色又是紫红色的，非常适合送老人家。蝴蝶兰平常有散射光就能长，但是想要开花，还是得多晒太阳。</p><p>既然是新装修的房子，那肯定还是要送盆吊兰来净化空气啦！吊兰可以吸收空气中的苯、甲醛等有害物质，而且还是特别好养的花，非常适合送给老人~</p>",
-      "related_products": [
-        "P02",
-        "P03"
-      ],
-      "view_count": 6,
-      "tags": [
-        "爷爷",
-        "送花"
-      ],
-      "status": "published",
-      "publish_time": "2018-10-10T09:00:00Z"
-    },
-    {
-      "id": "A02",
-      "title": "送花要注意什么？如何给老人，爱人，朋友送花？",
-      "cover_img": "/images/articles/A02/cover.jpg",
-      "content": "<p>看到这个标题你可能会纳闷，送花谁不会，还需要你来教？你有可能真的不会哦，送花的讲究可多着呢，送花要注意什么？如何给老人，爱人，朋友送花？</p><p>老者要长寿，那么你送他花尽量要送单枝，不要送双枝。因为单数逢阳，双数就是一个句号、结束。情侣之间送花一定要送双数，其中的含义不言自明，就是要成双成对。</p><p>如果夫妻之间送花，那么最好送的是长枝条的，也就是夫妻两人牵手要走的长。这是一个助运技巧。给病人送花，你千万不能送长枝条的，要送短枝的，或者送假花。因为我们的老黄历里面有十二个字，其中有一个字叫\"除\"，也就是病人的病要早一点除掉。</p><p>你送给他的花千万不要很长，要给他送短的，希望他的病尽快结束。或者送假花，让他的病不存在生机，也就代表了让他的病早一点除掉。当然，这个病人出院之后送的花一定不能带回家。</p><p>朋友的新店开张或者公司开业你要送什么花呢？一定要送圆满的花篮，不要去送一捧花。我们古人说财源茂盛通四海，生意兴隆达三江。你想他的方圆有多圆满，所以这花篮一定要饱满。去看望德高望重的老者，或者你的师父，或者你的引路人，你要送花给他，千万记住只送一枝，唯尔独尊。也就是他在你心目中是唯一的。</p>",
-      "related_products": [
-        "P02",
-        "P03"
-      ],
-      "view_count": 2,
-      "tags": [
-        "送花",
-        "鲜花生活"
-      ],
-      "status": "published",
-      "publish_time": "2023-02-13T09:00:00Z"
-    },
-    {
-      "id": "A03",
-      "title": "绣球脱水如何急救？绣球保水措施揭秘！",
-      "cover_img": "/images/articles/A03/cover.jpg",
-      "content": "<p>绣球很需要水，这是对绣球的最基本的认知，但是也别担心承受不了损耗风险而不敢选购，万事都是相对的，绣球脱水了我们可以挽救，或者提前预防，绣球脱水如何急救？绣球保水措施揭秘！</p><p>保水管。网上有均码带杆的和不带杆的保水管，带杆比较适合运用在手捧花或花束里，不带杆的适合运用在架构花艺或花束以及平时的花艺布置及花盒中。</p><p>大家可以根据作品情况来选择合适的保水管，没用过的朋友可能还不知道保水管的开口处是有弹性的，虽然看着洞口小，但是比较粗的枝条也可以放进去，这样会更稳固。</p><p>可利鲜或者花之寿品牌都有喷剂，是液体的，这些材料在某宝都有，价格美丽，无需亲自跑当地资材店买，这个方法适用场景很多，平时做婚礼宴会或者打花束及手捧，在客人看到之前都可以先喷喷，尤其手捧花，如果枝条底部没有保水管，在送出之前最好喷几下。</p><p>保鲜膜就类似市面上包在半个西瓜表面的，棉布就类似街边卖水果的喜欢盖在上面的那种，只要能保湿就行，包括用卫生纸都可以。</p><p>同样的办法，在把这些介质盖在绣球作品表面前，可以先在绣球表面喷点营养液。所以除了在花瓶内装满水，还要时不时在花头上喷水。</p>",
-      "related_products": [
-        "P02",
-        "P03"
-      ],
-      "view_count": 56,
-      "tags": [
-        "鲜花生活"
-      ],
-      "status": "published",
-      "publish_time": "2016-03-10T09:00:00Z"
-    },
-    {
-      "id": "A04",
-      "title": "奶油春天在花艺中的运用！",
-      "cover_img": "/images/articles/A04/cover.jpg",
-      "content": "<p>奶油春天的这种「粉」是偏低饱和度的粉色，和其他大黄、大橙、大红的高饱和色彩比，天然自带性冷淡属性，因此但看就已比一般的非洲菊高大上太多。</p><p>其次是花瓣造型的不同，传统非洲菊花瓣整齐，一瓣一瓣非常捋顺，奶油春天的花瓣就像爆炸头，乱蓬蓬的，花瓣细窄而尖，乍一看还以为是纸剪成的呢。</p><p>奶油春天适合与粉色、浅色系花材搭配，选用沉色包装纸，可以突出它的粉色，若用浅色包装纸，配材上选择黄白色系，更有春天的感觉。</p><p>不过如果只是单插，没有配花，也略微单调。</p><p>几乎所有的花艺师都不会多用，1-3朵足矣，数量不多，足够吸睛。除了甜美，若使用大量自然系花材搭配，它也颇能胜任乡村风。</p><p>如果包装纸是透明色，会增强轻盈感一些，比较空灵哦。</p>",
-      "related_products": [
-        "P02",
-        "P03"
-      ],
-      "view_count": 16,
-      "tags": [
-        "鲜花生活"
-      ],
-      "status": "published",
-      "publish_time": "2025-04-01T09:00:00Z"
-    }
-  ],
   "normal_orders": [
     {
       "user_id": "02",
       "items": [
         {
-          "product_id": "P01",
+          "product_id": "P04",
           "quantity": 1
-        }
-      ],
-      "total_price": "259.90",
-      "shipping_fee": 0,
-      "delivery_time": "2025-05-28Tmorning:00Z",
-      "status": "进行中",
-      "id": 1
-    },
-    {
-      "user_id": "02",
-      "items": [
-        {
-          "product_id": "P01",
-          "quantity": 2
         },
         {
-          "product_id": "P02",
+          "product_id": "P01",
           "quantity": 1
         }
       ],
-      "total_price": "718.80",
+      "total_price": "558.90",
       "shipping_fee": 0,
       "delivery_time": "2025-05-28Tmorning:00Z",
       "status": "进行中",
-      "id": 2
-    },
-    {
-      "user_id": "02",
-      "items": [
-        {
-          "product_id": "P08",
-          "quantity": 1
-        }
-      ],
-      "total_price": "299.00",
-      "shipping_fee": 0,
-      "delivery_time": "2025-05-28Tmorning:00Z",
-      "status": "进行中",
-      "id": 3
+      "created_at": "2025-05-01T18:10:02.528Z",
+      "id": 1
     }
   ],
   "addresses": [
@@ -825,7 +548,16 @@
       "img": "/public/images/carousel-img/carousel-4.png"
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "quantity": 2,
+      "id": "P01"
+    },
+    {
+      "id": "P02",
+      "quantity": 1
+    }
+  ],
   "custom": [
     {
       "id": "1",
@@ -882,6 +614,15 @@
       "phone": "14726839224",
       "feedback_message": "123",
       "created_at": "2025-04-25T18:15:40.526Z"
+    },
+    {
+      "user_id": "02",
+      "name": "chris",
+      "email": "meirui@cdjcc.edu.cn",
+      "phone": "13540604635",
+      "feedback_message": "真好",
+      "created_at": "2025-05-01T18:44:19.078Z",
+      "id": "RjzhdCa"
     }
   ]
 }

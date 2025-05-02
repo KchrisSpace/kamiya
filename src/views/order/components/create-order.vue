@@ -321,6 +321,7 @@ const createOrder = async () => {
       shipping_fee: shippingFee.value,
       delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
       status: "进行中",
+      created_at: new Date().toISOString(),
     };
 
     // 先创建订单
