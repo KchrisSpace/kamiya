@@ -163,9 +163,10 @@ const goToProductDetails = (productId) => {
 }
 
 .products-grid {
+  width: 90vw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   gap: 20px;
 }
 
@@ -173,6 +174,7 @@ const goToProductDetails = (productId) => {
   width: 235px;
   height: 400px;
   display: flex;
+  margin: 10px;
   flex-direction: column;
   border: 1px solid #dddddda7;
   padding: 10px;
@@ -246,7 +248,7 @@ const goToProductDetails = (productId) => {
 .title {
   font-size: 1.1rem;
   margin: 10px 0;
-  font-weight: 400;
+  font-weight: 600;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -256,7 +258,7 @@ const goToProductDetails = (productId) => {
 hr {
   margin: 15px 0;
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #d0b7c1;
 }
 
 .price {

@@ -44,18 +44,12 @@
         <!-- 商品描述 -->
         <div class="description">
           <!-- 主要材料 -->
-          <div
-            class="flower-language"
-            v-if="product?.promotion?.material"
-          >
+          <div class="flower-language" v-if="product?.promotion?.material">
             <span class="label">材料：</span>
             <span class="content">{{ product.promotion.material }}</span>
           </div>
           <!-- 关键词 -->
-          <div
-            class="keywords"
-            v-if="product?.promotion?.keywords"
-          >
+          <div class="keywords" v-if="product?.promotion?.keywords">
             <span class="label">关键词：</span>
             <span class="content">{{ product.promotion.keywords }}</span>
           </div>
@@ -86,16 +80,8 @@
             type="primary"
             class="add-to-cart"
             @click="addItem(productId, quantity)"
-            :loading="isAddingToCart"
           >
             加入购物车
-          </el-button>
-          <el-button
-            class="wishlist-btn"
-            @click="addToWishlist"
-            :loading="isAddingToWishlist"
-          >
-            <el-icon><Star /></el-icon>
           </el-button>
         </div>
       </div>
@@ -115,19 +101,16 @@ import { ref, onMounted } from "vue";
 import { Plus, Minus, Star } from "@element-plus/icons-vue";
 import { useRoute } from "vue-router";
 import { useCartStore } from "../../../data_stores/cart.js";
-import { useWishlistStore } from "../../../data_stores/wishlist.js";
 import { ElMessage } from "element-plus";
 
 const route = useRoute();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
 
 const productId = route.params.id;
 const product = ref(null);
 const quantity = ref(1);
 const rating = ref(5);
 const isAddingToCart = ref(false);
-const isAddingToWishlist = ref(false);
 
 // 处理图片路径
 const getImagePath = (imagePath) => {
@@ -177,22 +160,6 @@ const addItem = async () => {
     ElMessage.error("添加商品失败，请重试");
   } finally {
     isAddingToCart.value = false;
-  }
-};
-
-// 添加商品到心愿单
-const addToWishlist = async () => {
-  if (!product.value) return;
-
-  try {
-    isAddingToWishlist.value = true;
-    await wishlistStore.addItem(productId, 1);
-    ElMessage.success("商品已成功添加到心愿单");
-  } catch (error) {
-    console.error("添加商品到心愿单失败:", error);
-    ElMessage.error("添加商品到心愿单失败，请重试");
-  } finally {
-    isAddingToWishlist.value = false;
   }
 };
 
@@ -293,24 +260,35 @@ onMounted(() => {
 .description {
   margin: 24px 0;
   padding: 24px;
-  background: #f8f9fa;
+  background: #fff5f5;
   border-radius: 12px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+  border: 2px solid #ffe4e1;
 }
 
 .description > div {
   margin-bottom: 20px;
   padding: 16px 0;
-  border-bottom: 1px dashed #e8e8e8;
+  border-bottom: 2px dotted #ffc0cb;
   display: flex;
   align-items: flex-start;
+  color: #d87093;
 }
 
 .description > div:last-child {
   border-bottom: none;
   margin-bottom: 0;
 }
- 
+
+.description .label {
+  font-weight: 600;
+  color: #ff69b4;
+}
+
+.description .content {
+  color: #db7093;
+  line-height: 1.6;
+}
 
 .action-buttons {
   display: flex;
@@ -338,7 +316,7 @@ onMounted(() => {
 }
 
 .add-to-cart {
-  background-color: #ff4d4f;
+  background-color: #ff7875;
   color: white;
   border: none;
   padding: 14px 32px;
@@ -351,7 +329,7 @@ onMounted(() => {
 }
 
 .add-to-cart:hover {
-  background-color: #ff7875;
+  background-color: rgb(248, 169, 180);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(255, 77, 79, 0.3);
 }

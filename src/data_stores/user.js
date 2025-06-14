@@ -6,23 +6,20 @@ import { ElMessage } from "element-plus";
 export const useUserStore = defineStore("user", () => {
   const userInfo = ref(null);
   const token = ref(localStorage.getItem("token") || null);
+  const userId = ref(localStorage.getItem("userId") || null);
   const loading = ref(false);
 
   const isLoggedIn = computed(() => !!token.value);
-  const userAvatar = computed(
-    () => userInfo.value?.["user-info"]?.avatar || ""
-  );
-  const userNickname = computed(
-    () => userInfo.value?.["user-info"]?.nickname || ""
-  );
+  const userAvatar = computed(() => userInfo.value?.["user-info"]?.avatar || "");
+  const userNickname = computed(() => userInfo.value?.["user-info"]?.nickname || "");
   const isAdmin = computed(() => userInfo.value?.role === "admin");
 
   async function login(username, password, remember = false) {
     loading.value = true;
     try {
-      // 验证管理员账号
       if (username === "admin" && password === "000000") {
         const adminUser = {
+          id: "admin",
           username: "admin",
           role: "admin",
           "user-info": {
@@ -33,6 +30,7 @@ export const useUserStore = defineStore("user", () => {
 
         setUserInfo(adminUser);
         setToken("admin-token");
+        setUserId("admin");
 
         if (remember) {
           localStorage.setItem("remember", "true");
@@ -42,16 +40,11 @@ export const useUserStore = defineStore("user", () => {
         return { success: true, isAdmin: true };
       }
 
-      // 验证普通用户账号
       const response = await axios.get("http://localhost:3001/users");
-      console.log("用户数据:", response.data); // 添加日志查看数据结构
-
-      // 确保数据结构正确
       if (!response.data || !Array.isArray(response.data)) {
         throw new Error("用户数据格式错误");
       }
 
-      // 查找匹配的用户
       const user = response.data.find(
         (u) => u.username === username && u.password === password
       );
@@ -59,6 +52,7 @@ export const useUserStore = defineStore("user", () => {
       if (user) {
         setUserInfo(user);
         setToken("user-token");
+        setUserId(user.id);
 
         if (remember) {
           localStorage.setItem("remember", "true");
@@ -79,24 +73,13 @@ export const useUserStore = defineStore("user", () => {
   }
 
   async function getUserInfo() {
-    if (!token.value) return;
+    if (!token.value || !userId.value) return;
 
     loading.value = true;
     try {
-      // 从 users 接口获取所有用户数据
-      const response = await axios.get("http://localhost:3001/users");
-
-      if (!response.data || !Array.isArray(response.data)) {
-        throw new Error("用户数据格式错误");
-      }
-
-      // 根据当前用户信息查找对应的用户数据
-      const currentUser = response.data.find(
-        (user) => user.username === userInfo.value?.username
-      );
-
-      if (currentUser) {
-        setUserInfo(currentUser);
+      const response = await axios.get(`http://localhost:3001/users/${userId.value}`);
+      if (response.data) {
+        setUserInfo(userId.value);
       } else {
         throw new Error("用户信息不存在");
       }
@@ -113,11 +96,6 @@ export const useUserStore = defineStore("user", () => {
 
   function setUserInfo(info) {
     userInfo.value = info;
-    if (info) {
-      localStorage.setItem("userInfo", JSON.stringify(info));
-    } else {
-      localStorage.removeItem("userInfo");
-    }
   }
 
   function setToken(newToken) {
@@ -129,30 +107,31 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
-  function logout() {
-    userInfo.value = null;
-    setToken(null);
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("remember");
-  }
-
-  function initUserInfo() {
-    const savedUserInfo = localStorage.getItem("userInfo");
-    if (savedUserInfo) {
-      try {
-        userInfo.value = JSON.parse(savedUserInfo);
-      } catch (error) {
-        console.error("解析用户信息失败:", error);
-        localStorage.removeItem("userInfo");
-      }
+  function setUserId(newUserId) {
+    userId.value = newUserId;
+    if (newUserId) {
+      localStorage.setItem("userId", newUserId);
+    } else {
+      localStorage.removeItem("userId");
     }
   }
 
-  initUserInfo();
+  function logout() {
+    userInfo.value = null;
+    setToken(null);
+    setUserId(null);
+    localStorage.removeItem("remember");
+  }
+
+  // Initial load of user info if token and userId exist
+  if (token.value && userId.value) {
+    getUserInfo();
+  }
 
   return {
     userInfo,
     token,
+    userId,
     isLoggedIn,
     isAdmin,
     loading,
@@ -162,6 +141,7 @@ export const useUserStore = defineStore("user", () => {
     getUserInfo,
     setUserInfo,
     setToken,
+    setUserId,
     logout,
   };
 });

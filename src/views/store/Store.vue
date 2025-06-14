@@ -98,7 +98,7 @@ const priceRange = ref([0, 600]);
 const searchKeyword = ref("");
 const searchResult = ref([]);
 const isLoading = ref(false);
-const categories = ["推荐", "生日鲜花", "友情鲜花", "情人节鲜花"];
+const categories = ["单品", "冷品", "暖品", "套餐"];
 
 // 计算属性
 const filteredGoods = computed(() => {

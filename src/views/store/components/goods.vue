@@ -32,9 +32,6 @@
         <button class="add-to-cart-btn" @click.stop="handleAddToCart(item)">
           加入购物车
         </button>
-        <div class="details-icon" @click.stop="handleShowDetails(item)">
-          <el-icon :size="36"><ArrowRight /></el-icon>
-        </div>
       </div>
     </div>
     <div class="goods-info">

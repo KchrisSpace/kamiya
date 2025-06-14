@@ -312,7 +312,7 @@ const createOrder = async () => {
 
   try {
     const orderData = {
-      user_id: "02",
+      user_id: "user2",
       items: cartStore.cartItems.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,

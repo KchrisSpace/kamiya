@@ -77,7 +77,7 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
+  background-color: aquamarine;
   font-family: "Alibaba", sans-serif;
 }
 
@@ -119,7 +119,7 @@ const handleLogin = async () => {
 }
 
 .form-input:focus {
-  border-color: #f26371;
+  border-color: #dac5c7;
 }
 
 .form-options {

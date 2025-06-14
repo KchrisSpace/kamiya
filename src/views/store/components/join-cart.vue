@@ -9,37 +9,14 @@
         </div>
         <!-- right -->
         <div class="product-info">
-          <h4 class="product-title">{{ title }}</h4>
+          <h4 class="product-title">{{ title }} x1</h4>
           <div class="success-message">
-            <span class="success-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-              >
-                <circle cx="16" cy="16" r="16" fill="#20B759"></circle>
-                <path
-                  stroke="rgba(255, 255, 255, 1)"
-                  stroke-width="2"
-                  d="M5.5 16L15 21L25 8.5"
-                ></path>
-              </svg>
-            </span>
             <span class="message-text">成功添加到您的购物车</span>
           </div>
           <button class="view-cart-btn" @click="goToCart">查看购物车</button>
           <!-- 关闭按钮 -->
           <div class="close-btn">
-            <el-icon
-              size="24"
-              color="#fff"
-              class="close-icon"
-              @click="$emit('close')"
-              ><Close
-            /></el-icon>
+            <div class="close" @click="$emit('close')">X</div>
           </div>
         </div>
       </div>
@@ -92,45 +69,45 @@
 
 .product-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .product-title {
   margin: 0;
   font-size: 18px;
+
   color: var(--color-font-secondary);
 }
 
 .success-message {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   margin-top: 10px;
 }
 
-.success-icon {
-  width: 16px;
-  height: 16px;
-}
-
 .message-text {
   margin-left: 8px;
-  font-size: 14px;
+  font-size: 1.2rem;
   color: var(--color-font-secondary);
 }
 
 .view-cart-btn {
+  position: relative;
+  left: 40px;
   background-color: var(--color-font-primary);
-  width: 120px;
+  width: 170px;
+  height: 30px;
   color: white;
   padding: 4px 0;
   margin-top: 20px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
 
-.view-cart-btn:hover {
-  background-color: rgba(242, 99, 113, 0.8);
+  transition: background-color 0.3s;
+  background-color: rgb(248, 169, 180);
 }
 
 .close-btn {
@@ -139,16 +116,15 @@
   right: 0;
   width: 28px;
   height: 28px;
-  background-color: var(--color-font-primary);
+  color: rgb(238, 67, 29);
+  background-color: rgb(247, 246, 246);
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
-.close-icon {
-  cursor: pointer;
-  font-weight: bold;
-}
+ 
 </style>
 
 <script>
@@ -166,7 +142,7 @@ export default {
   },
   methods: {
     goToCart() {
-      this.$router.push("/cart");  
+      this.$router.push("/cart");
     },
   },
 };

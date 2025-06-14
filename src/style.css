@@ -24,7 +24,7 @@
   --bg-secondary: #ffe4e1; /* 浅玫瑰色 */
 
   /* 按钮颜色 */
-  --btn-primary: #ffb6c1;
+  --btn-primary:rgba(196, 83, 83, 0.5);
   --btn-hover: #ffc0cb;
   --btn-text: #ffffff;
 }
