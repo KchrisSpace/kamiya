@@ -200,6 +200,7 @@
       </form>
     </div>
   </div>
+  <LoginTip v-if="showLoginTip"  />
 </template>
 
 <script setup>
@@ -209,7 +210,8 @@ import { ElDatePicker, ElMessage } from "element-plus";
 import { useNormalOrdersStore } from "../../../data_stores/normal-orders";
 import { useCartStore } from "../../../data_stores/cart";
 import { useAddressStore } from "../../../data_stores/address";
-
+import LoginTip from "./login-tip.vue";
+const showLoginTip = ref(false);
 const cartStore = useCartStore();
 const router = useRouter();
 const normalOrdersStore = useNormalOrdersStore();
@@ -223,6 +225,7 @@ const showNewAddressModal = ref(false);
 const nameError = ref("");
 const addressError = ref("");
 const phoneError = ref("");
+const userid = localStorage.getItem("userId");
 // 判断是否为编辑
 const editingAddressId = ref("");
 const newAddress = ref({
@@ -300,6 +303,11 @@ const finalPrice = computed(() => {
 
 // 创建订单
 const createOrder = async () => {
+  if (!userid) {
+    showLoginTip.value = true;
+    // ElMessage.error("请先登录");
+    return;
+  }
   if (!selectedDate.value || !selectedTime.value) {
     ElMessage.error("请选择配送日期和时间");
     return;
@@ -312,7 +320,7 @@ const createOrder = async () => {
 
   try {
     const orderData = {
-      user_id: "user2",
+      user_id:userid,
       items: cartStore.cartItems.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,

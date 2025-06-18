@@ -110,7 +110,9 @@ const router = useRouter();
 const normalOrdersStore = useNormalOrdersStore();
 const cartStore = useCartStore();
 const productsStore = useProductsStore();
-const currentUserId = "02";
+const userid = localStorage.getItem("userId");
+const currentUserId = userid;
+// const currentUserId = "";
 
 // 获取订单数据
 onMounted(async () => {
@@ -131,6 +133,7 @@ const orders = computed(() => {
     return dateB - dateA; // 降序排序，最新的在前面
   });
 });
+console.log(orders);
 
 // 删除订单
 async function deleteOrder(orderId) {
