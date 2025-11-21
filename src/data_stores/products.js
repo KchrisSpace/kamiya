@@ -82,6 +82,17 @@ export const useProductsStore = defineStore("products", () => {
   const updateProduct = async (id, product) => {
     loading.value = true;
     try {
+      const productData = { ...product };
+
+      // 如果库存为0且不是上架状态，自动下架
+      // 注意：如果是在上架操作中（status为"1"），则不上架操作已经处理了库存加1，所以这里不需要下架
+      if (
+        (productData.stock === 0 || productData.stock === "0") &&
+        productData.status !== "1"
+      ) {
+        productData.status = "0";
+      }
+
       const response = await fetch(
         `http://localhost:3001/products_list/${id}`,
         {
@@ -89,7 +100,7 @@ export const useProductsStore = defineStore("products", () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(product),
+          body: JSON.stringify(productData),
         }
       );
       const updatedProduct = await response.json();

@@ -2,11 +2,26 @@
   <div class="products">
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" class="filter-form">
+        <el-form-item label="商品ID">
+          <el-input
+            v-model="filterForm.id"
+            placeholder="请输入商品ID"
+            clearable
+          />
+        </el-form-item>
         <el-form-item label="商品名称">
-          <el-input v-model="filterForm.name" placeholder="请输入商品名称" />
+          <el-input
+            v-model="filterForm.name"
+            placeholder="请输入商品名称"
+            clearable
+          />
         </el-form-item>
         <el-form-item label="商品分类">
-          <el-select v-model="filterForm.category" placeholder="请选择分类">
+          <el-select
+            v-model="filterForm.category"
+            placeholder="请选择分类"
+            clearable
+          >
             <el-option label="全部" value="" />
             <el-option
               v-for="category in productsStore.categories"
@@ -17,7 +32,6 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="resetFilter">重置</el-button>
         </el-form-item>
       </el-form>
@@ -32,7 +46,7 @@
       </template>
 
       <el-table
-        :data="productsStore.filteredProducts"
+        :data="paginatedProducts"
         style="width: 100%"
         v-loading="productsStore.loading"
       >
@@ -81,7 +95,7 @@
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
           :page-sizes="[10, 20, 50, 100]"
-          :total="productsStore.total"
+          :total="filteredProducts.length"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -105,7 +119,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProductForm from "./components/ProductForm.vue";
 import { useProductsStore } from "../../../data_stores/products";
@@ -118,37 +132,70 @@ const dialogType = ref("add");
 const formData = ref({});
 
 const filterForm = reactive({
+  id: "",
   name: "",
   category: "",
 });
 
-const handleSearch = () => {
-  if (filterForm.name) {
-    const results = productsStore.searchProducts(filterForm.name);
-    productsStore.products = results;
+// 实时过滤商品列表
+const filteredProducts = computed(() => {
+  let result = [...productsStore.products];
+
+  // ID过滤
+  if (filterForm.id && filterForm.id.trim()) {
+    result = result.filter((product) =>
+      product.id?.toLowerCase().includes(filterForm.id.trim().toLowerCase())
+    );
   }
-  if (filterForm.category) {
-    productsStore.setCurrentCategory(filterForm.category);
+
+  // 商品名称过滤
+  if (filterForm.name && filterForm.name.trim()) {
+    result = result.filter((product) =>
+      product.title
+        ?.toLowerCase()
+        .includes(filterForm.name.trim().toLowerCase())
+    );
   }
-};
+
+  // 分类过滤
+  if (filterForm.category && filterForm.category.trim()) {
+    result = result.filter(
+      (product) => product.main_category === filterForm.category
+    );
+  }
+
+  return result;
+});
+
+// 监听过滤条件变化，重置到第一页
+watch(
+  [() => filterForm.id, () => filterForm.name, () => filterForm.category],
+  () => {
+    currentPage.value = 1;
+  }
+);
 
 const resetFilter = () => {
+  filterForm.id = "";
   filterForm.name = "";
   filterForm.category = "";
-  productsStore.setCurrentCategory("");
-  productsStore.fetchProducts();
 };
 
 const handleSizeChange = (val) => {
   pageSize.value = val;
-  productsStore.perPage = val;
-  productsStore.fetchProducts();
+  currentPage.value = 1; // 重置到第一页
 };
 
 const handleCurrentChange = (val) => {
   currentPage.value = val;
-  productsStore.setCurrentPage(val);
 };
+
+// 计算分页后的商品列表
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return filteredProducts.value.slice(start, end);
+});
 
 const handleAdd = () => {
   dialogType.value = "add";
@@ -158,12 +205,13 @@ const handleAdd = () => {
     price_info: {
       current_price: "",
     },
-    stock: "",
+    stock: 1, // 默认库存为1
     description: "",
     images: [],
     promotion: {
       keywords: [],
     },
+    status: "0", // 默认下架，需要手动上架
   };
   dialogVisible.value = true;
 };
@@ -176,16 +224,28 @@ const handleEdit = (row) => {
 
 const handleStatus = async (row) => {
   const action = row.status === "1" ? "下架" : "上架";
+  const isGoingOnSale = row.status !== "1"; // 判断是否为上架操作
+
   try {
     await ElMessageBox.confirm(`确定要${action}该商品吗？`, "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning",
     });
-    await productsStore.updateProduct(row.id, {
+
+    // 准备更新的数据
+    const updateData = {
       ...row,
       status: row.status === "1" ? "0" : "1",
-    });
+    };
+
+    // 如果是上架操作且库存为0，自动将库存加1
+    if (isGoingOnSale && (row.stock === 0 || row.stock === "0" || !row.stock)) {
+      updateData.stock = 1;
+      ElMessage.info("检测到库存为0，已自动将库存设置为1");
+    }
+
+    await productsStore.updateProduct(row.id, updateData);
     ElMessage.success(`${action}成功`);
   } catch (error) {
     if (error !== "cancel") {
@@ -212,6 +272,11 @@ const handleDelete = async (row) => {
 
 const handleSubmit = async (form) => {
   try {
+    // 如果库存为0，自动下架
+    if (form.stock === 0 || form.stock === "0") {
+      form.status = "0";
+    }
+
     if (dialogType.value === "add") {
       await productsStore.addProduct(form);
       ElMessage.success("添加成功");

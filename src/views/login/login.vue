@@ -77,7 +77,7 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: aquamarine;
+  background-color: rgb(255, 255, 255);
   font-family: "Alibaba", sans-serif;
 }
 

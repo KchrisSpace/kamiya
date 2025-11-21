@@ -1,6 +1,10 @@
 <template>
   <div class="product-container">
     <div class="product-content">
+      <!-- 关闭按钮 -->
+      <button class="close-btn" @click="handleClose">
+        <el-icon><Close /></el-icon>
+      </button>
       <!-- 左侧商品图片 -->
       <div class="product-image">
         <div class="img-main">
@@ -43,6 +47,11 @@
 
         <!-- 商品描述 -->
         <div class="description">
+          <!-- 商品描述 -->
+          <div class="product-description" v-if="product?.description">
+            <span class="label">商品描述：</span>
+            <span class="content">{{ product.description }}</span>
+          </div>
           <!-- 主要材料 -->
           <div class="flower-language" v-if="product?.promotion?.material">
             <span class="label">材料：</span>
@@ -52,16 +61,6 @@
           <div class="keywords" v-if="product?.promotion?.keywords">
             <span class="label">关键词：</span>
             <span class="content">{{ product.promotion.keywords }}</span>
-          </div>
-          <!-- 主体 -->
-          <div
-            class="main_description"
-            v-if="product?.promotion?.main_description"
-          >
-            <span class="label">主体：</span>
-            <span class="content">{{
-              product.promotion.main_description
-            }}</span>
           </div>
         </div>
 
@@ -98,12 +97,13 @@ export default {
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { Plus, Minus, Star } from "@element-plus/icons-vue";
-import { useRoute } from "vue-router";
+import { Plus, Minus, Star, Close } from "@element-plus/icons-vue";
+import { useRoute, useRouter } from "vue-router";
 import { useCartStore } from "../../../data_stores/cart.js";
 import { ElMessage } from "element-plus";
 
 const route = useRoute();
+const router = useRouter();
 const cartStore = useCartStore();
 
 const productId = route.params.id;
@@ -163,6 +163,16 @@ const addItem = async () => {
   }
 };
 
+// 处理关闭按钮
+const handleClose = () => {
+  // 返回到上一级路由，如果没有历史记录则返回到商店页面
+  if (window.history.length > 1) {
+    router.go(-1);
+  } else {
+    router.push("/store");
+  }
+};
+
 onMounted(() => {
   fetchProductDetails();
 });
@@ -188,6 +198,40 @@ onMounted(() => {
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border: none;
+  background: linear-gradient(135deg, #ffffff 0%, #fff9fa 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.3);
+  color: #ff6b9d;
+  font-size: 28px;
+  border: 3px solid rgba(255, 107, 157, 0.2);
+}
+
+.close-btn:hover {
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff91a4 100%);
+  color: #ffffff;
+  transform: scale(1.15) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+  border-color: rgba(255, 107, 157, 0.4);
+}
+
+.close-btn:active {
+  transform: scale(1.05) rotate(90deg);
 }
 
 .product-image {
@@ -369,6 +413,15 @@ onMounted(() => {
     flex-direction: column;
     padding: 20px;
     gap: 30px;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    border-width: 2px;
   }
 
   .product-image {

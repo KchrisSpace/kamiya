@@ -29,54 +29,55 @@
           </div>
         </div>
         <div class="order-summary">
-          <div class="summary-item">
-            <span>商品总价</span>
-            <span>¥{{ totalPrice }}</span>
-          </div>
-          <div class="summary-item">
-            <span>运费</span>
-            <span>¥{{ shippingFee }}</span>
-          </div>
           <div class="summary-item total">
             <span>应付金额</span>
-            <span class="final-price">¥{{ finalPrice }}</span>
+            <span class="final-price">¥{{ totalPrice }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="payment-right">
       <div class="payment-info">
-        <h3>支付信息</h3>
+        <h3>订单信息</h3>
         <div class="delivery-info">
-          <h4>收货信息</h4>
-          <div class="address-card" v-if="addressStore.addresses.length > 0">
-            <p class="receiver w-fit">
-              收货人：{{ addressStore.defaultAddress?.consignee }}
-            </p>
-            <p class="phone w-fit">
-              电话：{{ addressStore.defaultAddress?.phone }}
-            </p>
-            <p class="address w-fit">
-              地址：{{ addressStore.defaultAddress?.region }}
-              {{ addressStore.defaultAddress?.detail }}
-            </p>
-            <button
-              @click="showNewAddressModal = true"
-              class="edit-address-btn"
-            >
-              新增
-            </button>
-          </div>
-
-          <div v-else class="no-address">
-            <p>请先添加收货地址</p>
-            <button @click="showNewAddressModal = true" class="add-address-btn">
-              添加地址
-            </button>
+          <h4>取餐信息</h4>
+          <div class="info-card">
+            <div class="form-group">
+              <label for="name"
+                >姓名 <span class="text-font-primary">*</span></label
+              >
+              <input
+                type="text"
+                placeholder="请输入姓名"
+                v-model="orderInfo.name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone"
+                >电话 <span class="text-font-primary">*</span></label
+              >
+              <input
+                type="tel"
+                placeholder="请输入手机号码"
+                v-model="orderInfo.phone"
+                @input="validatePhone"
+                required
+              />
+              <p class="error-message" v-if="phoneError">{{ phoneError }}</p>
+            </div>
+            <div class="form-group">
+              <label for="remark">备注</label>
+              <textarea
+                placeholder="请输入备注信息（选填）"
+                v-model="orderInfo.remark"
+                rows="3"
+              ></textarea>
+            </div>
           </div>
         </div>
         <div class="delivery-time">
-          <h4>配送时间</h4>
+          <h4>预计取餐时间</h4>
           <div class="date-picker">
             <el-date-picker
               v-model="selectedDate"
@@ -109,7 +110,7 @@
         </div>
         <div class="payment-methods">
           <h4>支付方式</h4>
-          <p>仅支持货到付款</p>
+          <p>仅支持店内付款</p>
         </div>
       </div>
       <div class="create-order">
@@ -117,90 +118,7 @@
       </div>
     </div>
   </div>
-  <div
-    v-if="showNewAddressModal"
-    class="modal-overlay"
-    @click="showNewAddressModal = false"
-  >
-    <div class="modal-content" @click.stop>
-      <h5>添加收货地址</h5>
-      <form @submit.prevent="addNewAddress">
-        <div class="form-group">
-          <label for="region"
-            >地址信息 <span class="text-font-primary">*</span></label
-          >
-          <select v-model="newAddress.region" required>
-            <option value="" disabled>请选择省/市/区/街道</option>
-            <option
-              v-for="option in addressOptions"
-              :key="option"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="address"
-            >详细信息 <span class="text-font-primary">*</span></label
-          >
-          <textarea
-            placeholder="请输入详细地址信息，如道路，门牌号，小区，楼栋号，单元等信息"
-            v-model="newAddress.address"
-            @blur="validateAddress"
-            required
-          ></textarea>
-          <p class="error-message" v-if="addressError">{{ addressError }}</p>
-        </div>
-
-        <div class="form-group">
-          <label for="name"
-            >收货人姓名 <span class="text-font-primary">*</span></label
-          >
-          <input
-            type="text"
-            placeholder="长度不超过25字符"
-            v-model="newAddress.name"
-            @input="validateName"
-            required
-          />
-          <p class="error-message" v-if="nameError">{{ nameError }}</p>
-        </div>
-
-        <div class="form-group">
-          <label for="phone"
-            >手机号码 <span class="text-font-primary">*</span></label
-          >
-          <input
-            type="tel"
-            placeholder="请输入手机号码"
-            v-model="newAddress.phone"
-            @input="validatePhone"
-            required
-          />
-          <p class="error-message" v-if="phoneError">{{ phoneError }}</p>
-        </div>
-
-        <div class="checkbox-group">
-          <input
-            type="checkbox"
-            v-model="newAddress.isDefault"
-            id="defaultAddress"
-          />
-          <label for="defaultAddress">设为默认地址</label>
-        </div>
-
-        <div class="modal-buttons">
-          <button type="button" @click="showNewAddressModal = false">
-            取消
-          </button>
-          <button type="submit">确认</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <LoginTip v-if="showLoginTip"  />
+  <LoginTip v-if="showLoginTip" />
 </template>
 
 <script setup>
@@ -215,41 +133,20 @@ const showLoginTip = ref(false);
 const cartStore = useCartStore();
 const router = useRouter();
 const normalOrdersStore = useNormalOrdersStore();
-const addressStore = useAddressStore();
 const cartItems = ref([]);
-// const address = ref(null);
 const selectedMethod = ref("wechat");
 const selectedDate = ref("");
 const selectedTime = ref("");
-const showNewAddressModal = ref(false);
-const nameError = ref("");
-const addressError = ref("");
 const phoneError = ref("");
 const userid = localStorage.getItem("userId");
-// 判断是否为编辑
-const editingAddressId = ref("");
-const newAddress = ref({
-  user_id: "02",
+
+// 订单信息
+const orderInfo = ref({
   name: "",
   phone: "",
-  region: "",
-  address: "",
-  isDefault: false,
+  remark: "",
 });
 
-// 示例地址选项
-const addressOptions = ref([
-  "成都市/郫都区",
-  "成都市/青羊区",
-  "成都市/金牛区",
-  "成都市/成华区",
-  "成都市/高新区",
-  "成都市/锦江区",
-  "成都市/温江区",
-  "成都市/双流区",
-  "成都市/龙泉驿区",
-  // 添加更多选项
-]);
 // 禁用过去的日期
 const disabledDate = (time) => {
   return time.getTime() < Date.now() - 8.64e7;
@@ -260,27 +157,6 @@ const timeSlots = [
   { label: "14:00-18:00", value: "afternoon" },
   { label: "18:00-21:00", value: "evening" },
 ];
-
-// 获取地址数据
-const fetchAddress = async () => {
-  try {
-    await addressStore.fetchAddresses();
-    console.log("地址列表:", addressStore.addresses);
-    console.log("默认地址:", addressStore.defaultAddress);
-  } catch (error) {
-    console.error("获取地址失败:", error);
-    ElMessage.error("获取地址失败，请重试");
-  }
-};
-
-// 监听地址变化
-watch(
-  () => addressStore.addresses,
-  (newAddresses) => {
-    console.log("地址列表变化:", newAddresses);
-  },
-  { immediate: true }
-);
 
 // 计算总价
 const totalPrice = computed(() => {
@@ -293,42 +169,53 @@ const totalPrice = computed(() => {
     .toFixed(2);
 });
 
-// 运费
-const shippingFee = ref(0);
-
-// 最终价格
-const finalPrice = computed(() => {
-  return (parseFloat(totalPrice.value) + shippingFee.value).toFixed(2);
-});
-
 // 创建订单
 const createOrder = async () => {
   if (!userid) {
     showLoginTip.value = true;
-    // ElMessage.error("请先登录");
-    return;
-  }
-  if (!selectedDate.value || !selectedTime.value) {
-    ElMessage.error("请选择配送日期和时间");
     return;
   }
 
-  if (!addressStore.addresses) {
-    ElMessage.warning("请先选择收货地址");
+  // 验证姓名
+  if (!orderInfo.value.name || orderInfo.value.name.trim() === "") {
+    ElMessage.error("请输入姓名");
+    return;
+  }
+
+  // 验证电话
+  if (!orderInfo.value.phone || orderInfo.value.phone.trim() === "") {
+    ElMessage.error("请输入手机号码");
+    return;
+  }
+
+  // 去除所有空格和非数字字符，只保留数字
+  const phoneNumber = orderInfo.value.phone.replace(/\D/g, "");
+
+  // 验证是否为11位数字，且以1开头
+  if (phoneNumber.length !== 11 || !phoneNumber.startsWith("1")) {
+    ElMessage.error("请输入有效的手机号码（11位数字，以1开头）");
+    return;
+  }
+
+  if (!selectedDate.value || !selectedTime.value) {
+    ElMessage.error("请选择预计取餐日期和时间");
     return;
   }
 
   try {
     const orderData = {
-      user_id:userid,
+      user_id: userid,
       items: cartStore.cartItems.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,
       })),
-      total_price: finalPrice.value,
-      shipping_fee: shippingFee.value,
+      total_price: totalPrice.value,
+      shipping_fee: 0,
       delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
-      status: "进行中",
+      consignee: orderInfo.value.name,
+      phone: orderInfo.value.phone.replace(/\D/g, ""), // 保存时去除所有非数字字符
+      remark: orderInfo.value.remark || "",
+      status: "待商家确认",
       created_at: new Date().toISOString(),
     };
 
@@ -341,9 +228,14 @@ const createOrder = async () => {
       await cartStore.fetchCartData();
 
       ElMessage.success("订单创建成功");
-      // 清空配送时间
+      // 清空表单
       selectedDate.value = "";
       selectedTime.value = "";
+      orderInfo.value = {
+        name: "",
+        phone: "",
+        remark: "",
+      };
       // 跳转到订单列表页
       router.push("/order");
     }
@@ -371,15 +263,21 @@ const getTimeLabel = (timeValue) => {
   return slot ? slot.label : "";
 };
 
-// 处理地址更新
-const handleAddressUpdate = async (updatedAddress) => {
-  try {
-    await addressStore.updateAddress(updatedAddress);
-    ElMessage.success("地址更新成功");
-    await fetchAddress();
-  } catch (error) {
-    console.error("更新地址失败:", error);
-    ElMessage.error("更新地址失败，请重试");
+// 手机号码校验
+const validatePhone = () => {
+  if (!orderInfo.value.phone || orderInfo.value.phone.trim() === "") {
+    phoneError.value = "";
+    return;
+  }
+
+  // 去除所有空格和非数字字符，只保留数字
+  const phoneNumber = orderInfo.value.phone.replace(/\D/g, "");
+
+  // 验证是否为11位数字，且以1开头
+  if (phoneNumber.length !== 11 || !phoneNumber.startsWith("1")) {
+    phoneError.value = "请输入有效的手机号码（11位数字，以1开头）";
+  } else {
+    phoneError.value = "";
   }
 };
 
@@ -390,106 +288,11 @@ onMounted(async () => {
       await cartStore.fetchCartData();
     }
     cartItems.value = [...cartStore.cartItems];
-
-    // 获取地址数据
-    await fetchAddress();
   } catch (error) {
     console.error("初始化数据失败:", error);
     ElMessage.error("加载数据失败，请重试");
   }
 });
-// 设置默认地址
-async function setDefaultAddress(address) {
-  if (address.is_default) {
-    return;
-  }
-  try {
-    await addressStore.setDefaultAddress(address.id);
-  } catch (error) {
-    console.error("设置默认地址失败:", error);
-  }
-}
-
-// 收货人姓名校验
-const validateName = () => {
-  if (newAddress.value.name.length > 25) {
-    nameError.value = "收货人姓名不能超过25个字符";
-  } else {
-    nameError.value = "";
-  }
-};
-
-// 详细地址校验
-const validateAddress = () => {
-  const addressLength = newAddress.value.address.length;
-  const emojiPattern = /[\u{1F600}-\u{1F64F}]/u; // 简单的表情符号检测
-  if (
-    addressLength < 2 ||
-    addressLength > 120 ||
-    emojiPattern.test(newAddress.value.address)
-  ) {
-    addressError.value =
-      "详细地址长度需要在2-120个字符之间，且不能包含表情符号";
-    alert("详细地址长度需要在2-120个字符之间，且不能包含表情符号");
-  } else {
-    addressError.value = "";
-  }
-};
-
-// 手机号码校验
-const validatePhone = () => {
-  const phonePattern = /^[0-9]{10,11}$/; // 假设电话号码为10到11位数字
-  if (!phonePattern.test(newAddress.value.phone)) {
-    phoneError.value = "请输入有效的电话号码";
-  } else {
-    phoneError.value = "";
-  }
-};
-
-// 添加新地址
-async function addNewAddress() {
-  try {
-    const addressData = {
-      user_id: newAddress.value.user_id,
-      consignee: newAddress.value.name,
-      phone: newAddress.value.phone,
-      region: newAddress.value.region,
-      detail: newAddress.value.address,
-      is_default: newAddress.value.isDefault,
-    };
-
-    // 保证全局唯一
-    if (addressData.is_default) {
-      for (const addr of addressStore.addresses) {
-        if (addr.is_default && addr.id !== editingAddressId.value) {
-          await addressStore.updateAddress(addr.id, {
-            ...addr,
-            is_default: false,
-          });
-        }
-      }
-    }
-
-    if (editingAddressId.value) {
-      await addressStore.updateAddress(editingAddressId.value, addressData);
-    } else {
-      await addressStore.addAddress(addressData);
-    }
-
-    showNewAddressModal.value = false;
-    editingAddressId.value = "";
-    newAddress.value = {
-      user_id: "02",
-      name: "",
-      phone: "",
-      region: "",
-      address: "",
-      isDefault: false,
-    };
-  } catch (error) {
-    console.error("保存地址失败:", error);
-  }
-}
 </script>
 
 <style scoped>
@@ -536,9 +339,9 @@ async function addNewAddress() {
 .delivery-info h4 {
   text-align: left;
   margin-left: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .items-list {
@@ -635,27 +438,58 @@ async function addNewAddress() {
   margin-bottom: 1rem;
 }
 
-.address-card {
-  background: #f9f9f9;
+.info-card {
+  background: linear-gradient(135deg, #fff9fb 0%, #ffffff 100%);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 182, 193, 0.2);
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 14px;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
-.address-card p {
-  margin: 0;
+.info-card .form-group {
+  margin-bottom: 0;
+}
+
+.info-card label {
+  display: block;
+  margin-bottom: 0.3rem;
   color: #666;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: "Nunito", sans-serif;
 }
 
-.no-address {
-  background: #f9f9f9;
-  padding: 1rem;
+.info-card input,
+.info-card textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid rgba(255, 182, 193, 0.3);
   border-radius: 8px;
-  text-align: center;
-  color: #666;
+  font-size: 14px;
+  font-family: "Nunito", sans-serif;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #333;
+}
+
+.info-card input:focus,
+.info-card textarea:focus {
+  border-color: #ff6b9d;
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+  outline: none;
+}
+
+.info-card textarea {
+  min-height: 60px;
+  resize: vertical;
+  font-family: "Nunito", sans-serif;
+}
+
+.text-font-primary {
+  color: #ff6b9d;
+  font-weight: 700;
 }
 
 .pay-button {
@@ -748,38 +582,6 @@ async function addNewAddress() {
   font-size: 0.9rem;
 }
 
-.edit-address-btn {
-  color: #f26371;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-left: 1rem;
-  font-size: 16px;
-}
-
-.edit-address-btn:hover {
-  background: #fbe4e9;
-  transform: translateY(-2px);
-}
-
-.add-address-btn {
-  background: #f26371;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
-}
-
-.add-address-btn:hover {
-  background: #fbe4e9;
-  transform: translateY(-2px);
-}
-
 @media (max-width: 768px) {
   .payment-container {
     flex-direction: column;
@@ -789,141 +591,9 @@ async function addNewAddress() {
   .payment-right {
     width: 100%;
   }
-}
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
 
-.modal-content {
-  background-color: white;
-  border-radius: 12px;
-  width: 600px;
-  max-width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 2rem;
-}
-
-.modal-content h5 {
-  font-size: 1.25rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
-}
-
-input[type="text"],
-input[type="tel"],
-select,
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  margin-bottom: 0.5rem;
-}
-
-input[type="text"]:focus,
-input[type="tel"]:focus,
-select:focus,
-textarea:focus {
-  border-color: #f26371;
-  box-shadow: 0 0 0 2px rgba(242, 99, 113, 0.1);
-  outline: none;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin-right: 0.5rem;
-  accent-color: #f26371;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.modal-buttons button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.modal-buttons button[type="button"] {
-  background: white;
-  border: 1px solid #e5e5e5;
-  color: #666;
-}
-
-.modal-buttons button[type="submit"] {
-  background: #f26371;
-  border: none;
-  color: white;
-}
-
-.modal-buttons button:hover {
-  transform: translateY(-2px);
-}
-
-.modal-buttons button[type="button"]:hover {
-  background: #f9f9f9;
-  border-color: #f26371;
-  color: #f26371;
-}
-
-.modal-buttons button[type="submit"]:hover {
-  background: #fbe4e9;
-  color: #f26371;
-}
-
-.error-message {
-  color: #f26371;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
-@media (max-width: 640px) {
-  .modal-content {
-    width: 95%;
-    padding: 1.5rem;
+  .info-card {
+    padding: 1rem;
   }
 }
 </style>

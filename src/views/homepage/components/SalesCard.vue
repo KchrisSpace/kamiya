@@ -88,7 +88,13 @@ watch(filteredProducts, (newVal) => {
 onMounted(async () => {
   try {
     const response = await axios.get(API_URL);
-    ProductList.value = response.data;
+    // 只显示上架的商品，并移除库存字段
+    ProductList.value = response.data
+      .filter((item) => item.status === "1" || item.status === 1)
+      .map((item) => {
+        const { stock, ...rest } = item; // 移除库存字段
+        return rest;
+      });
     console.log("获取的商品数据:", ProductList.value);
   } catch (err) {
     console.error("获取商品数据失败:", err);

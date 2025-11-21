@@ -127,24 +127,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import * as echarts from "echarts";
-
-// 模拟数据
-const mockUsers = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  username: `user${i + 1}`,
-  email: `user${i + 1}@example.com`,
-  phone: `138${String(Math.floor(Math.random() * 100000000)).padStart(8, "0")}`,
-  role: Math.random() > 0.8 ? "admin" : "user",
-  status: Math.random() > 0.5 ? "1" : "0",
-  createTime: new Date(
-    Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
-  ).toLocaleString(),
-}));
+import axios from "axios";
 
 const loading = ref(false);
+const allUsers = ref([]);
 const users = ref([]);
 const total = ref(0);
 const currentPage = ref(1);
@@ -160,11 +149,13 @@ const filterForm = reactive({
 });
 
 const formData = reactive({
+  id: "",
   username: "",
   email: "",
   phone: "",
   role: "user",
   status: "1",
+  password: "",
 });
 
 const rules = {
@@ -189,6 +180,46 @@ const rules = {
 
 const userChart = ref(null);
 const roleChart = ref(null);
+
+// 格式化用户数据，将 db.json 格式转换为页面显示格式
+const formatUser = (user) => {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email || `${user.username}@example.com`,
+    phone: user.phone || "",
+    role: user.role || (user.id === "admin" ? "admin" : "user"),
+    status: user.status || "1",
+    createTime: user.createTime || new Date().toLocaleString(),
+    password: user.password || "",
+    "user-info": user["user-info"] || {},
+  };
+};
+
+// 过滤后的用户列表
+const filteredUsers = computed(() => {
+  let result = [...allUsers.value];
+
+  // 用户名过滤
+  if (filterForm.username && filterForm.username.trim()) {
+    const keyword = filterForm.username.trim().toLowerCase();
+    result = result.filter((user) =>
+      user.username.toLowerCase().includes(keyword)
+    );
+  }
+
+  // 角色过滤
+  if (filterForm.role && filterForm.role.trim()) {
+    result = result.filter((user) => user.role === filterForm.role);
+  }
+
+  // 状态过滤
+  if (filterForm.status && filterForm.status.trim()) {
+    result = result.filter((user) => user.status === filterForm.status);
+  }
+
+  return result;
+});
 
 const initCharts = () => {
   // 用户增长趋势图
@@ -216,7 +247,7 @@ const initCharts = () => {
       {
         name: "新增用户",
         type: "line",
-        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 20)),
+        data: Array.from({ length: 7 }, () => Math.floor(Math.random() * 5)),
         smooth: true,
       },
     ],
@@ -244,11 +275,11 @@ const initCharts = () => {
         radius: "50%",
         data: [
           {
-            value: mockUsers.filter((u) => u.role === "admin").length,
+            value: allUsers.value.filter((u) => u.role === "admin").length,
             name: "管理员",
           },
           {
-            value: mockUsers.filter((u) => u.role === "user").length,
+            value: allUsers.value.filter((u) => u.role === "user").length,
             name: "普通用户",
           },
         ],
@@ -271,21 +302,47 @@ const initCharts = () => {
   });
 };
 
-const fetchUsers = () => {
+const fetchUsers = async () => {
   loading.value = true;
-  // 模拟API请求
-  setTimeout(() => {
+  try {
+    const response = await axios.get("http://localhost:3001/users");
+    // 格式化用户数据
+    allUsers.value = response.data.map(formatUser);
+    total.value = filteredUsers.value.length;
+
+    // 分页
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    users.value = mockUsers.slice(start, end);
-    total.value = mockUsers.length;
+    users.value = filteredUsers.value.slice(start, end);
+
+    // 更新图表
+    if (userChart.value && roleChart.value) {
+      initCharts();
+    }
+  } catch (error) {
+    console.error("获取用户列表失败:", error);
+    ElMessage.error("获取用户列表失败");
+  } finally {
     loading.value = false;
-  }, 500);
+  }
 };
 
 const handleSearch = () => {
   currentPage.value = 1;
-  fetchUsers();
+  updateUsersList();
+};
+
+// 更新用户列表（基于过滤结果）
+const updateUsersList = () => {
+  total.value = filteredUsers.value.length;
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  users.value = filteredUsers.value.slice(start, end);
+
+  // 更新图表
+  if (userChart.value && roleChart.value) {
+    initCharts();
+  }
 };
 
 const resetFilter = () => {
@@ -297,76 +354,147 @@ const resetFilter = () => {
 
 const handleSizeChange = (val) => {
   pageSize.value = val;
-  fetchUsers();
+  currentPage.value = 1;
+  updateUsersList();
 };
 
 const handleCurrentChange = (val) => {
   currentPage.value = val;
-  fetchUsers();
+  updateUsersList();
 };
 
 const handleEdit = (row) => {
   dialogType.value = "edit";
-  Object.assign(formData, row);
+  Object.assign(formData, {
+    id: row.id,
+    username: row.username,
+    email: row.email || "",
+    phone: row.phone || "",
+    role: row.role || "user",
+    status: row.status || "1",
+    password: row.password || "",
+  });
   dialogVisible.value = true;
 };
 
-const handleStatus = (row) => {
+const handleStatus = async (row) => {
   const action = row.status === "1" ? "禁用" : "启用";
-  ElMessageBox.confirm(`确定要${action}该用户吗？`, "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    // 模拟API请求
-    row.status = row.status === "1" ? "0" : "1";
+  try {
+    await ElMessageBox.confirm(`确定要${action}该用户吗？`, "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    });
+
+    const newStatus = row.status === "1" ? "0" : "1";
+    const updatedUser = {
+      ...row,
+      status: newStatus,
+    };
+
+    await axios.put(`http://localhost:3001/users/${row.id}`, updatedUser);
+
+    // 更新本地数据
+    const index = allUsers.value.findIndex((u) => u.id === row.id);
+    if (index !== -1) {
+      allUsers.value[index].status = newStatus;
+    }
+
+    updateUsersList();
     ElMessage.success(`${action}成功`);
-  });
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error(`${action}用户失败:`, error);
+      ElMessage.error(`${action}用户失败`);
+    }
+  }
 };
 
-const handleDelete = (row) => {
-  ElMessageBox.confirm("确定要删除该用户吗？", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    // 模拟API请求
-    const index = users.value.findIndex((item) => item.id === row.id);
+const handleDelete = async (row) => {
+  try {
+    await ElMessageBox.confirm("确定要删除该用户吗？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    });
+
+    await axios.delete(`http://localhost:3001/users/${row.id}`);
+
+    // 更新本地数据
+    const index = allUsers.value.findIndex((u) => u.id === row.id);
     if (index !== -1) {
-      users.value.splice(index, 1);
+      allUsers.value.splice(index, 1);
     }
+
+    updateUsersList();
     ElMessage.success("删除成功");
-  });
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("删除用户失败:", error);
+      ElMessage.error("删除用户失败");
+    }
+  }
 };
 
 const handleSubmit = async () => {
   if (!formRef.value) return;
-  await formRef.value.validate((valid) => {
+  await formRef.value.validate(async (valid) => {
     if (valid) {
-      // 模拟API请求
-      if (dialogType.value === "add") {
-        users.value.unshift({
-          ...formData,
-          id: users.value.length + 1,
-          createTime: new Date().toLocaleString(),
-        });
-        ElMessage.success("添加成功");
-      } else {
-        const index = users.value.findIndex((item) => item.id === formData.id);
-        if (index !== -1) {
-          users.value[index] = formData;
+      try {
+        const userData = {
+          id: formData.id || `user${Date.now()}`,
+          username: formData.username,
+          password: formData.password || "000000",
+          email: formData.email,
+          phone: formData.phone,
+          role: formData.role,
+          status: formData.status,
+          createTime: formData.createTime || new Date().toLocaleString(),
+          "user-info": formData["user-info"] || {
+            nickname: formData.username,
+            avatar: "",
+          },
+        };
+
+        if (dialogType.value === "add") {
+          await axios.post("http://localhost:3001/users", userData);
+          ElMessage.success("添加成功");
+        } else {
+          await axios.put(
+            `http://localhost:3001/users/${formData.id}`,
+            userData
+          );
+          ElMessage.success("更新成功");
         }
-        ElMessage.success("更新成功");
+
+        dialogVisible.value = false;
+        await fetchUsers();
+      } catch (error) {
+        console.error("保存用户失败:", error);
+        ElMessage.error("保存用户失败");
       }
-      dialogVisible.value = false;
     }
   });
 };
 
+// 监听过滤条件变化
+watch(
+  [() => filterForm.username, () => filterForm.role, () => filterForm.status],
+  () => {
+    currentPage.value = 1;
+    updateUsersList();
+  }
+);
+
 // 初始化
-onMounted(() => {
-  fetchUsers();
-  initCharts();
+onMounted(async () => {
+  await fetchUsers();
+  // 延迟初始化图表，等待DOM和数据加载完成
+  setTimeout(() => {
+    if (userChart.value && roleChart.value) {
+      initCharts();
+    }
+  }, 300);
 });
 </script>
 

@@ -31,25 +31,27 @@
   "products_list": [
     {
       "id": "P01",
-      "main_category": "热销",
-      "category": "单品",
-      "images": "https://photo.yannick.com.tw/photo/0201039/%E7%94%9F%E6%97%A5%E8%9B%8B%E7%B3%95_%E6%88%80%E8%8E%93%E7%99%BD%E7%99%BD.jpg",
       "title": "星与你皆浪漫",
+      "main_category": "热销",
       "price_info": {
-        "original_price": 399,
-        "current_price": 259.9
+        "current_price": 559.9,
+        "original_price": 399
       },
-      "score": 3,
+      "stock": 10,
+      "description": "feivhangthdd",
+      "images": "https://photo.yannick.com.tw/photo/0201039/%E7%94%9F%E6%97%A5%E8%9B%8B%E7%B3%95_%E6%88%80%E8%8E%93%E7%99%BD%E7%99%BD.jpg",
       "promotion": {
-        "is_hot": true,
-        "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠",
         "keywords": [
           "星空",
           "浪漫",
           "情人节",
           "告白"
-        ]
+        ],
+        "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠",
+        "main_description": "feivhangthdd"
       },
+      "category": "单品",
+      "sales": 0,
       "status": "1"
     },
     {
@@ -63,6 +65,7 @@
         "current_price": 199
       },
       "score": 2,
+      "stock": 15,
       "promotion": {
         "is_hot": true,
         "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚",
@@ -72,7 +75,8 @@
           "健康",
           "清新"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P03",
@@ -85,6 +89,7 @@
         "current_price": 199
       },
       "score": 1,
+      "stock": 8,
       "promotion": {
         "is_hot": false,
         "material": "安佳动物奶油，抹茶粉，新鲜薄荷叶，糖霜装饰",
@@ -94,7 +99,8 @@
           "简约",
           "抹茶"
         ]
-      }
+      },
+      "status": "0"
     },
     {
       "id": "P04",
@@ -107,6 +113,7 @@
         "current_price": 299
       },
       "score": 2,
+      "stock": 5,
       "promotion": {
         "is_hot": false,
         "material": "红丝绒蛋糕胚，粉色糖霜，食用金箔，巧克力皇冠",
@@ -116,7 +123,8 @@
           "高贵",
           "粉色"
         ]
-      }
+      },
+      "status": "0"
     },
     {
       "id": "P05",
@@ -129,6 +137,7 @@
         "current_price": 399
       },
       "score": 3,
+      "stock": 20,
       "promotion": {
         "is_hot": true,
         "material": "比利时巧克力，樱桃果酱，可可粉，慕斯奶油",
@@ -138,7 +147,8 @@
           "慕斯",
           "樱桃"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P06",
@@ -151,6 +161,7 @@
         "current_price": 329
       },
       "score": 1,
+      "stock": 6,
       "promotion": {
         "is_hot": false,
         "material": "蓝莓果酱，生乳奶油，戚风蛋糕卷，糖粉装饰",
@@ -160,7 +171,8 @@
           "蓝莓",
           "日式"
         ]
-      }
+      },
+      "status": "0"
     },
     {
       "id": "P07",
@@ -173,6 +185,7 @@
         "current_price": 239
       },
       "score": 2,
+      "stock": 12,
       "promotion": {
         "is_hot": true,
         "material": "樱花粉，糯米粉，红豆沙，樱花糖浆",
@@ -182,7 +195,8 @@
           "日式",
           "春季"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P08",
@@ -195,6 +209,7 @@
         "current_price": 299
       },
       "score": 1,
+      "stock": 4,
       "promotion": {
         "is_hot": false,
         "material": "杏仁片，核桃仁，黄油酥皮，蜂蜜糖浆",
@@ -204,7 +219,8 @@
           "下午茶",
           "手工"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P09",
@@ -217,6 +233,7 @@
         "current_price": 460
       },
       "score": 10,
+      "stock": 3,
       "promotion": {
         "is_hot": false,
         "material": "新鲜草莓，香草奶油，酥脆塔皮，糖粉装饰",
@@ -226,7 +243,8 @@
           "甜点",
           "下午茶"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P10",
@@ -239,6 +257,7 @@
         "current_price": 400
       },
       "score": 23,
+      "stock": 2,
       "promotion": {
         "is_hot": false,
         "material": "玫瑰花瓣，杏仁粉，黄油酥皮，糖霜装饰",
@@ -248,7 +267,8 @@
           "浪漫",
           "手工"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P11",
@@ -261,6 +281,7 @@
         "current_price": 420
       },
       "score": 21,
+      "stock": 1,
       "promotion": {
         "is_hot": false,
         "material": "新鲜草莓，卡仕达酱，酥脆塔皮，糖粉装饰",
@@ -270,7 +291,8 @@
           "甜点",
           "下午茶"
         ]
-      }
+      },
+      "status": "1"
     },
     {
       "id": "P12",
@@ -283,6 +305,7 @@
         "current_price": 430
       },
       "score": 20,
+      "stock": 7,
       "promotion": {
         "is_hot": false,
         "material": "新鲜芒果，动物奶油，千层饼皮，糖粉装饰",
@@ -410,34 +433,70 @@
   ],
   "normal_orders": [
     {
-      "user_id": "user2",
+      "user_id": "admin",
       "items": [
         {
-          "product_id": "P10",
+          "product_id": "P01",
           "quantity": 1
-        }
-      ],
-      "total_price": "400.00",
-      "shipping_fee": 0,
-      "delivery_time": "2025-06-26Tmorning:00Z",
-      "status": "进行中",
-      "created_at": "2025-06-18T06:10:39.711Z",
-      "id": 5
-    },
-    {
-      "user_id": "user1",
-      "items": [
+        },
         {
           "product_id": "P02",
           "quantity": 1
         }
       ],
-      "total_price": "199.00",
+      "total_price": "758.90",
       "shipping_fee": 0,
-      "delivery_time": "2025-06-25Tafternoon:00Z",
+      "delivery_time": "2025-11-26Tmorning:00Z",
+      "consignee": "李四",
+      "phone": "13011111234",
+      "remark": "不要芒果",
+      "status": "预备出餐中",
+      "created_at": "2025-11-21T13:29:19.182Z",
+      "id": 1
+    },
+    {
+      "user_id": "admin",
+      "items": [
+        {
+          "product_id": "P01",
+          "quantity": 1
+        }
+      ],
+      "total_price": "559.90",
+      "shipping_fee": 0,
+      "delivery_time": "2025-11-26Tmorning:00Z",
+      "consignee": "李四",
+      "phone": "11111111111",
+      "remark": "e",
       "status": "进行中",
-      "created_at": "2025-06-18T07:19:43.845Z",
-      "id": 8
+      "created_at": "2025-11-21T14:19:33.796Z",
+      "id": 2,
+      "communications": [
+        {
+          "role": "admin",
+          "text": "hh",
+          "images": [],
+          "created_at": "2025-11-21T14:28:39.804Z"
+        },
+        {
+          "role": "customer",
+          "text": "h",
+          "images": [],
+          "created_at": "2025-11-21T15:02:14.955Z"
+        },
+        {
+          "role": "admin",
+          "text": "h",
+          "images": [],
+          "created_at": "2025-11-21T15:02:39.106Z"
+        },
+        {
+          "role": "admin",
+          "text": "ok",
+          "images": [],
+          "created_at": "2025-11-21T15:05:12.977Z"
+        }
+      ]
     }
   ],
   "addresses": [
@@ -572,14 +631,6 @@
     }
   ],
   "cart": [
-    {
-      "quantity": 1,
-      "id": "P03"
-    },
-    {
-      "id": "P05",
-      "quantity": 1
-    },
     {
       "id": "P01",
       "quantity": 1

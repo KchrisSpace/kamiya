@@ -43,6 +43,13 @@
       />
     </el-form-item>
 
+    <el-form-item label="材料" prop="promotion.material">
+      <el-input
+        v-model="form.promotion.material"
+        placeholder="请输入材料信息"
+      />
+    </el-form-item>
+
     <el-form-item label="商品图片" prop="images">
       <el-upload
         v-model:file-list="form.images"
@@ -87,7 +94,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
@@ -106,17 +113,23 @@ const dialogImageUrl = ref("");
 const categories = ["热销", "上新", "特价出售"];
 
 const form = reactive({
+  id: "",
   title: "",
   main_category: "",
   price_info: {
     current_price: "",
+    original_price: "",
   },
-  stock: "",
+  stock: 1, // 默认库存为1
   description: "",
   images: [],
   promotion: {
     keywords: [],
+    material: "",
   },
+  category: "",
+  sales: 0,
+  status: "1",
 });
 
 const rules = {
@@ -164,9 +177,44 @@ const submitForm = async () => {
 
   try {
     await formRef.value.validate();
-    emit("submit", { ...form });
+
+    // 准备提交的数据
+    const submitData = {
+      ...form,
+      // 确保库存有默认值
+      stock: form.stock !== undefined && form.stock !== "" ? form.stock : 1,
+      // 确保状态有默认值（新商品默认下架）
+      status:
+        form.status !== undefined && form.status !== "" ? form.status : "0",
+      // 处理图片：如果是文件列表，提取 URL
+      images:
+        form.images.length > 0
+          ? typeof form.images[0] === "string"
+            ? form.images[0]
+            : form.images[0]?.url || form.images[0]?.response?.url || ""
+          : "",
+      // 确保 price_info 结构正确
+      price_info: {
+        current_price: form.price_info.current_price,
+        original_price:
+          form.price_info.original_price || form.price_info.current_price,
+      },
+      // 确保 promotion 结构正确
+      promotion: {
+        keywords: form.promotion.keywords || [],
+        material: form.promotion.material || "",
+      },
+    };
+
+    // 如果库存为0，自动下架
+    if (submitData.stock === 0 || submitData.stock === "0") {
+      submitData.status = "0";
+    }
+
+    emit("submit", submitData);
   } catch (error) {
     console.error("表单验证失败:", error);
+    ElMessage.error("请检查表单填写是否正确");
   }
 };
 
@@ -174,9 +222,83 @@ const cancel = () => {
   emit("cancel");
 };
 
+// 初始化表单数据的函数
+const initForm = () => {
+  const data = props.formData || {};
+
+  // 重置表单
+  form.id = data.id || "";
+  form.title = data.title || "";
+  form.main_category = data.main_category || "";
+  form.price_info = {
+    current_price: data.price_info?.current_price || "",
+    original_price:
+      data.price_info?.original_price || data.price_info?.current_price || "",
+  };
+  form.stock = data.stock !== undefined ? data.stock : 1; // 默认库存为1
+  form.description = data.description || "";
+  form.category = data.category || "";
+  form.sales = data.sales || 0;
+  form.status = data.status !== undefined ? data.status : "0"; // 默认下架
+
+  // 确保 promotion 对象存在
+  if (!form.promotion) {
+    form.promotion = {
+      keywords: [],
+      material: "",
+    };
+  }
+
+  // 处理图片：如果是字符串，转换为文件列表格式
+  if (data.images) {
+    if (typeof data.images === "string") {
+      form.images = [
+        {
+          url: data.images,
+          name: "product-image",
+        },
+      ];
+    } else if (Array.isArray(data.images)) {
+      form.images = data.images.map((img, index) => {
+        if (typeof img === "string") {
+          return {
+            url: img,
+            name: `product-image-${index}`,
+          };
+        }
+        return img;
+      });
+    } else {
+      form.images = [];
+    }
+  } else {
+    form.images = [];
+  }
+
+  // 处理关键词
+  if (data.promotion?.keywords) {
+    form.promotion.keywords = Array.isArray(data.promotion.keywords)
+      ? [...data.promotion.keywords]
+      : [];
+  } else {
+    form.promotion.keywords = [];
+  }
+
+  form.promotion.material = data.promotion?.material || "";
+};
+
+// 监听 formData 变化，更新表单
+watch(
+  () => props.formData,
+  () => {
+    initForm();
+  },
+  { immediate: true, deep: true }
+);
+
 // 初始化表单数据
 onMounted(() => {
-  Object.assign(form, props.formData);
+  initForm();
 });
 </script>
 

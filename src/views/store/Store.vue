@@ -105,6 +105,9 @@ const filteredGoods = computed(() => {
   if (isLoading.value) return [];
 
   const filtered = goods.value.filter((item) => {
+    // 只显示上架的商品（status === "1"）
+    const statusMatch = item.status === "1" || item.status === 1;
+
     // 类别筛选：如果选择"全部"则显示所有，否则匹配 category 字段
     const categoryMatch =
       selectedCategory.value === "全部" ||
@@ -120,7 +123,7 @@ const filteredGoods = computed(() => {
     const keywordMatch =
       !searchKeyword.value.trim() || searchResult.value.includes(item.id);
 
-    return categoryMatch && priceMatch && keywordMatch;
+    return statusMatch && categoryMatch && priceMatch && keywordMatch;
   });
 
   return filtered;
@@ -211,7 +214,13 @@ const handleSearch = () => {
 const getGoods = async () => {
   try {
     const res = await axios.get(`http://localhost:3001/products_list`);
-    goods.value = res.data.map((item) => ({ ...item, showCart: false }));
+    // 只获取上架的商品，并移除库存字段（不在前台显示）
+    goods.value = res.data
+      .filter((item) => item.status === "1" || item.status === 1)
+      .map((item) => {
+        const { stock, ...rest } = item; // 移除库存字段
+        return { ...rest, showCart: false };
+      });
   } catch (error) {
     console.error("获取商品数据失败:", error);
   }
