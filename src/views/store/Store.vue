@@ -9,7 +9,7 @@
             <input
               type="text"
               class="search-input"
-              placeholder="搜索商品名称、关键词或描述..."
+              placeholder="搜索商品名或关键词..."
               v-model="searchKeyword"
               @keyup.enter="handleSearch"
               @input="debouncedSearch"
@@ -92,39 +92,48 @@ import Goods from "./components/goods.vue";
 const router = useRouter();
 
 // 状态
-const selectedCategory = ref("推荐");
+const selectedCategory = ref("全部");
 const goods = ref([]);
 const priceRange = ref([0, 600]);
 const searchKeyword = ref("");
 const searchResult = ref([]);
 const isLoading = ref(false);
-const categories = ["单品", "冷品", "暖品", "套餐"];
+const categories = ["全部", "单品", "冷品", "暖品", "套餐"];
 
 // 计算属性
 const filteredGoods = computed(() => {
   if (isLoading.value) return [];
 
   const filtered = goods.value.filter((item) => {
+    // 类别筛选：如果选择"全部"则显示所有，否则匹配 category 字段
     const categoryMatch =
-      selectedCategory.value === "推荐" ||
-      item.specification.category.includes(selectedCategory.value);
+      selectedCategory.value === "全部" ||
+      (item.category && item.category === selectedCategory.value);
 
+    // 价格筛选
     const priceMatch =
+      item.price_info &&
       item.price_info.current_price >= priceRange.value[0] &&
       item.price_info.current_price <= priceRange.value[1];
 
+    // 关键词搜索筛选：如果没有搜索关键词，则显示所有；如果有，则只显示匹配的商品
     const keywordMatch =
-      searchResult.value.length === 0 || searchResult.value.includes(item.id);
+      !searchKeyword.value.trim() || searchResult.value.includes(item.id);
 
     return categoryMatch && priceMatch && keywordMatch;
   });
 
-  return filtered.length === 0 ? [] : filtered;
+  return filtered;
 });
 
 // 方法
 const setCategory = (category) => {
   selectedCategory.value = category;
+  // 切换类别时，如果搜索框有内容，清空搜索结果以显示该类别的所有商品
+  if (searchKeyword.value.trim()) {
+    searchResult.value = [];
+    searchKeyword.value = "";
+  }
 };
 
 const formatPrice = (value) => {
@@ -148,18 +157,52 @@ const handleSearch = () => {
   }
 
   isLoading.value = true;
-  const keyword = searchKeyword.value.toLowerCase();
+  // 将搜索关键词按空格拆分成多个词，支持多词搜索
+  const searchTerms = searchKeyword.value
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((term) => term.length > 0);
 
   setTimeout(() => {
     searchResult.value = goods.value
-      .filter(
-        (item) =>
-          item.title.toLowerCase().includes(keyword) ||
-          item.promotion.keywords.some((k) =>
-            k.toLowerCase().includes(keyword)
-          ) ||
-          item.promotion.main_description.toLowerCase().includes(keyword)
-      )
+      .filter((item) => {
+        // 合并所有可搜索的文本内容
+        const searchableTexts = [];
+
+        // 1. 商品标题
+        if (item.title) {
+          searchableTexts.push(item.title.toLowerCase());
+        }
+
+        // 2. 材料
+        if (item.promotion?.material) {
+          searchableTexts.push(item.promotion.material.toLowerCase());
+        }
+
+        // 3. 关键词数组
+        if (
+          item.promotion?.keywords &&
+          Array.isArray(item.promotion.keywords)
+        ) {
+          const keywordsText = item.promotion.keywords
+            .filter((k) => k)
+            .map((k) => k.toLowerCase())
+            .join(" ");
+          searchableTexts.push(keywordsText);
+        }
+
+        // 将所有可搜索文本合并成一个字符串
+        const combinedText = searchableTexts.join(" ");
+
+        // 检查所有搜索词是否都在合并的文本中
+        // 所有词都必须匹配才返回 true
+        const allTermsMatch = searchTerms.every((term) =>
+          combinedText.includes(term)
+        );
+
+        return allTermsMatch;
+      })
       .map((item) => item.id);
     isLoading.value = false;
   }, 300);
@@ -185,10 +228,11 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 <style scoped>
 .store-container {
-  margin-left: 96px;
+  margin-left: 10vw;
   margin-right: 96px;
   font-family: var(--font-Alibaba);
-  height: 100vh;
+  margin-top: 3vh;
+  height: 85vh;
   overflow: hidden;
 }
 
@@ -201,15 +245,27 @@ const debouncedSearch = debounce(handleSearch, 500);
 
 .sidebar {
   width: 20%;
-  margin-right: 40px;
+  height: 80vh;
   border: 2px solid var(--color-bg-primary);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(242, 99, 113, 0.1);
   background-color: white;
   padding: 22px;
   transform: translateY(-8px);
-  position: relative;
+  position: fixed;
+  left: 96px;
+  top: 10vh;
   z-index: 1;
+  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+/* 隐藏 sidebar 的滚动条 */
+.sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .sidebar::before {
@@ -228,55 +284,109 @@ const debouncedSearch = debounce(handleSearch, 500);
   position: sticky;
   top: 40px;
   padding: 8px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 隐藏 sticky-sidebar 的滚动条 */
+.sticky-sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.sticky-sidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .search-container {
-  padding: 12px 16px;
-  border: 2px solid var(--color-bg-primary);
-  border-radius: 12px;
+  padding: 10px 16px;
+  border: 2px solid rgba(242, 99, 113, 0.5);
+  border-radius: 24px;
   display: flex;
   align-items: center;
-  transition: all 0.3s ease;
-  background-color: #fff5f6;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f6 100%);
 }
 
 .search-container:hover {
-  border-color: var(--color-font-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(242, 99, 113, 0.1);
+  border-color: #f26371;
+  box-shadow: 0 4px 20px rgba(242, 99, 113, 0.18);
+  background: linear-gradient(135deg, #fff6f7 0%, #ffeaea 100%);
+}
+
+.search-container:focus-within {
+  border-color: #f26371;
+  box-shadow: 0 4px 16px rgba(242, 99, 113, 0.22);
+  background: linear-gradient(135deg, #fff3f6 0%, #ffffff 100%);
 }
 
 .search-input {
-  height: 40px;
+  flex: 1;
+  height: 36px;
   width: 100%;
   outline: none;
   border: none;
-  background: none;
-  font-size: 16px;
+  background: transparent;
+  font-size: 15px;
+  color: #333;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  caret-color: #f26371;
+}
+
+.search-input::selection {
+  background-color: rgba(242, 99, 113, 0.2);
+  color: #333;
 }
 
 .search-input::placeholder {
-  color: var(--color-font-thirth);
+  color: #999;
+  font-weight: 400;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.search-input:focus::placeholder {
+  opacity: 0.5;
 }
 
 .search-icon {
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 8px;
-  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-font-primary);
+  background-color: rgba(242, 99, 113, 0.1);
 }
 
 .search-icon:hover {
-  background-color: rgba(242, 99, 113, 0.1);
-  transform: scale(1.1);
+  background-color: rgba(242, 99, 113, 0.15);
+  transform: scale(1.15) rotate(5deg);
+}
+
+.search-icon:active {
+  transform: scale(1.05) rotate(0deg);
 }
 
 .search-icon.active {
-  color: var(--color-font-primary);
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6b6b 0%, #f24253 100%);
+  box-shadow: 0 2px 8px rgba(242, 99, 113, 0.3);
+  transform: scale(1.1);
 }
 
 .search-icon.inactive {
-  color: var(--color-font-thirth);
+  color: #999;
+  background-color: transparent;
 }
 
 .section-title {
@@ -303,10 +413,6 @@ const debouncedSearch = debounce(handleSearch, 500);
   margin-top: 8px;
   color: var(--color-font-thirth);
   font-size: 16px;
-}
-
-.category-section {
-  margin-top: 24px;
 }
 
 .category-list {
@@ -350,6 +456,7 @@ const debouncedSearch = debounce(handleSearch, 500);
   overflow-y: auto;
   height: 100%;
   padding-right: 16px;
+  margin-left: calc(20% + 40px);
 }
 
 /* 自定义滚动条样式 */

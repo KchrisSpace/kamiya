@@ -213,7 +213,7 @@ onMounted(async () => {
   margin: 0 auto;
   width: 90%;
   height: calc(80vh - 180px);
-  padding: 15px;
+  padding: 35px;
   border-radius: 15px;
   box-shadow: 0 0 20px 0 rgba(255, 107, 107, 0.1);
   background-color: white;
@@ -312,13 +312,13 @@ onMounted(async () => {
 
 .counter button {
   width: 24px;
-  height: 24px;
+  height: 34px;
   border: 1px solid #ffd3d3;
   background: white;
   color: #ff6b6b;
   cursor: pointer;
   font-size: 14px;
-  border-radius: 50%;
+  border-radius: 250%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,18 +328,44 @@ onMounted(async () => {
 
 .count-input {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .count-input input {
-  width: 40px;
-  height: 24px;
-  text-align: center;
+  width: 34px;
+  height: 34px;
+  text-align: center !important;
   border: 1px solid #ffd3d3;
-  border-radius: 12px;
+  border-radius: 50%;
   color: #ff6b6b;
   font-size: 14px;
+  padding: 0 !important;
+  margin: 0;
+  line-height: 34px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  direction: ltr;
+  text-indent: 0;
 }
 
+/* 隐藏 number 类型 input 的上下加减按钮 */
+.count-input input::-webkit-outer-spin-button,
+.count-input input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.count-input input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
 .total-price {
   margin-left: 15px;
   font-size: 16px;

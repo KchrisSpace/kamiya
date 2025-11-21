@@ -99,6 +99,7 @@
     {
       "id": "P04",
       "main_category": "上新",
+      "category": "单品",
       "images": "https://photo.yannick.com.tw/photo/0201186/%E7%B4%85%E5%BF%83%E5%A5%B3%E7%8E%8B(1).jpg",
       "title": "紅心女王-粉糖霜款",
       "price_info": {
@@ -120,6 +121,7 @@
     {
       "id": "P05",
       "main_category": "热销",
+      "category": "冷品",
       "images": "https://photo.yannick.com.tw/photo/0606024/2.jpg",
       "title": "黑森林慕斯",
       "price_info": {
@@ -141,6 +143,7 @@
     {
       "id": "P06",
       "main_category": "上新",
+      "category": "冷品",
       "images": "https://photo.yannick.com.tw/photo/0101303/1.jpg",
       "title": "美安限定-俏‧美莓生乳捲",
       "price_info": {
@@ -162,6 +165,7 @@
     {
       "id": "P07",
       "main_category": "热销",
+      "category": "单品",
       "images": "https://img.enjoy-osaka-kyoto-kobe.com/wp-content/uploads/2023/04/11231035/sakura_goods_11-1024x978.webp",
       "title": "樱花限定-樱花凝糕",
       "price_info": {
@@ -183,6 +187,7 @@
     {
       "id": "P08",
       "main_category": "上新",
+      "category": "单品",
       "images": "https://m.media-amazon.com/images/I/61lFEhDEuBL._AC_.jpg",
       "title": "坚果小船酥",
       "price_info": {
@@ -204,6 +209,7 @@
     {
       "id": "P09",
       "main_category": "特价出售",
+      "category": "冷品",
       "images": "https://s.yimg.com/ut/api/res/1.2/kdl.L6ACNDv97XZdX768sg--~B/YXBwaWQ9eXR3bWFsbDtjYz0zMTUzNjAwMDtoPTYwMDtxPTEwMDt3PTYwMA--/https://s.yimg.com/fy/47ce/item/p0084224280761-item-5019xf4x0601x0600-m.jpg",
       "title": "草莓蕾塔",
       "price_info": {
@@ -225,6 +231,7 @@
     {
       "id": "P10",
       "main_category": "特价出售",
+      "category": "单品",
       "images": "https://mi-journey.jp/foodie/wp-content/uploads/2025/04/250410hahanohi1.jpg",
       "title": "花甜酥酥",
       "price_info": {
@@ -246,6 +253,7 @@
     {
       "id": "P11",
       "main_category": "特价出售",
+      "category": "冷品",
       "images": "https://img.cloudimg.in/uploads/shops/27978/products/76/76c01e68c8e256440f596808cd9bb485.jpg",
       "title": "草莓塔",
       "price_info": {
@@ -267,6 +275,7 @@
     {
       "id": "P12",
       "main_category": "特价出售",
+      "category": "冷品",
       "images": "https://img.hua9.net/img/400_400/237/2023281291.jpg",
       "title": "芒果千层",
       "price_info": {
@@ -400,40 +409,6 @@
     }
   ],
   "normal_orders": [
-    {
-      "user_id": "user2",
-      "items": [
-        {
-          "product_id": "P04",
-          "quantity": 1
-        },
-        {
-          "product_id": "P01",
-          "quantity": 1
-        }
-      ],
-      "total_price": "558.90",
-      "shipping_fee": 0,
-      "delivery_time": "2025-05-28Tmorning:00Z",
-      "status": "进行中",
-      "created_at": "2025-05-01T18:10:02.528Z",
-      "id": 1
-    },
-    {
-      "user_id": "user2",
-      "items": [
-        {
-          "product_id": "P01",
-          "quantity": 1
-        }
-      ],
-      "total_price": "259.90",
-      "shipping_fee": 0,
-      "delivery_time": "2025-06-24Tmorning:00Z",
-      "status": "进行中",
-      "created_at": "2025-06-14T06:17:29.313Z",
-      "id": 4
-    },
     {
       "user_id": "user2",
       "items": [
@@ -598,11 +573,15 @@
   ],
   "cart": [
     {
-      "id": "P02",
+      "quantity": 1,
+      "id": "P03"
+    },
+    {
+      "id": "P05",
       "quantity": 1
     },
     {
-      "id": "P09",
+      "id": "P01",
       "quantity": 1
     }
   ],

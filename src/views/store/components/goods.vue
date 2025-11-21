@@ -70,6 +70,8 @@
 <style scoped>
 .goods-item {
   position: relative;
+  width: 235px;
+  height: 360px;
   margin-bottom: 24px;
   padding: 16px;
   background: #fff;
@@ -78,6 +80,8 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .goods-item:hover {
@@ -87,8 +91,8 @@
 
 .goods-image-container {
   position: relative;
-  width: 240px;
-  height: 260px;
+  width: 100%;
+  height: 240px;
   background-color: #f8f9fa;
   border-radius: 8px;
   overflow: hidden;
@@ -211,6 +215,7 @@
   margin: 0;
   line-height: 1.4;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
