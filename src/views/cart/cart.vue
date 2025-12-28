@@ -31,6 +31,20 @@
               <span class="item-price"
                 >¥{{ item.product?.price_info.current_price }}</span
               >
+              <!-- 库存提示 -->
+              <div class="item-stock" v-if="item.product">
+                <span 
+                  class="stock-text"
+                  :class="{
+                    'stock-warning': item.product.stock <= 5 && item.product.stock > 0,
+                    'stock-danger': item.product.stock === 0 || item.quantity > (item.product.stock || 0)
+                  }"
+                >
+                  {{ item.product.stock > 0 
+                    ? `库存：${item.product.stock} 件${item.quantity > item.product.stock ? '（库存不足）' : ''}` 
+                    : '缺货' }}
+                </span>
+              </div>
 
               <div class="counter">
                 <button @click="decrement(item)">
@@ -116,28 +130,50 @@ const createOrder = () => {
   router.push("/create-order");
 };
 
-const handleQuantityChange = (item) => {
+const handleQuantityChange = async (item) => {
   if (item.quantity < 1) {
     item.quantity = 1;
   }
-  updateCartItem(item);
-};
-
-const increment = (item) => {
-  item.quantity += 1;
-  updateCartItem(item);
-};
-
-const decrement = (item) => {
-  if (item.quantity > 1) {
-    item.quantity -= 1;
-    updateCartItem(item);
+  try {
+    await updateCartItem(item);
+    ElMessage.success("数量更新成功");
+  } catch (error) {
+    // 如果库存不足，恢复原数量
+    const originalQuantity = item.quantity;
+    item.quantity = Math.max(1, originalQuantity - 1);
+    ElMessage.error(error.message || "更新数量失败");
   }
 };
 
-const updateCartItem = (item) => {
-  cartStore.updateCartItem({
+const increment = async (item) => {
+  const originalQuantity = item.quantity;
+  item.quantity += 1;
+  try {
+    await updateCartItem(item);
+  } catch (error) {
+    // 如果库存不足，恢复原数量
+    item.quantity = originalQuantity;
+    ElMessage.error(error.message || "库存不足");
+  }
+};
+
+const decrement = async (item) => {
+  if (item.quantity > 1) {
+    item.quantity -= 1;
+    try {
+      await updateCartItem(item);
+    } catch (error) {
+      // 恢复原数量
+      item.quantity += 1;
+      ElMessage.error(error.message || "更新数量失败");
+    }
+  }
+};
+
+const updateCartItem = async (item) => {
+  await cartStore.updateCartItem({
     id: item.id,
+    product_id: item.product_id,
     quantity: item.quantity,
   });
 };
@@ -313,6 +349,24 @@ onMounted(async () => {
 .item-price {
   color: #ff6b6b;
   font-size: 16px;
+  font-weight: 500;
+}
+
+.item-stock {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.stock-text {
+  color: #52c41a;
+}
+
+.stock-text.stock-warning {
+  color: #faad14;
+}
+
+.stock-text.stock-danger {
+  color: #ff4d4f;
   font-weight: 500;
 }
 

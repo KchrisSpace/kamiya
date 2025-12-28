@@ -67,6 +67,20 @@
           </div>
         </div>
 
+        <!-- 库存信息 -->
+        <div class="stock-info" v-if="product">
+          <span class="stock-label">库存：</span>
+          <span 
+            class="stock-value" 
+            :class="{
+              'stock-low': product.stock <= 5 && product.stock > 0,
+              'stock-out': product.stock === 0
+            }"
+          >
+            {{ product.stock > 0 ? `${product.stock} 件` : '缺货' }}
+          </span>
+        </div>
+
         <!-- 数量和购物车 -->
         <div class="action-buttons">
           <div class="quantity-selector">
@@ -74,7 +88,10 @@
               <el-icon><Minus /></el-icon>
             </el-button>
             <span class="quantity">{{ quantity }}</span>
-            <el-button @click="increaseQuantity">
+            <el-button 
+              @click="increaseQuantity"
+              :disabled="!product || quantity >= (product.stock || 0)"
+            >
               <el-icon><Plus /></el-icon>
             </el-button>
           </div>
@@ -82,8 +99,9 @@
             type="primary"
             class="add-to-cart"
             @click="addItem(productId, quantity)"
+            :disabled="!product || product.stock === 0 || product.status !== '1'"
           >
-            加入购物车
+            {{ !product || product.stock === 0 ? '缺货' : product.status !== '1' ? '已下架' : '加入购物车' }}
           </el-button>
         </div>
       </div>
@@ -223,7 +241,11 @@ const fetchProductDetails = async () => {
 
 // 数量控制
 const increaseQuantity = () => {
-  quantity.value++;
+  if (product.value && product.value.stock && quantity.value < product.value.stock) {
+    quantity.value++;
+  } else if (!product.value || !product.value.stock) {
+    quantity.value++;
+  }
 };
 
 const decreaseQuantity = () => {
@@ -242,7 +264,7 @@ const addItem = async () => {
     ElMessage.success("商品已成功添加到购物车");
   } catch (error) {
     console.error("添加商品到购物车失败:", error);
-    ElMessage.error("添加商品失败，请重试");
+    ElMessage.error(error.message || "添加商品失败，请重试");
   } finally {
     isAddingToCart.value = false;
   }
@@ -540,10 +562,42 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
 }
 
-.add-to-cart:hover {
+.add-to-cart:hover:not(:disabled) {
   background-color: rgb(248, 169, 180);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(255, 77, 79, 0.3);
+}
+
+.add-to-cart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.stock-info {
+  margin: 16px 0;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.stock-label {
+  color: #666;
+  margin-right: 8px;
+}
+
+.stock-value {
+  font-weight: 500;
+  color: #52c41a;
+}
+
+.stock-value.stock-low {
+  color: #faad14;
+}
+
+.stock-value.stock-out {
+  color: #ff4d4f;
 }
 
 .wishlist-btn {

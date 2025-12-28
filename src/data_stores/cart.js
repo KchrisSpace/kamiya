@@ -96,11 +96,33 @@ export const useCartStore = defineStore("cart", () => {
   // 更新商品数量
   const updateCartItem = async (item) => {
     try {
+      // 获取商品信息，检查库存
+      const productId = item.product_id || item.id;
+      const productResponse = await axios.get(
+        `http://localhost:3001/products_list/${productId}`
+      );
+      const product = productResponse.data;
+      
+      if (!product) {
+        throw new Error("商品不存在");
+      }
+
+      // 检查库存
+      const currentStock = product.stock || 0;
+      if (item.quantity > currentStock) {
+        throw new Error(`库存不足，当前库存为 ${currentStock}，最多只能购买 ${currentStock} 件`);
+      }
+
+      if (item.quantity < 1) {
+        throw new Error("商品数量不能小于1");
+      }
+
       await axios.put(`http://localhost:3001/cart/${item.id}`, {
         quantity: item.quantity,
       });
     } catch (error) {
       console.error("更新购物车商品失败:", error);
+      throw error; // 抛出错误以便组件可以处理
     }
   };
 
@@ -112,16 +134,44 @@ export const useCartStore = defineStore("cart", () => {
         throw new Error("用户未登录");
       }
 
+      // 获取商品信息，检查库存
+      const productResponse = await axios.get(
+        `http://localhost:3001/products_list/${productId}`
+      );
+      const product = productResponse.data;
+      
+      if (!product) {
+        throw new Error("商品不存在");
+      }
+
+      // 检查商品是否上架
+      if (product.status !== "1") {
+        throw new Error("商品已下架，无法添加到购物车");
+      }
+
+      // 检查库存
+      const currentStock = product.stock || 0;
+      if (currentStock <= 0) {
+        throw new Error("商品库存不足，无法添加到购物车");
+      }
+
       // 检查商品是否已经在当前用户的购物车中
       const existingItem = cartItems.value.find(
         (item) => (item.product_id || item.id) === productId && item.user_id === currentUserId
       );
 
+      const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
+
+      // 检查库存是否足够
+      if (newQuantity > currentStock) {
+        throw new Error(`库存不足，当前库存为 ${currentStock}，您已选择 ${existingItem ? existingItem.quantity : 0} 件，最多只能再添加 ${currentStock - (existingItem ? existingItem.quantity : 0)} 件`);
+      }
+
       if (existingItem) {
         // 如果商品已存在，更新数量
         await axios.put(`http://localhost:3001/cart/${existingItem.id}`, {
           ...existingItem,
-          quantity: existingItem.quantity + quantity,
+          quantity: newQuantity,
         });
       } else {
         // 如果商品不存在，添加新商品

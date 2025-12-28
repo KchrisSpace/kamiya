@@ -128,6 +128,7 @@ import { ElDatePicker, ElMessage } from "element-plus";
 import { useNormalOrdersStore } from "../../../data_stores/normal-orders";
 import { useCartStore } from "../../../data_stores/cart";
 import LoginTip from "./login-tip.vue";
+import axios from "axios";
 const showLoginTip = ref(false);
 const cartStore = useCartStore();
 const router = useRouter();
@@ -202,6 +203,35 @@ const createOrder = async () => {
   }
 
   try {
+    // 检查所有商品的库存
+    const stockCheckPromises = cartStore.cartItems.map(async (item) => {
+      const productId = item.product_id || item.id;
+      const productResponse = await axios.get(
+        `http://localhost:3001/products_list/${productId}`
+      );
+      const product = productResponse.data;
+      
+      if (!product) {
+        throw new Error(`商品 ${productId} 不存在`);
+      }
+
+      // 检查商品是否上架
+      if (product.status !== "1") {
+        throw new Error(`商品 "${product.title || productId}" 已下架，无法下单`);
+      }
+
+      // 检查库存
+      const currentStock = product.stock || 0;
+      if (currentStock < item.quantity) {
+        throw new Error(`商品 "${product.title || productId}" 库存不足，当前库存为 ${currentStock}，您需要 ${item.quantity} 件`);
+      }
+
+      return { productId, product, quantity: item.quantity };
+    });
+
+    const stockCheckResults = await Promise.all(stockCheckPromises);
+
+    // 所有库存检查通过，创建订单并扣减库存
     const now = new Date().toISOString();
     const orderData = {
       user_id: userid,
@@ -233,12 +263,23 @@ const createOrder = async () => {
     // 先创建订单
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
+      // 扣减库存
+      const stockUpdatePromises = stockCheckResults.map(async ({ productId, product, quantity }) => {
+        const newStock = (product.stock || 0) - quantity;
+        await axios.patch(`http://localhost:3001/products_list/${productId}`, {
+          stock: Math.max(0, newStock), // 确保库存不为负数
+          updated_at: now,
+        });
+      });
+
+      await Promise.all(stockUpdatePromises);
+
       // 等待购物车清空完成
       await cartStore.clearCart(userid);
       // 重新获取购物车数据以确保同步
       await cartStore.fetchCartData(userid);
 
-      ElMessage.success("订单创建成功");
+      ElMessage.success("订单创建成功，库存已扣减");
       // 清空表单
       selectedDate.value = "";
       selectedTime.value = "";
@@ -252,7 +293,7 @@ const createOrder = async () => {
     }
   } catch (error) {
     console.error("创建订单失败:", error);
-    ElMessage.error("创建订单失败，请稍后重试");
+    ElMessage.error(error.message || "创建订单失败，请稍后重试");
   }
 };
 

@@ -86,11 +86,24 @@ const handleLogout = () => {
 <style scoped>
 .admin-layout {
   height: 100vh;
+  overflow: hidden;
+}
+
+.el-container {
+  height: 100vh;
 }
 
 .el-aside {
   background-color: #304156;
   color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1000;
 }
 
 .admin-title {
@@ -102,10 +115,33 @@ const handleLogout = () => {
   font-size: 16px;
   font-weight: bold;
   color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .admin-menu {
   border-right: none;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.admin-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-menu::-webkit-scrollbar-track {
+  background: #2b2f3a;
+}
+
+.admin-menu::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 3px;
+}
+
+.admin-menu::-webkit-scrollbar-thumb:hover {
+  background: #5a6578;
 }
 
 .admin-content {
@@ -130,6 +166,38 @@ const handleLogout = () => {
   align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 200px;
+  height: 60px;
+  z-index: 999;
+}
+
+.el-main {
+  margin-left: 200px;
+  margin-top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+.el-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.el-main::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.el-main::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.el-main::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
 }
 
 .header-right {
