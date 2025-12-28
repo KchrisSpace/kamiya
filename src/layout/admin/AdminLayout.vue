@@ -27,6 +27,14 @@
             <el-icon><User /></el-icon>
             <span>用户管理</span>
           </el-menu-item>
+          <el-menu-item index="/admin/comments">
+            <el-icon><ChatDotRound /></el-icon>
+            <span>评论管理</span>
+          </el-menu-item>
+          <el-menu-item index="/admin/feedback">
+            <el-icon><Message /></el-icon>
+            <span>反馈管理</span>
+          </el-menu-item>
           <el-menu-item index="/admin/settings">
             <el-icon><Setting /></el-icon>
             <span>系统设置</span>
@@ -65,7 +73,7 @@
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "../../data_stores/user";
-import { Monitor, Goods, List, User, Setting } from "@element-plus/icons-vue";
+import { Monitor, Goods, List, User, Setting, ChatDotRound, Message } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const router = useRouter();

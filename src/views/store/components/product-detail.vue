@@ -171,6 +171,17 @@
               <div v-if="comment.useful_count !== undefined" class="comment-useful">
                 <span>有用 ({{ comment.useful_count }})</span>
               </div>
+              <!-- 商家回复 -->
+              <div v-if="comment.reply" class="comment-reply">
+                <div class="reply-header">
+                  <el-icon><ChatDotRound /></el-icon>
+                  <span class="reply-label">商家回复：</span>
+                  <span class="reply-time" v-if="comment.reply_time">
+                    {{ formatDate(comment.reply_time) }}
+                  </span>
+                </div>
+                <div class="reply-content">{{ comment.reply }}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -289,10 +300,12 @@ async function fetchProductComments() {
     const response = await axios.get(
       `http://localhost:3001/product_comments?product_id=${productId}`
     );
-    // 按时间倒序排列
-    productComments.value = (response.data || []).sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
-    });
+    // 过滤掉不可见的评论，按时间倒序排列
+    productComments.value = (response.data || [])
+      .filter(comment => comment.is_visible !== false)
+      .sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
   } catch (error) {
     console.error("获取商品评论失败:", error);
   } finally {
@@ -842,6 +855,40 @@ onMounted(() => {
   font-size: 12px;
   color: #999;
   margin-top: 8px;
+}
+
+.comment-reply {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f5f7fa;
+  border-radius: 8px;
+  border-left: 3px solid #f26371;
+}
+
+.reply-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.reply-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f26371;
+}
+
+.reply-time {
+  font-size: 12px;
+  color: #909399;
+  margin-left: auto;
+}
+
+.reply-content {
+  font-size: 14px;
+  color: #606266;
+  line-height: 1.6;
+  word-break: break-word;
 }
 
 @media (max-width: 768px) {

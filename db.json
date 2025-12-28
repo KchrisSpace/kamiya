@@ -57,7 +57,7 @@
       "title": "星与你皆浪漫",
       "main_category": "热销",
       "price_info": {
-        "current_price": 559.9,
+        "current_price": "359.10",
         "original_price": 399
       },
       "stock": 9,
@@ -70,41 +70,39 @@
           "情人节",
           "告白"
         ],
-        "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠",
-        "main_description": "feivhangthdd"
+        "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠"
       },
       "category": "单品",
       "sales": 0,
-      "views": 0,
-      "favorites": 0,
       "status": "1",
-      "created_at": "2025-01-01T00:00:00Z",
-      "updated_at": "2025-12-28T11:29:54.584Z"
+      "hasDiscount": true,
+      "discount": 10
     },
     {
       "id": "P02",
-      "main_category": "热销",
-      "category": "单品",
-      "images": "https://photo.yannick.com.tw/photo/0201139/%E6%B3%95%E5%BC%8F%E8%8D%89%E8%8E%93%E8%8A%99%E8%93%AE.jpg",
       "title": "莓*夹心蛋糕*少奶油",
+      "main_category": "热销",
       "price_info": {
-        "original_price": 299,
-        "current_price": 199
+        "current_price": 198.7,
+        "original_price": 299
       },
-      "score": 2,
       "stock": 14,
+      "description": "",
+      "images": "https://photo.yannick.com.tw/photo/0201139/%E6%B3%95%E5%BC%8F%E8%8D%89%E8%8E%93%E8%8A%99%E8%93%AE.jpg",
       "promotion": {
-        "is_hot": true,
-        "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚",
         "keywords": [
           "水果",
           "低脂",
           "健康",
           "清新"
-        ]
+        ],
+        "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚"
       },
+      "category": "单品",
+      "sales": 0,
       "status": "1",
-      "updated_at": "2025-12-28T11:28:22.646Z"
+      "hasDiscount": false,
+      "discount": 0
     },
     {
       "id": "P03",
@@ -501,23 +499,6 @@
       "is_audited": true
     },
     {
-      "product_id": "P01",
-      "user_id": "user1",
-      "user_name": "user1",
-      "avatar": "/images/users/avater/user1.png",
-      "content": "",
-      "rating": 4,
-      "tags": [
-        "味道鲜美"
-      ],
-      "images": [],
-      "useful_count": 0,
-      "is_audited": true,
-      "created_at": "2025-12-28T10:46:40.790Z",
-      "updated_at": "2025-12-28T10:46:40.790Z",
-      "id": "COZK1Dd"
-    },
-    {
       "product_id": "P05",
       "user_id": "user1",
       "user_name": "user1",
@@ -548,53 +529,6 @@
       "created_at": "2025-12-28T10:50:26.802Z",
       "updated_at": "2025-12-28T10:50:26.802Z",
       "id": "o9oDc7h"
-    },
-    {
-      "product_id": "P05",
-      "user_id": "user1",
-      "user_name": "user1",
-      "avatar": "/images/users/avater/user1.png",
-      "content": "",
-      "rating": 4,
-      "tags": [],
-      "images": [],
-      "useful_count": 0,
-      "is_audited": true,
-      "created_at": "2025-12-28T10:50:26.803Z",
-      "updated_at": "2025-12-28T10:50:26.803Z",
-      "id": "n7tkRsb"
-    },
-    {
-      "product_id": "P05",
-      "user_id": "user1",
-      "user_name": "user1",
-      "avatar": "/images/users/avater/user1.png",
-      "content": "",
-      "rating": 4,
-      "tags": [],
-      "images": [],
-      "useful_count": 0,
-      "is_audited": true,
-      "created_at": "2025-12-28T10:50:51.548Z",
-      "updated_at": "2025-12-28T10:50:51.548Z",
-      "id": "tqNo_02"
-    },
-    {
-      "product_id": "P01",
-      "user_id": "user1",
-      "user_name": "user1",
-      "avatar": "/images/users/avater/user1.png",
-      "content": "h",
-      "rating": 4,
-      "tags": [
-        "味道鲜美"
-      ],
-      "images": [],
-      "useful_count": 0,
-      "is_audited": true,
-      "created_at": "2025-12-28T10:50:51.547Z",
-      "updated_at": "2025-12-28T10:50:51.547Z",
-      "id": "HIeVQ9A"
     }
   ],
   "normal_orders": [
@@ -812,8 +746,18 @@
       "phone": "13540604635",
       "feedback_message": "真好",
       "created_at": "2025-05-01T18:44:19.078Z",
-      "updated_at": "2025-05-01T18:44:19.078Z",
-      "id": "RjzhdCa"
+      "updated_at": "2025-12-28T12:35:45.741Z",
+      "id": "RjzhdCa",
+      "status": "processed"
+    },
+    {
+      "user_id": "user1",
+      "name": "路人甲",
+      "email": "garyclayton2001217@outlook.com",
+      "phone": "13540604635",
+      "feedback_message": "晚上关店之前能打折吗",
+      "created_at": "2025-12-28T12:35:34.660Z",
+      "id": "h_d379h"
     }
   ]
 }

@@ -13,7 +13,9 @@
           <span class="order-value">{{ orderId }}</span>
         </div>
         <div class="review-progress">
-          <span class="progress-text">商品评价({{ completedCount }}/{{ totalCount }})</span>
+          <span class="progress-text"
+            >商品评价({{ completedCount }}/{{ totalCount }})</span
+          >
         </div>
       </div>
 
@@ -31,7 +33,9 @@
               class="product-image"
             />
             <div class="product-details">
-              <p class="product-name">{{ getProductName(product.product_id) }}</p>
+              <p class="product-name">
+                {{ getProductName(product.product_id) }}
+              </p>
               <p class="product-spec" v-if="product.quantity">
                 数量：{{ product.quantity }}
               </p>
@@ -86,7 +90,9 @@
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="(file) => handleRemove(index, file)"
-              :on-change="(file, fileList) => handleChange(index, file, fileList)"
+              :on-change="
+                (file, fileList) => handleChange(index, file, fileList)
+              "
               :before-upload="beforeUpload"
               :limit="3"
               accept="image/*"
@@ -111,7 +117,7 @@
           @click="handleSubmit"
           class="submit-btn"
         >
-          {{ submitting ? '提交中...' : '提交评价' }}
+          {{ submitting ? "提交中..." : "提交评价" }}
         </el-button>
       </div>
     </div>
@@ -234,7 +240,7 @@ function getSuggestedTags(productId) {
   // 根据商品类型返回不同的标签建议
   const commonTags = ["品质很好", "味道鲜美", "分量很足", "包装精美"];
   const product = productsStore.products.find((p) => p.id === productId);
-  
+
   if (product?.category === "热销") {
     return ["炒菜很香", "营养丰富", "品质很好", "肉厚"];
   }
@@ -295,7 +301,7 @@ function handleChange(index, file, fileList) {
         uid: file.uid,
         name: file.name,
         url: imageUrl,
-        status: 'success',
+        status: "success",
       };
       // 更新文件列表
       const fileIndex = reviews.value[index].images.findIndex(
@@ -400,12 +406,12 @@ async function handleSubmit() {
 
     await Promise.all(promises);
     ElMessage.success("评价提交成功！");
-    
+
     // 延迟跳转，让用户看到成功提示
     setTimeout(() => {
       router.push("/order");
       // 触发页面刷新，更新评论状态
-      window.dispatchEvent(new Event('comments-updated'));
+      window.dispatchEvent(new Event("comments-updated"));
     }, 1500);
   } catch (error) {
     console.error("提交评价失败:", error);
@@ -642,4 +648,3 @@ async function handleSubmit() {
   cursor: not-allowed;
 }
 </style>
-

@@ -117,6 +117,16 @@ const router = createRouter({
           component: () => import("../views/admin/users/users.vue"),
         },
         {
+          path: "comments",
+          name: "adminComments",
+          component: () => import("../views/admin/comments/comments.vue"),
+        },
+        {
+          path: "feedback",
+          name: "adminFeedback",
+          component: () => import("../views/admin/feedback/feedback.vue"),
+        },
+        {
           path: "settings",
           name: "adminSettings",
           component: () => import("../views/admin/settings/settings.vue"),
