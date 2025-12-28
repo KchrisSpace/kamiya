@@ -296,6 +296,10 @@ const getStatusType = (status) => {
 };
 
 const getStatusName = (status) => {
+  // 用户端将"已出餐"显示为"可取餐"，管理员端保持原样
+  if (!isAdmin.value && status === "已出餐") {
+    return "可取餐";
+  }
   return status || "未知";
 };
 

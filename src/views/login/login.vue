@@ -7,10 +7,11 @@
           <input
             type="text"
             v-model="formData.username"
-            placeholder="用户名"
+            placeholder="用户ID或手机号"
             class="form-input"
             required
           />
+          <div class="input-hint">支持使用用户ID或手机号登录</div>
         </div>
         <div class="form-group">
           <input
@@ -120,6 +121,12 @@ const handleLogin = async () => {
 
 .form-input:focus {
   border-color: #dac5c7;
+}
+
+.input-hint {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 4px;
 }
 
 .form-options {

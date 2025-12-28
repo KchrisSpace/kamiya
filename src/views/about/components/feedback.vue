@@ -114,9 +114,12 @@ import { ref } from "vue";
 import thanks from "./thanks.vue";
 import axios from "axios";
 
+import { useUserStore } from "../../../data_stores/user";
+
+const userStore = useUserStore();
 const showThanks = ref(false);
 const formData = ref({
-  user_id: "02", // 默认用户ID
+  user_id: userStore.userId || null,
   name: "",
   email: "",
   phone: "",
@@ -173,7 +176,7 @@ const handleSubmit = async () => {
 const closeThanks = () => {
   showThanks.value = false;
   formData.value = {
-    user_id: "02",
+    user_id: userStore.userId || null,
     name: "",
     email: "",
     phone: "",

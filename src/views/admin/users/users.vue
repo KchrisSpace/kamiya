@@ -1,18 +1,92 @@
 <template>
   <div class="users">
+    <!-- 页面标题 -->
+    <div class="page-header">
+      <h2 class="page-title">用户管理</h2>
+      <el-button type="primary" @click="handleAdd">
+        <el-icon><Plus /></el-icon>
+        添加用户
+      </el-button>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stats-cards">
+      <el-card class="stat-card stat-card-primary" shadow="hover">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <el-icon :size="40"><User /></el-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">用户总数</div>
+          </div>
+        </div>
+      </el-card>
+      <el-card class="stat-card stat-card-success" shadow="hover">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <el-icon :size="40"><UserFilled /></el-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ adminCount }}</div>
+            <div class="stat-label">管理员</div>
+          </div>
+        </div>
+      </el-card>
+      <el-card class="stat-card stat-card-info" shadow="hover">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <el-icon :size="40"><Avatar /></el-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ userCount }}</div>
+            <div class="stat-label">普通用户</div>
+          </div>
+        </div>
+      </el-card>
+      <el-card class="stat-card stat-card-warning" shadow="hover">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <el-icon :size="40"><Lock /></el-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ disabledCount }}</div>
+            <div class="stat-label">已禁用</div>
+          </div>
+        </div>
+      </el-card>
+    </div>
+
+    <!-- 图表区域 -->
     <div class="charts">
-      <el-card class="chart-card">
+      <el-card class="chart-card" shadow="hover">
+        <template #header>
+          <div class="card-header">
+            <span>用户增长趋势</span>
+          </div>
+        </template>
         <div ref="userChart" class="chart"></div>
       </el-card>
-      <el-card class="chart-card">
+      <el-card class="chart-card" shadow="hover">
+        <template #header>
+          <div class="card-header">
+            <span>用户角色分布</span>
+          </div>
+        </template>
         <div ref="roleChart" class="chart"></div>
       </el-card>
     </div>
 
-    <el-card class="filter-card">
+    <!-- 筛选和操作区域 -->
+    <el-card class="filter-card" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span>筛选条件</span>
+        </div>
+      </template>
       <el-form :inline="true" :model="filterForm" class="filter-form">
-        <el-form-item label="用户名">
-          <el-input v-model="filterForm.username" placeholder="请输入用户名" />
+        <el-form-item label="登录账号">
+          <el-input v-model="filterForm.username" placeholder="请输入登录账号" />
         </el-form-item>
         <el-form-item label="用户角色">
           <el-select v-model="filterForm.role" placeholder="请选择角色">
@@ -35,9 +109,24 @@
       </el-form>
     </el-card>
 
-    <el-table :data="users" style="width: 100%" v-loading="loading">
+    <!-- 用户列表表格 -->
+    <el-card class="table-card" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <span>用户列表</span>
+          <span class="table-count">共 {{ total }} 条数据</span>
+        </div>
+      </template>
+      <el-table 
+        :data="users" 
+        style="width: 100%" 
+        v-loading="loading"
+        stripe
+        :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
+      >
       <el-table-column prop="id" label="ID" width="80" />
-      <el-table-column prop="username" label="用户名" />
+      <el-table-column prop="username" label="登录账号" />
+      <el-table-column prop="nickname" label="昵称" />
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="phone" label="手机号" />
       <el-table-column prop="role" label="角色" width="120">
@@ -68,9 +157,9 @@
           >
         </template>
       </el-table-column>
-    </el-table>
+      </el-table>
 
-    <div class="pagination">
+      <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="pageSize"
@@ -80,7 +169,8 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+      </div>
+    </el-card>
 
     <el-dialog
       v-model="dialogVisible"
@@ -93,7 +183,7 @@
         :rules="rules"
         label-width="100px"
       >
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="登录账号" prop="username">
           <el-input v-model="formData.username" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -129,6 +219,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus, User, UserFilled, Avatar, Lock } from "@element-plus/icons-vue";
 import * as echarts from "echarts";
 import axios from "axios";
 
@@ -160,7 +251,7 @@ const formData = reactive({
 
 const rules = {
   username: [
-    { required: true, message: "请输入用户名", trigger: "blur" },
+    { required: true, message: "请输入登录账号", trigger: "blur" },
     { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" },
   ],
   email: [
@@ -181,18 +272,33 @@ const rules = {
 const userChart = ref(null);
 const roleChart = ref(null);
 
+// 统计数据
+const adminCount = computed(() => {
+  return allUsers.value.filter((u) => u.role === "admin").length;
+});
+
+const userCount = computed(() => {
+  return allUsers.value.filter((u) => u.role === "user").length;
+});
+
+const disabledCount = computed(() => {
+  return allUsers.value.filter((u) => u.status === "0").length;
+});
+
 // 格式化用户数据，将 db.json 格式转换为页面显示格式
 const formatUser = (user) => {
+  const userInfo = user.user_info || user["user-info"] || {};
   return {
     id: user.id,
     username: user.username,
+    nickname: userInfo.nickname || user.username || "未设置",
     email: user.email || `${user.username}@example.com`,
     phone: user.phone || "",
     role: user.role || (user.id === "admin" ? "admin" : "user"),
     status: user.status || "1",
     createTime: user.createTime || new Date().toLocaleString(),
     password: user.password || "",
-    "user-info": user["user-info"] || {},
+    "user-info": userInfo,
   };
 };
 
@@ -363,6 +469,20 @@ const handleCurrentChange = (val) => {
   updateUsersList();
 };
 
+const handleAdd = () => {
+  dialogType.value = "add";
+  formData.id = "";
+  formData.username = "";
+  formData.email = "";
+  formData.phone = "";
+  formData.role = "user";
+  formData.status = "1";
+  formData.password = "";
+  formData.createTime = "";
+  formData["user-info"] = {};
+  dialogVisible.value = true;
+};
+
 const handleEdit = (row) => {
   dialogType.value = "edit";
   Object.assign(formData, {
@@ -441,8 +561,16 @@ const handleSubmit = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
+        // 如果是新用户，生成短ID（时间戳后6位 + 2位随机数）
+        let userId = formData.id;
+        if (!userId) {
+          const timestamp = Date.now().toString();
+          const randomSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+          userId = `user${timestamp.slice(-6)}${randomSuffix}`;
+        }
+        
         const userData = {
-          id: formData.id || `user${Date.now()}`,
+          id: userId,
           username: formData.username,
           password: formData.password || "000000",
           email: formData.email,
@@ -450,10 +578,12 @@ const handleSubmit = async () => {
           role: formData.role,
           status: formData.status,
           createTime: formData.createTime || new Date().toLocaleString(),
-          "user-info": formData["user-info"] || {
+          user_info: formData["user-info"] || formData.user_info || {
             nickname: formData.username,
             avatar: "",
           },
+          created_at: formData.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
 
         if (dialogType.value === "add") {
@@ -500,44 +630,208 @@ onMounted(async () => {
 
 <style scoped>
 .users {
-  padding: 20px;
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: 100vh;
 }
 
+/* 页面标题 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #303133;
+  margin: 0;
+}
+
+/* 统计卡片 */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.stat-card-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.stat-card-success {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.stat-card-info {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.stat-card-warning {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.stat-icon {
+  margin-right: 16px;
+  opacity: 0.9;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* 图表区域 */
 .charts {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .chart-card {
-  height: 400px;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: #303133;
+}
+
+.table-count {
+  font-size: 14px;
+  color: #909399;
+  font-weight: normal;
 }
 
 .chart {
   width: 100%;
-  height: 100%;
+  height: 350px;
 }
 
+/* 筛选卡片 */
 .filter-card {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  border: none;
 }
 
 .filter-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filter-form :deep(.el-form-item) {
+  margin-bottom: 0;
+}
+
+/* 表格卡片 */
+.table-card {
+  border-radius: 12px;
+  border: none;
+  overflow: hidden;
+}
+
+.table-card :deep(.el-table) {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-card :deep(.el-table th) {
+  background-color: #f5f7fa;
+}
+
+.table-card :deep(.el-table--striped .el-table__body tr.el-table__row--striped td) {
+  background-color: #fafafa;
+}
+
+.table-card :deep(.el-table__row:hover) {
+  background-color: #f5f7fa;
 }
 
 .pagination {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  padding: 16px 0;
 }
 
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1400px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .charts {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 }
 </style>

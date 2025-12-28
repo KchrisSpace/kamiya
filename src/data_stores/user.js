@@ -10,21 +10,26 @@ export const useUserStore = defineStore("user", () => {
   const loading = ref(false);
 
   const isLoggedIn = computed(() => !!token.value);
-  const userAvatar = computed(() => userInfo.value?.["user-info"]?.avatar || "");
-  const userNickname = computed(() => userInfo.value?.["user-info"]?.nickname || "");
+  const userAvatar = computed(
+    () => userInfo.value?.user_info?.avatar || userInfo.value?.["user-info"]?.avatar || ""
+  );
+  const userNickname = computed(
+    () => userInfo.value?.user_info?.nickname || userInfo.value?.["user-info"]?.nickname || ""
+  );
   const isAdmin = computed(() => userInfo.value?.role === "admin");
 
-  async function login(username, password, remember = false) {
+  async function login(identifier, password, remember = false) {
     loading.value = true;
     try {
-      if (username === "admin" && password === "000000") {
+      // 管理员登录（支持admin用户名）
+      if (identifier === "admin" && password === "000000") {
         const adminUser = {
           id: "admin",
           username: "admin",
           role: "admin",
-          "user-info": {
+          user_info: {
             nickname: "管理员",
-            avatar: "/public/images/users/avater/user0.png",
+            avatar: "/images/users/avater/user0.png",
           },
         };
 
@@ -45,9 +50,28 @@ export const useUserStore = defineStore("user", () => {
         throw new Error("用户数据格式错误");
       }
 
-      const user = response.data.find(
-        (u) => u.username === username && u.password === password
-      );
+      // 判断输入的是ID还是手机号
+      const isPhone = /^1[3-9]\d{9}$/.test(identifier); // 手机号格式：11位数字，以1开头，第二位是3-9
+      const isUserId = identifier.startsWith("user"); // ID格式：以user开头
+
+      let user = null;
+
+      if (isPhone) {
+        // 通过手机号登录
+        user = response.data.find(
+          (u) => u.phone === identifier && u.password === password
+        );
+      } else if (isUserId) {
+        // 通过用户ID登录
+        user = response.data.find(
+          (u) => u.id === identifier && u.password === password
+        );
+      } else {
+        // 兼容旧方式：通过用户名登录
+        user = response.data.find(
+          (u) => u.username === identifier && u.password === password
+        );
+      }
 
       if (user) {
         setUserInfo(user);
@@ -62,7 +86,7 @@ export const useUserStore = defineStore("user", () => {
         return { success: true, isAdmin: false };
       }
 
-      throw new Error("用户名或密码错误");
+      throw new Error("用户ID/手机号或密码错误");
     } catch (error) {
       console.error("登录失败:", error);
       ElMessage.error(error.message || "登录失败，请稍后重试");
@@ -77,9 +101,11 @@ export const useUserStore = defineStore("user", () => {
 
     loading.value = true;
     try {
-      const response = await axios.get(`http://localhost:3001/users/${userId.value}`);
+      const response = await axios.get(
+        `http://localhost:3001/users/${userId.value}`
+      );
       if (response.data) {
-        setUserInfo(userId.value);
+        setUserInfo(response.data);
       } else {
         throw new Error("用户信息不存在");
       }
@@ -116,6 +142,49 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function updateUserInfo(updates) {
+    if (!userId.value) {
+      throw new Error("用户未登录");
+    }
+
+    loading.value = true;
+    try {
+      // 获取当前用户信息
+      const currentUserResponse = await axios.get(
+        `http://localhost:3001/users/${userId.value}`
+      );
+      const currentUser = currentUserResponse.data;
+
+      // 更新用户信息（兼容新旧格式）
+      const userInfoField = currentUser.user_info || currentUser["user-info"] || {};
+      const updatedUser = {
+        ...currentUser,
+        user_info: {
+          ...userInfoField,
+          ...updates,
+        },
+        updated_at: new Date().toISOString(),
+      };
+
+      // 保存到服务器
+      const response = await axios.put(
+        `http://localhost:3001/users/${userId.value}`,
+        updatedUser
+      );
+
+      // 更新本地状态
+      setUserInfo(response.data);
+      ElMessage.success("更新成功");
+      return response.data;
+    } catch (error) {
+      console.error("更新用户信息失败:", error);
+      ElMessage.error(error.message || "更新失败，请稍后重试");
+      throw error;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   function logout() {
     userInfo.value = null;
     setToken(null);
@@ -142,6 +211,7 @@ export const useUserStore = defineStore("user", () => {
     setUserInfo,
     setToken,
     setUserId,
+    updateUserInfo,
     logout,
   };
 });

@@ -4,28 +4,51 @@
       "id": "admin",
       "username": "admin",
       "password": "000000",
-      "user-info": {
+      "role": "admin",
+      "email": "admin@kamiya.com",
+      "phone": "13800000000",
+      "email_verified": true,
+      "phone_verified": true,
+      "account_status": "active",
+      "user_info": {
         "nickname": "管理员",
         "avatar": "https://s1.aigei.com/src/img/jpg/88/883f9f9c8dfd4f8b99cc8abe8c997333.jpg?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:UvSsaPJ453FbKHB7XmV-aIOoww8="
-      }
+      },
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
     },
     {
       "id": "user1",
       "username": "user1",
       "password": "000000",
-      "user-info": {
-        "nickname": "花花",
-        "avatar": "https://s1.aigei.com/src/img/jpg/88/883f9f9c8dfd4f8b99cc8abe8c997333.jpg?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:UvSsaPJ453FbKHB7XmV-aIOoww8="
-      }
+      "email": "user1@example.com",
+      "phone": "13800000001",
+      "role": "user",
+      "status": "1",
+      "createTime": "2025/12/28 17:41:57",
+      "user_info": {
+        "nickname": "小美",
+        "avatar": ""
+      },
+      "created_at": "2025-12-28T09:41:57.374Z",
+      "updated_at": "2025-12-28T10:58:40.305Z"
     },
     {
       "id": "user2",
       "username": "user2",
       "password": "000000",
-      "user-info": {
+      "role": "user",
+      "email": "user2@example.com",
+      "phone": "13800000002",
+      "email_verified": false,
+      "phone_verified": false,
+      "account_status": "active",
+      "user_info": {
         "nickname": "小草",
         "avatar": "/images/users/avater/user1.png"
-      }
+      },
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
     }
   ],
   "products_list": [
@@ -52,7 +75,11 @@
       },
       "category": "单品",
       "sales": 0,
-      "status": "1"
+      "views": 0,
+      "favorites": 0,
+      "status": "1",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
     },
     {
       "id": "P02",
@@ -100,7 +127,7 @@
           "抹茶"
         ]
       },
-      "status": "0"
+      "status": "1"
     },
     {
       "id": "P04",
@@ -124,7 +151,11 @@
           "粉色"
         ]
       },
-      "status": "0"
+      "status": "0",
+      "views": 0,
+      "favorites": 0,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
     },
     {
       "id": "P05",
@@ -172,7 +203,11 @@
           "日式"
         ]
       },
-      "status": "0"
+      "status": "0",
+      "views": 0,
+      "favorites": 0,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
     },
     {
       "id": "P07",
@@ -323,383 +358,388 @@
     {
       "id": "bd9e",
       "product_id": "P01",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "没错",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 5,
+      "useful_count": 3,
       "created_at": "2025-04-25T17:51:56.908Z",
+      "updated_at": "2025-04-25T17:51:56.908Z",
       "is_audited": true
     },
     {
       "id": "1256",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "好烦啊，我好讨厌这个",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 2,
+      "useful_count": 0,
       "created_at": "2025-04-25T17:53:27.907Z",
+      "updated_at": "2025-04-25T17:53:27.907Z",
       "is_audited": true
     },
     {
       "id": "34cb",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "难过",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 3,
+      "useful_count": 1,
       "created_at": "2025-04-25T17:53:35.099Z",
+      "updated_at": "2025-04-25T17:53:35.099Z",
       "is_audited": true
     },
     {
       "id": "60f1",
       "product_id": "P02",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "12",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 4,
+      "useful_count": 2,
       "created_at": "2025-04-25T20:21:45.747Z",
+      "updated_at": "2025-04-25T20:21:45.747Z",
       "is_audited": true
     },
     {
       "id": "e6b5",
       "product_id": "P02",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "烦死了，讨厌代码",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 1,
+      "useful_count": 0,
       "created_at": "2025-04-26T06:26:30.522Z",
+      "updated_at": "2025-04-26T06:26:30.522Z",
       "is_audited": true
     },
     {
       "id": "9189",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "哈哈哈哈",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 5,
+      "useful_count": 5,
       "created_at": "2025-04-27T09:45:34.357Z",
+      "updated_at": "2025-04-27T09:45:34.357Z",
       "is_audited": true
     },
     {
       "id": "f246",
       "product_id": "P07",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "哈哈哈",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 4,
+      "useful_count": 1,
       "created_at": "2025-04-27T12:02:04.634Z",
+      "updated_at": "2025-04-27T12:02:04.634Z",
       "is_audited": true
     },
     {
       "id": "b985",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "123",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 3,
+      "useful_count": 0,
       "created_at": "2025-04-27T12:14:24.121Z",
+      "updated_at": "2025-04-27T12:14:24.121Z",
       "is_audited": true
     },
     {
       "id": "5827",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "123",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 3,
+      "useful_count": 0,
       "created_at": "2025-04-27T12:23:38.369Z",
+      "updated_at": "2025-04-27T12:23:38.369Z",
       "is_audited": true
     },
     {
       "id": "5012",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "12",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 4,
+      "useful_count": 1,
       "created_at": "2025-04-27T12:25:09.634Z",
+      "updated_at": "2025-04-27T12:25:09.634Z",
       "is_audited": true
     },
     {
       "id": "197e",
       "product_id": "P03",
-      "user_id": "2",
+      "user_id": "user2",
       "user_name": "Maybe",
       "content": "害",
       "avatar": "/images/users/avater/user1.png",
+      "rating": 3,
+      "useful_count": 0,
       "created_at": "2025-04-27T12:25:21.284Z",
+      "updated_at": "2025-04-27T12:25:21.284Z",
       "is_audited": true
+    },
+    {
+      "product_id": "P01",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "",
+      "rating": 4,
+      "tags": [
+        "味道鲜美"
+      ],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:46:40.790Z",
+      "updated_at": "2025-12-28T10:46:40.790Z",
+      "id": "COZK1Dd"
+    },
+    {
+      "product_id": "P05",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "",
+      "rating": 4,
+      "tags": [],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:46:40.791Z",
+      "updated_at": "2025-12-28T10:46:40.791Z",
+      "id": "tIXfoWx"
+    },
+    {
+      "product_id": "P01",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "",
+      "rating": 4,
+      "tags": [
+        "味道鲜美"
+      ],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:50:26.802Z",
+      "updated_at": "2025-12-28T10:50:26.802Z",
+      "id": "o9oDc7h"
+    },
+    {
+      "product_id": "P05",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "",
+      "rating": 4,
+      "tags": [],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:50:26.803Z",
+      "updated_at": "2025-12-28T10:50:26.803Z",
+      "id": "n7tkRsb"
+    },
+    {
+      "product_id": "P05",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "",
+      "rating": 4,
+      "tags": [],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:50:51.548Z",
+      "updated_at": "2025-12-28T10:50:51.548Z",
+      "id": "tqNo_02"
+    },
+    {
+      "product_id": "P01",
+      "user_id": "user1",
+      "user_name": "user1",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "h",
+      "rating": 4,
+      "tags": [
+        "味道鲜美"
+      ],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2025-12-28T10:50:51.547Z",
+      "updated_at": "2025-12-28T10:50:51.547Z",
+      "id": "HIeVQ9A"
     }
   ],
   "normal_orders": [
     {
-      "user_id": "admin",
+      "user_id": "user1",
       "items": [
         {
           "product_id": "P01",
-          "quantity": 1
+          "product_name": "星与你皆浪漫",
+          "quantity": 1,
+          "single_price": 559.9
         },
         {
-          "product_id": "P02",
-          "quantity": 1
+          "product_id": "P05",
+          "product_name": "黑森林慕斯",
+          "quantity": 2,
+          "single_price": 399
         }
       ],
-      "total_price": "758.90",
+      "total_price": 1357.9,
       "shipping_fee": 0,
-      "delivery_time": "2025-11-26Tmorning:00Z",
-      "consignee": "李四",
-      "phone": "13011111234",
-      "remark": "不要芒果",
-      "status": "预备出餐中",
-      "created_at": "2025-11-21T13:29:19.182Z",
-      "id": 1
-    },
-    {
-      "user_id": "admin",
-      "items": [
-        {
-          "product_id": "P01",
-          "quantity": 1
-        }
-      ],
-      "total_price": "559.90",
-      "shipping_fee": 0,
-      "delivery_time": "2025-11-26Tmorning:00Z",
-      "consignee": "李四",
-      "phone": "11111111111",
-      "remark": "e",
-      "status": "进行中",
-      "created_at": "2025-11-21T14:19:33.796Z",
-      "id": 2,
+      "delivery_time": "2025-12-31Tmorning:00Z",
+      "consignee": "hh",
+      "phone": "13555552222",
+      "remark": "ki",
+      "status": "已完成",
+      "payment_method": "wechat",
+      "payment_time": "2025-12-22T02:23:00.000Z",
+      "shipped_time": "2025-12-28T09:36:16.396Z",
+      "completed_time": "2025-12-28T10:41:10.796Z",
+      "created_at": "2025-12-22T02:22:33.672Z",
+      "updated_at": "2025-12-28T10:41:10.796Z",
+      "id": 3,
       "communications": [
         {
-          "role": "admin",
-          "text": "hh",
-          "images": [],
-          "created_at": "2025-11-21T14:28:39.804Z"
-        },
-        {
           "role": "customer",
-          "text": "h",
-          "images": [],
-          "created_at": "2025-11-21T15:02:14.955Z"
-        },
-        {
-          "role": "admin",
-          "text": "h",
-          "images": [],
-          "created_at": "2025-11-21T15:02:39.106Z"
-        },
-        {
-          "role": "admin",
-          "text": "ok",
-          "images": [],
-          "created_at": "2025-11-21T15:05:12.977Z"
+          "text": "给我做这个样式",
+          "images": [
+            "blob:http://localhost:5173/0cf53dab-5a01-46db-9033-1dc52299275b"
+          ],
+          "created_at": "2025-12-28T09:23:44.552Z"
         }
       ]
-    }
-  ],
-  "addresses": [
-    {
-      "id": "1",
-      "user_id": "1",
-      "consignee": "李女士",
-      "phone": "13800138000",
-      "region": [
-        "上海市",
-        "浦东新区",
-        "陆家嘴街道"
-      ],
-      "detail": "世纪大道100号",
-      "is_default": false
-    },
-    {
-      "id": "2",
-      "user_id": "2",
-      "consignee": "陈先生",
-      "phone": "13800138001",
-      "region": [
-        "北京市",
-        "海淀区",
-        "中关村街道"
-      ],
-      "detail": "中关村大街1号",
-      "is_default": false
-    },
-    {
-      "user_id": "02",
-      "consignee": "555",
-      "phone": "13800138003",
-      "region": "成都市/青羊区",
-      "detail": "55",
-      "is_default": false,
-      "id": "4"
-    },
-    {
-      "user_id": "02",
-      "consignee": "1111111",
-      "phone": "147777777",
-      "region": [
-        "成都市/金牛区"
-      ],
-      "detail": "1111111",
-      "is_default": false,
-      "id": "6004"
-    },
-    {
-      "user_id": "02",
-      "consignee": "1111",
-      "phone": "11111111111",
-      "region": "成都市/成华区",
-      "detail": "1111",
-      "is_default": false,
-      "id": "a09b"
-    },
-    {
-      "user_id": "02",
-      "consignee": "11",
-      "phone": "14726839224",
-      "region": [
-        "成都市/青羊区"
-      ],
-      "detail": "11",
-      "is_default": false,
-      "id": "0dea"
-    },
-    {
-      "user_id": "02",
-      "consignee": "11",
-      "phone": "11111111111",
-      "region": "成都市/成华区",
-      "detail": "111",
-      "is_default": false,
-      "id": "fc3d"
-    },
-    {
-      "user_id": "02",
-      "consignee": "14",
-      "phone": "1111111111",
-      "region": "成都市/郫都区",
-      "detail": "444",
-      "is_default": false,
-      "id": "5f12"
-    },
-    {
-      "user_id": "02",
-      "consignee": "刘盈盈",
-      "phone": "1111111111",
-      "region": "成都市/郫都区",
-      "detail": "12",
-      "is_default": false,
-      "id": "ace0"
-    },
-    {
-      "id": "1af1",
-      "user_id": "02",
-      "consignee": "111",
-      "phone": "1111111111",
-      "region": "成都市/郫都区",
-      "detail": "1111",
-      "is_default": false
-    },
-    {
-      "id": "b497",
-      "user_id": "02",
-      "consignee": "刘盈盈",
-      "phone": "14726839224",
-      "region": "成都市/郫都区",
-      "detail": "成都锦城学院",
-      "is_default": true
     }
   ],
   "carousel": [
     {
       "id": "1",
-      "img": "/public/images/carousel-img/carousel-1.png"
+      "img": "/images/carousel-img/carousel-1.png"
     },
     {
       "id": "2",
-      "img": "/public/images/carousel-img/carousel-2.png"
+      "img": "/images/carousel-img/carousel-2.png"
     },
     {
       "id": "3",
-      "img": "/public/images/carousel-img/carousel-3.png"
+      "img": "/images/carousel-img/carousel-3.png"
     },
     {
       "id": "4",
-      "img": "/public/images/carousel-img/carousel-4.png"
+      "img": "/images/carousel-img/carousel-4.png"
     }
   ],
   "cart": [
     {
-      "id": "P01",
-      "quantity": 1
+      "quantity": 2,
+      "id": "cart_1"
+    },
+    {
+      "id": "cart_1766913801877_338rme1ss",
+      "user_id": "user1",
+      "product_id": "P01",
+      "quantity": 1,
+      "created_at": "2025-12-28T09:23:21.877Z"
     }
   ],
   "custom": [
     {
       "id": "1",
-      "user_id": "02",
+      "user_id": "user2",
       "custom_img": "",
       "email": "123456@qq.com",
       "phone": "12345678901",
       "custom_message": "贺卡写上生日快乐",
-      "created_at": "2025-04-25T17:51:56.908Z"
+      "created_at": "2025-04-25T17:51:56.908Z",
+      "updated_at": "2025-04-25T17:51:56.908Z"
     },
     {
       "id": "0ad7",
-      "user_id": "02",
+      "user_id": "user2",
       "custom_img": "",
       "email": "maybe3340458807@163.com",
       "phone": "111111",
       "custom_message": "哈哈哈哈",
-      "created_at": "2025-04-25T18:11:43.222Z"
+      "created_at": "2025-04-25T18:11:43.222Z",
+      "updated_at": "2025-04-25T18:11:43.222Z"
     }
   ],
   "feedback": [
     {
       "id": "1",
-      "user_id": "02",
+      "user_id": "user2",
       "name": "刘盈盈",
       "email": "123456@qq.com",
       "phone": "12345678901",
       "feedback_message": "花布很好看，我很喜欢",
-      "created_at": "2025-04-25T17:51:56.908Z"
+      "created_at": "2025-04-25T17:51:56.908Z",
+      "updated_at": "2025-04-25T17:51:56.908Z"
     },
     {
       "id": "4eb5",
-      "user_id": "02",
+      "user_id": "user2",
       "name": "刘盈盈",
       "email": "maybe3340458807@163.com",
       "phone": "14726839224",
       "feedback_message": "12",
-      "created_at": "2025-04-25T18:08:17.845Z"
+      "created_at": "2025-04-25T18:08:17.845Z",
+      "updated_at": "2025-04-25T18:08:17.845Z"
     },
     {
       "id": "bc47",
-      "user_id": "02",
+      "user_id": "user2",
       "name": "刘盈盈",
       "email": "maybe3340458807@163.com",
       "phone": "14726839224",
       "feedback_message": "1",
-      "created_at": "2025-04-25T18:15:35.320Z"
+      "created_at": "2025-04-25T18:15:35.320Z",
+      "updated_at": "2025-04-25T18:15:35.320Z"
     },
     {
       "id": "14ee",
-      "user_id": "02",
+      "user_id": "user2",
       "name": "刘盈盈",
       "email": "maybe3340458807@163.co",
       "phone": "14726839224",
       "feedback_message": "123",
-      "created_at": "2025-04-25T18:15:40.526Z"
+      "created_at": "2025-04-25T18:15:40.526Z",
+      "updated_at": "2025-04-25T18:15:40.526Z"
     },
     {
-      "user_id": "02",
+      "user_id": "user2",
       "name": "chris",
       "email": "meirui@cdjcc.edu.cn",
       "phone": "13540604635",
       "feedback_message": "真好",
       "created_at": "2025-05-01T18:44:19.078Z",
+      "updated_at": "2025-05-01T18:44:19.078Z",
       "id": "RjzhdCa"
     }
   ]

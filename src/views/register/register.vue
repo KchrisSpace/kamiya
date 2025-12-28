@@ -108,20 +108,55 @@ const handleRegister = async () => {
       return;
     }
 
-    // 发送注册请求
-    const response = await axios.post("http://localhost:3001/register", {
-      username: formData.value.username,
-      email: formData.value.email,
-      password: formData.value.password,
-      phone: formData.value.phone,
-    });
+    // 检查用户名是否已存在
+    const usersResponse = await axios.get("http://localhost:3001/users");
+    const existingUser = usersResponse.data.find(
+      (u) => u.username === formData.value.username
+    );
 
-    if (response.data.success) {
-      alert("注册成功，请登录");
-      router.push("/login");
-    } else {
-      alert(response.data.message || "注册失败");
+    if (existingUser) {
+      alert("用户名已存在，请使用其他用户名");
+      return;
     }
+
+    // 生成用户ID（使用时间戳后6位 + 2位随机数，共8位数字）
+    const timestamp = Date.now().toString();
+    const randomSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+    let userId = `user${timestamp.slice(-6)}${randomSuffix}`;
+    
+    // 检查ID是否已存在，如果存在则重新生成
+    let attempts = 0;
+    while (usersResponse.data.some(u => u.id === userId) && attempts < 10) {
+      const newRandomSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+      userId = `user${timestamp.slice(-6)}${newRandomSuffix}`;
+      attempts++;
+    }
+
+    // 创建新用户
+    const now = new Date().toISOString();
+    const newUser = {
+      id: userId,
+      username: formData.value.username,
+      password: formData.value.password,
+      role: "user", // 默认角色为普通用户
+      email: formData.value.email,
+      phone: formData.value.phone,
+      email_verified: false, // 默认未验证
+      phone_verified: false, // 默认未验证
+      account_status: "active", // 默认账户状态为激活
+      user_info: {
+        nickname: formData.value.username,
+        avatar: "",
+      },
+      created_at: now,
+      updated_at: now,
+    };
+
+    // 发送注册请求
+    await axios.post("http://localhost:3001/users", newUser);
+
+    alert("注册成功，请登录");
+    router.push("/login");
   } catch (error) {
     console.error("注册失败:", error);
     alert("注册失败，请稍后重试");

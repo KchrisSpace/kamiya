@@ -11,7 +11,7 @@
       <el-skeleton :rows="3" animated />
     </div>
     <template v-else>
-      <div class="cart-container">
+      <div class="cart-container" :class="{ 'empty-state': cartStore.cartItems.length === 0 }">
         <div v-if="cartStore.cartItems.length > 0">
           <div
             class="cart-item"
@@ -159,9 +159,14 @@ const removeItem = async (itemId) => {
   }
 };
 
+import { useUserStore } from "../../data_stores/user";
+
+const userStore = useUserStore();
+
 onMounted(async () => {
+  const userId = userStore.userId;
   if (cartStore.cartItems.length === 0) {
-    await cartStore.fetchCartData();
+    await cartStore.fetchCartData(userId);
   }
 });
 </script>
@@ -217,8 +222,16 @@ onMounted(async () => {
   border-radius: 15px;
   box-shadow: 0 0 20px 0 rgba(255, 107, 107, 0.1);
   background-color: white;
-  overflow-y: auto;
   overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-container.empty-state {
+  overflow-y: hidden;
+  justify-content: center;
+  align-items: center;
 }
 
 .cart-container::-webkit-scrollbar {
@@ -445,12 +458,11 @@ onMounted(async () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 180px);
+  width: 100%;
+  height: 100%;
   font-size: 16px;
   color: #666;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 0 20px 0 rgba(255, 107, 107, 0.1);
+  flex: 1;
 }
 
 .empty-icon {

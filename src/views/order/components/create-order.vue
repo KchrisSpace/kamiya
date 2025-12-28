@@ -127,7 +127,6 @@ import { useRouter } from "vue-router";
 import { ElDatePicker, ElMessage } from "element-plus";
 import { useNormalOrdersStore } from "../../../data_stores/normal-orders";
 import { useCartStore } from "../../../data_stores/cart";
-import { useAddressStore } from "../../../data_stores/address";
 import LoginTip from "./login-tip.vue";
 const showLoginTip = ref(false);
 const cartStore = useCartStore();
@@ -203,29 +202,41 @@ const createOrder = async () => {
   }
 
   try {
+    const now = new Date().toISOString();
     const orderData = {
       user_id: userid,
-      items: cartStore.cartItems.map((item) => ({
-        product_id: item.id,
-        quantity: item.quantity,
-      })),
-      total_price: totalPrice.value,
+      items: cartStore.cartItems.map((item) => {
+        const productId = item.product_id || item.id;
+        const product = item.product;
+        return {
+          product_id: productId,
+          product_name: product?.title || `商品 ${productId}`,
+          quantity: item.quantity,
+          single_price: product?.price_info?.current_price || 0,
+        };
+      }),
+      total_price: parseFloat(totalPrice.value),
       shipping_fee: 0,
       delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
       consignee: orderInfo.value.name,
       phone: orderInfo.value.phone.replace(/\D/g, ""), // 保存时去除所有非数字字符
       remark: orderInfo.value.remark || "",
       status: "待商家确认",
-      created_at: new Date().toISOString(),
+      payment_method: "wechat", // 默认微信支付，后续可以添加选择
+      payment_time: null,
+      shipped_time: null,
+      completed_time: null,
+      created_at: now,
+      updated_at: now,
     };
 
     // 先创建订单
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
       // 等待购物车清空完成
-      await cartStore.clearCart();
+      await cartStore.clearCart(userid);
       // 重新获取购物车数据以确保同步
-      await cartStore.fetchCartData();
+      await cartStore.fetchCartData(userid);
 
       ElMessage.success("订单创建成功");
       // 清空表单
@@ -285,7 +296,7 @@ onMounted(async () => {
   try {
     // 确保购物车数据已加载
     if (!cartStore.cartItems.length) {
-      await cartStore.fetchCartData();
+      await cartStore.fetchCartData(userid);
     }
     cartItems.value = [...cartStore.cartItems];
   } catch (error) {

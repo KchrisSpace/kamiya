@@ -14,27 +14,27 @@
 const products = [
   {
     name: "商品名称 1",
-    image: "/public/product-1.jpg",
+    image: "/images/product-1.jpg",
     sales: 1100,
   },
   {
     name: "商品名称 2",
-    image: "/public/product-2.jpg",
+    image: "/images/product-2.jpg",
     sales: 1200,
   },
   {
     name: "商品名称 3",
-    image: "/public/product-3.jpg",
+    image: "/images/product-3.jpg",
     sales: 1300,
   },
   {
     name: "商品名称 4",
-    image: "/public/product-4.jpg",
+    image: "/images/product-4.jpg",
     sales: 1400,
   },
   {
     name: "商品名称 5",
-    image: "/public/product-5.jpg",
+    image: "/images/product-5.jpg",
     sales: 1500,
   },
 ];

@@ -77,14 +77,29 @@
           alt="avatar"
           class="w-16 h-16 bg-font-primary rounded-full shrink-0 object-cover" />
         <div class="mx-2">
-          <div class="text-font-thirth font-Alibaba">
-            {{ comment.user_name }}
+          <div class="flex items-center gap-2">
+            <div class="text-font-thirth font-Alibaba">
+              {{ comment.user_name }}
+            </div>
+            <el-rate
+              v-if="comment.rating"
+              :model-value="comment.rating"
+              disabled
+              :size="12"
+              show-score
+              text-color="#ff9900"
+            />
           </div>
           <div class="my-2 text-xl text-font-secondary">
             {{ comment.content }}
           </div>
-          <div class="text-font-thirth">
-            {{ formatDate(comment.created_at) }}
+          <div class="flex items-center justify-between">
+            <div class="text-font-thirth">
+              {{ formatDate(comment.created_at) }}
+            </div>
+            <div v-if="comment.useful_count !== undefined" class="text-font-thirth text-sm">
+              有用 ({{ comment.useful_count }})
+            </div>
           </div>
           <!-- 修饰 -->
           <div class="w-[800px] border-b-1 border-bg-primary mt-10"></div>
@@ -99,6 +114,7 @@
 
 <script setup name="Comments">
 import { useCommentsStore } from '/src/stores/comments';
+import { useUserStore } from '/src/data_stores/user';
 import { defineProps, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -117,6 +133,7 @@ const props = defineProps({
 });
 
 const commentsStore = useCommentsStore();
+const userStore = useUserStore();
 const commentList = ref([]);
 const isFocused = ref(false);
 const commentText = ref('');
@@ -175,13 +192,23 @@ const handleSubmit = async (e) => {
 
   try {
     isLoading.value = true;
+    // 获取当前用户信息
+    const currentUserId = userStore.userId || null;
+    const currentUserName = userStore.userNickname || '游客';
+    const currentUserAvatar = userStore.userAvatar || '/images/users/avater/user1.png';
+
+    if (!currentUserId) {
+      alert('请先登录后再发表评论');
+      return;
+    }
+
     const newComment = await commentsStore.addComment(
       {
         [props.commentQuery]: props.sortId,
-        user_id: '2',
-        user_name: 'Maybe',
+        user_id: currentUserId,
+        user_name: currentUserName,
         content: commentText.value.trim(),
-        avatar: '/images/users/avater/user1.png',
+        avatar: currentUserAvatar,
       },
       props.commentType
     );

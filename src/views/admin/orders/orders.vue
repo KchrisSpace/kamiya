@@ -14,6 +14,8 @@
             <el-option label="全部" value="" />
             <el-option label="待商家确认" value="待商家确认" />
             <el-option label="进行中" value="进行中" />
+            <el-option label="预备出餐中" value="预备出餐中" />
+            <el-option label="已出餐" value="已出餐" />
             <el-option label="已完成" value="已完成" />
             <el-option label="已取消" value="已取消" />
           </el-select>
@@ -53,7 +55,7 @@
           <div class="customer-contact">{{ row.customer.phone }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" width="250" fixed="right">
         <template #default="{ row }">
           <el-button type="primary" link @click="handleViewDetail(row)"
             >查看订单</el-button
@@ -65,6 +67,14 @@
             @click="handleReject(row)"
           >
             拒绝接单
+          </el-button>
+          <el-button
+            v-if="row.status === '预备出餐中'"
+            type="success"
+            link
+            @click="handleConfirmDelivery(row)"
+          >
+            确认出餐
           </el-button>
         </template>
       </el-table-column>
@@ -151,6 +161,7 @@ const getStatusType = (status) => {
     协商中: "warning",
     预备出餐中: "primary",
     进行中: "primary",
+    已出餐: "success",
     已完成: "success",
     已取消: "danger",
   };
@@ -349,6 +360,7 @@ const handleReject = async (row) => {
     await axios.put(`http://localhost:3001/normal_orders/${orderId}`, {
       ...row.originalOrder,
       status: "已取消",
+      updated_at: new Date().toISOString(),
     });
 
     ElMessage.success("已拒绝接单");
@@ -357,6 +369,35 @@ const handleReject = async (row) => {
     if (error !== "cancel") {
       console.error("拒绝接单失败:", error);
       ElMessage.error("拒绝接单失败");
+    }
+  }
+};
+
+const handleConfirmDelivery = async (row) => {
+  try {
+    await ElMessageBox.confirm("确定该订单已出餐吗？", "确认出餐", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "info",
+    });
+
+    const orderId = row.originalOrder?.id || row.id;
+    const originalOrder = row.originalOrder;
+    
+    // 更新订单状态为"已出餐"，并更新出餐时间
+    await axios.put(`http://localhost:3001/normal_orders/${orderId}`, {
+      ...originalOrder,
+      status: "已出餐",
+      shipped_time: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+
+    ElMessage.success("已确认出餐");
+    await fetchOrders(); // 重新获取订单列表
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("确认出餐失败:", error);
+      ElMessage.error("确认出餐失败，请稍后重试");
     }
   }
 };

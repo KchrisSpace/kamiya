@@ -49,7 +49,6 @@ Kamiya/
 ├── src/
 │   ├── assets/            # 资源文件
 │   ├── data_stores/       # Pinia 状态管理
-│   │   ├── address.js     # 地址管理
 │   │   ├── cart.js         # 购物车状态
 │   │   ├── normal-orders.js # 订单状态
 │   │   ├── products.js     # 商品状态
@@ -116,11 +115,6 @@ Kamiya/
 - 订单状态管理
 - 订单详情查看
 
-#### 地址状态 (`address.js`)
-
-- 收货地址管理
-- 地址增删改查
-
 ### 2. 路由配置
 
 #### 前端路由
@@ -161,7 +155,6 @@ Kamiya/
 - `DELETE /cart/:id` - 删除购物车商品
 - `GET /orders` - 获取订单列表
 - `POST /orders` - 创建订单
-- `GET /addresses` - 获取地址列表
 
 ## 开发环境配置
 

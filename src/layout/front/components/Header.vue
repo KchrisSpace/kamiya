@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img src="/public/logo.png" alt="logo" />
+      <img src="/logo.png" alt="logo" />
     </div>
     <el-menu
       :default-active="activeIndex"

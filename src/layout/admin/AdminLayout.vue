@@ -74,7 +74,7 @@ const userStore = useUserStore();
 const activeMenu = computed(() => route.path);
 const username = computed(() => userStore.userInfo?.username || "管理员");
 const userAvatar = computed(
-  () => userStore.userInfo?.avatar || "/public/default-avatar.png"
+  () => userStore.userInfo?.avatar || "/images/default-avatar.png"
 );
 
 const handleLogout = () => {

@@ -5,15 +5,18 @@
       <button class="close-btn" @click="handleClose">
         <el-icon><Close /></el-icon>
       </button>
-      <!-- 左侧商品图片 -->
-      <div class="product-image">
-        <div class="img-main">
-          <img :src="getImagePath(product?.images)" alt="商品主图" />
+      
+      <!-- 商品主要信息区域 -->
+      <div class="product-main">
+        <!-- 左侧商品图片 -->
+        <div class="product-image">
+          <div class="img-main">
+            <img :src="getImagePath(product?.images)" alt="商品主图" />
+          </div>
         </div>
-      </div>
 
-      <!-- 右侧商品信息 -->
-      <div class="product-info">
+        <!-- 右侧商品信息 -->
+        <div class="product-info">
         <h1 class="product-title">{{ product?.title || "加载中..." }}</h1>
 
         <!-- 价格区域 -->
@@ -84,8 +87,83 @@
           </el-button>
         </div>
       </div>
+      </div>
+
+      <!-- 评论区 -->
+      <div id="comments" class="comments-section">
+        <h3 class="comments-title">商品评价</h3>
+        <div v-if="commentsLoading" class="comments-loading">
+          <el-icon class="is-loading"><Loading /></el-icon>
+          <span>加载中...</span>
+        </div>
+        <div v-else-if="productComments.length === 0" class="no-comments">
+          <el-icon><ChatDotRound /></el-icon>
+          <p>暂无评价，快来发表第一条评价吧~</p>
+        </div>
+        <div v-else class="comments-list">
+          <div
+            v-for="comment in productComments"
+            :key="comment.id"
+            class="comment-item"
+          >
+            <div class="comment-header">
+              <el-avatar :src="comment.avatar || '/images/users/avater/user1.png'" :size="40" />
+              <div class="comment-user-info">
+                <div class="comment-user-name">{{ comment.user_name || "匿名用户" }}</div>
+                <div class="comment-meta">
+                  <el-rate
+                    v-if="comment.rating"
+                    :model-value="comment.rating"
+                    disabled
+                    :size="14"
+                    show-score
+                    text-color="#ff9900"
+                  />
+                  <span class="comment-time">{{ formatDate(comment.created_at) }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="comment-content">
+              <p class="comment-text">{{ comment.content }}</p>
+              <!-- 标签 -->
+              <div v-if="comment.tags && comment.tags.length > 0" class="comment-tags">
+                <el-tag
+                  v-for="tag in comment.tags"
+                  :key="tag"
+                  size="small"
+                  type="info"
+                  effect="plain"
+                  class="comment-tag"
+                >
+                  {{ tag }}
+                </el-tag>
+              </div>
+              <!-- 评论图片 -->
+              <div v-if="comment.images && comment.images.length > 0" class="comment-images">
+                <img
+                  v-for="(img, idx) in comment.images"
+                  :key="idx"
+                  :src="img"
+                  alt="评价图片"
+                  class="comment-image"
+                  @click="previewImage(img)"
+                />
+              </div>
+              <!-- 有用数 -->
+              <div v-if="comment.useful_count !== undefined" class="comment-useful">
+                <span>有用 ({{ comment.useful_count }})</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- 图片预览对话框 -->
+  <el-dialog v-model="imagePreviewVisible" width="50%">
+    <img :src="previewImageUrl" alt="预览图片" style="width: 100%" />
+  </el-dialog>
 </template>
 
 <script>
@@ -96,11 +174,12 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { Plus, Minus, Star, Close } from "@element-plus/icons-vue";
+import { ref, onMounted, watch } from "vue";
+import { Plus, Minus, Star, Close, Loading, ChatDotRound } from "@element-plus/icons-vue";
 import { useRoute, useRouter } from "vue-router";
 import { useCartStore } from "../../../data_stores/cart.js";
 import { ElMessage } from "element-plus";
+import axios from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -111,6 +190,12 @@ const product = ref(null);
 const quantity = ref(1);
 const rating = ref(5);
 const isAddingToCart = ref(false);
+
+// 评论相关
+const productComments = ref([]);
+const commentsLoading = ref(false);
+const imagePreviewVisible = ref(false);
+const previewImageUrl = ref("");
 
 // 处理图片路径
 const getImagePath = (imagePath) => {
@@ -173,8 +258,83 @@ const handleClose = () => {
   }
 };
 
+// 获取商品评论
+async function fetchProductComments() {
+  if (!productId) return;
+  
+  commentsLoading.value = true;
+  try {
+    const response = await axios.get(
+      `http://localhost:3001/product_comments?product_id=${productId}`
+    );
+    // 按时间倒序排列
+    productComments.value = (response.data || []).sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+  } catch (error) {
+    console.error("获取商品评论失败:", error);
+  } finally {
+    commentsLoading.value = false;
+  }
+}
+
+// 格式化日期
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+// 预览图片
+function previewImage(imgUrl) {
+  previewImageUrl.value = imgUrl;
+  imagePreviewVisible.value = true;
+}
+
+// 监听商品ID变化
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) {
+      fetchProductDetails();
+      fetchProductComments();
+    }
+  }
+);
+
+// 滚动到评论区
+function scrollToComments() {
+  if (route.hash === '#comments') {
+    setTimeout(() => {
+      const commentsSection = document.getElementById('comments');
+      if (commentsSection) {
+        commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 500);
+  }
+}
+
+// 监听路由hash变化
+watch(
+  () => route.hash,
+  (newHash) => {
+    if (newHash === '#comments') {
+      scrollToComments();
+    }
+  },
+  { immediate: true }
+);
+
 onMounted(() => {
   fetchProductDetails();
+  fetchProductComments();
+  scrollToComments();
 });
 </script>
 
@@ -186,10 +346,13 @@ onMounted(() => {
   padding: 40px 220px;
   box-sizing: border-box;
   background-color: var(--bg-primary);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .product-content {
   display: flex;
+  flex-direction: column;
   gap: 40px;
   max-width: 1200px;
   width: 100%;
@@ -199,6 +362,11 @@ onMounted(() => {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   position: relative;
+}
+
+.product-main {
+  display: flex;
+  gap: 40px;
 }
 
 .close-btn {
@@ -452,6 +620,187 @@ onMounted(() => {
 
   .description {
     padding: 20px;
+  }
+}
+
+/* 评论区样式 */
+.comments-section {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 2px solid #ffe4e1;
+}
+
+.comments-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #ffc0cb;
+}
+
+.comments-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: #999;
+}
+
+.no-comments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.no-comments .el-icon {
+  font-size: 64px;
+  color: #e0e0e0;
+  margin-bottom: 16px;
+}
+
+.no-comments p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-track {
+  background: #fff5f5;
+  border-radius: 3px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  background: #ffd3d3;
+  border-radius: 3px;
+}
+
+.comments-list::-webkit-scrollbar-thumb:hover {
+  background: #ff6b6b;
+}
+
+.comment-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.comment-user-info {
+  flex: 1;
+}
+
+.comment-user-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.comment-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.comment-content {
+  margin-left: 52px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+  word-break: break-word;
+}
+
+.comment-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.comment-tag {
+  font-size: 12px;
+}
+
+.comment-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.comment-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+}
+
+.comment-image:hover {
+  transform: scale(1.1);
+  border-color: #ff6b6b;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.comment-useful {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .product-main {
+    flex-direction: column;
+  }
+
+  .comments-list {
+    max-height: 400px;
+  }
+
+  .comment-content {
+    margin-left: 0;
   }
 }
 </style>

@@ -39,6 +39,20 @@ const router = createRouter({
           component: () => import("../views/about/about.vue"),
         },
         {
+          path: "profile",
+          name: "profile",
+          component: () => import("../views/profile/profile.vue"),
+          beforeEnter: (to, from, next) => {
+            // 检查是否是管理员，如果是则重定向到管理后台
+            const userId = localStorage.getItem("userId");
+            if (userId === "admin") {
+              next("/admin/dashboard");
+            } else {
+              next();
+            }
+          },
+        },
+        {
           path: "/product/:id",
           name: "ProductDetail",
           component: () =>
@@ -49,6 +63,11 @@ const router = createRouter({
           path: "/create-order",
           name: "CreateOrder",
           component: () => import("../views/order/components/create-order.vue"),
+        },
+        {
+          path: "/order-review/:orderId",
+          name: "OrderReview",
+          component: () => import("../views/order/components/order-review.vue"),
         },
       ],
     },

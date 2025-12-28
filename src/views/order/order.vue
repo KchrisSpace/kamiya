@@ -14,6 +14,17 @@
     </div>
     <!-- 订单列表 -->
     <div v-else class="orders-list">
+      <!-- 空状态提示 -->
+      <div v-if="orders.length === 0" class="empty-orders">
+        <el-icon class="empty-icon"><Document /></el-icon>
+        <p class="empty-text">暂无订单</p>
+        <p class="empty-tip">去挑选甜品吧~</p>
+        <button class="go-shopping-btn" @click="goToStore">
+          <el-icon><ShoppingBag /></el-icon>
+          去购物
+        </button>
+      </div>
+      <!-- 订单卡片列表 -->
       <div v-for="order in orders" :key="order.id" class="order-card">
         <div class="order-header">
           <div class="order-info">
@@ -21,7 +32,7 @@
             <span class="order-time">{{ formatDate(order.created_at) }}</span>
           </div>
           <div class="order-status" :class="getStatusClass(order.status)">
-            {{ order.status }}
+            {{ getStatusDisplayName(order.status) }}
           </div>
         </div>
 
@@ -53,13 +64,23 @@
                 >
                 <span class="item-quantity">x{{ item.quantity }}</span>
               </div>
-              <button
-                v-if="order.status !== '已取消'"
-                class="rebuy-btn"
-                @click.stop="rebuyItem(item.product_id)"
-              >
-                再买一单
-              </button>
+              <div class="item-actions">
+                <button
+                  v-if="order.status !== '已取消'"
+                  class="rebuy-btn"
+                  @click.stop="rebuyItem(item.product_id)"
+                >
+                  再买一单
+                </button>
+                <button
+                  v-if="order.status === '已完成'"
+                  class="view-comment-item-btn"
+                  @click.stop="viewProductComment(item.product_id)"
+                  :disabled="!isProductCommented(item.product_id)"
+                >
+                  {{ isProductCommented(item.product_id) ? '查看评论' : '未评论' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -99,6 +120,13 @@
               确认订单
             </button>
             <button
+              v-if="order.status === '已出餐'"
+              class="pickup-btn"
+              @click="confirmPickup(order.id)"
+            >
+              确认取餐
+            </button>
+            <button
               v-if="
                 order.status === '进行中' ||
                 order.status === '待商家确认' ||
@@ -109,6 +137,20 @@
               @click="cancelOrder(order.id)"
             >
               取消订单
+            </button>
+            <button
+              v-if="order.status === '已完成' && !isOrderCommented(order)"
+              class="comment-btn"
+              @click="goToComment(order)"
+            >
+              去评论
+            </button>
+            <button
+              v-if="order.status === '已完成' && isOrderCommented(order)"
+              class="comment-btn commented-btn"
+              disabled
+            >
+              已评论
             </button>
             <button class="delete-btn" @click="deleteOrder(order.id)">
               删除订单
@@ -142,12 +184,12 @@ export default {
 </script>
 
 <script setup>
-import { onMounted, computed, ref, onUnmounted } from "vue";
+import { onMounted, computed, ref, onUnmounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useNormalOrdersStore } from "../../data_stores/normal-orders";
 import { useCartStore } from "../../data_stores/cart";
 import { ElMessage, ElMessageBox, ElIcon } from "element-plus";
-import { User } from "@element-plus/icons-vue";
+import { User, Document, ShoppingBag } from "@element-plus/icons-vue";
 import { useProductsStore } from "../../data_stores/products";
 import OrderDetail from "../admin/orders/components/OrderDetail.vue";
 import axios from "axios";
@@ -164,9 +206,17 @@ const currentUserId = userid;
 const detailDialogVisible = ref(false);
 const currentOrderDetail = ref(null);
 
+// 用户评论列表
+const userComments = ref([]);
+
 // 跳转到登录页
 function goToLogin() {
   router.push("/login");
+}
+
+// 跳转到商店
+function goToStore() {
+  router.push("/store");
 }
 
 // 定时刷新订单的定时器
@@ -180,6 +230,7 @@ onMounted(async () => {
   try {
     await normalOrdersStore.fetchOrders(currentUserId);
     await productsStore.fetchProducts(); // 确保商品数据已加载
+    await fetchUserComments(); // 获取用户评论
 
     // 设置定时刷新订单列表（每30秒刷新一次）
     refreshTimer = setInterval(async () => {
@@ -253,6 +304,121 @@ async function confirmOrderFromList(orderId) {
     }
   }
 }
+
+// 确认取餐（状态变为已完成）
+async function confirmPickup(orderId) {
+  try {
+    await ElMessageBox.confirm(
+      "确定已取餐吗？确认后订单将变为已完成状态。",
+      "确认取餐",
+      {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info",
+      }
+    );
+    
+    const completedTime = new Date().toISOString();
+    await normalOrdersStore.updateOrder(orderId, {
+      status: "已完成",
+      completed_time: completedTime,
+      updated_at: completedTime,
+    });
+    
+    ElMessage.success("取餐确认成功，订单已完成");
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("确认取餐失败:", error);
+      ElMessage.error("确认取餐失败，请稍后重试");
+    }
+  }
+}
+
+// 获取用户评论
+async function fetchUserComments() {
+  if (!userid) return;
+  try {
+    const response = await axios.get(
+      `http://localhost:3001/product_comments?user_id=${userid}`
+    );
+    userComments.value = response.data || [];
+  } catch (error) {
+    console.error("获取评论失败:", error);
+  }
+}
+
+// 检查订单是否已评论
+function isOrderCommented(order) {
+  if (!order.items || order.items.length === 0) return false;
+  if (userComments.value.length === 0) return false;
+  
+  // 检查订单中的每个商品是否都有评论
+  const orderProductIds = order.items.map(item => item.product_id);
+  const commentedProductIds = userComments.value.map(comment => comment.product_id);
+  
+  // 如果订单中的所有商品都有评论，则返回true
+  return orderProductIds.every(productId => commentedProductIds.includes(productId));
+}
+
+// 跳转到评论（已完成订单）
+function goToComment(order) {
+  // 跳转到订单评价页面
+  if (order.id) {
+    router.push(`/order-review/${order.id}`);
+  } else {
+    ElMessage.warning("订单信息错误，无法评论");
+  }
+}
+
+// 检查商品是否已评论
+function isProductCommented(productId) {
+  if (!productId || userComments.value.length === 0) return false;
+  return userComments.value.some(comment => comment.product_id === productId);
+}
+
+// 查看商品评论（跳转到商品详情页的评论区）
+function viewProductComment(productId) {
+  if (productId) {
+    // 跳转到商品详情页，并添加锚点定位到评论区
+    router.push({
+      name: "ProductDetail",
+      params: { id: productId },
+      hash: "#comments"
+    });
+  } else {
+    ElMessage.warning("商品信息错误");
+  }
+}
+
+// 查看评论（订单级别，跳转到订单评价页面）
+function viewComments(order) {
+  // 跳转到订单评价页面查看已提交的评论
+  if (order.id) {
+    router.push(`/order-review/${order.id}`);
+  } else {
+    ElMessage.warning("订单信息错误");
+  }
+}
+
+// 监听路由变化，返回时刷新评论
+watch(
+  () => router.currentRoute.value.path,
+  (newPath, oldPath) => {
+    // 从评价页面返回订单页面时，刷新评论列表
+    if (newPath === "/order" && oldPath?.startsWith("/order-review") && userid) {
+      fetchUserComments();
+    }
+  }
+);
+
+// 监听评论更新事件
+onMounted(() => {
+  window.addEventListener('comments-updated', fetchUserComments);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('comments-updated', fetchUserComments);
+});
 
 // 取消订单
 async function cancelOrder(orderId) {
@@ -336,10 +502,19 @@ function getStatusClass(status) {
     协商中: "status-processing",
     预备出餐中: "status-processing",
     进行中: "status-processing",
+    已出餐: "status-completed", // 已出餐状态使用完成样式
     已完成: "status-completed",
     已取消: "status-cancelled",
   };
   return statusMap[status] || "";
+}
+
+// 获取状态显示名称（用户端将"已出餐"显示为"可取餐"）
+function getStatusDisplayName(status) {
+  if (status === "已出餐") {
+    return "可取餐";
+  }
+  return status || "未知";
 }
 
 // 查看订单详情
@@ -549,6 +724,64 @@ async function rebuyItem(productId) {
   gap: 15px;
 }
 
+/* 空状态样式 */
+.empty-orders {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 60px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  font-size: 80px;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.empty-text {
+  font-size: 20px;
+  color: #666;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.empty-tip {
+  font-size: 14px;
+  color: #999;
+  margin: 0 0 30px 0;
+}
+
+.go-shopping-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #f26371 0%, #ff8a95 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(242, 99, 113, 0.3);
+}
+
+.go-shopping-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(242, 99, 113, 0.4);
+  background: linear-gradient(135deg, #ff5252 0%, #ff6b9d 100%);
+}
+
+.go-shopping-btn:active {
+  transform: translateY(0);
+}
+
 .order-card {
   background: white;
   border-radius: 4px;
@@ -700,9 +933,15 @@ async function rebuyItem(productId) {
   font-size: 12px;
 }
 
-.rebuy-btn {
+.item-actions {
   position: absolute;
   right: 0;
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.rebuy-btn {
   padding: 5px 12px;
   border-radius: 2px;
   font-size: 12px;
@@ -711,7 +950,6 @@ async function rebuyItem(productId) {
   color: #f26371;
   cursor: pointer;
   transition: all 0.2s;
-  z-index: 1;
 }
 
 .rebuy-btn:hover {
@@ -766,7 +1004,10 @@ async function rebuyItem(productId) {
 .detail-btn,
 .confirm-btn,
 .cancel-btn,
-.delete-btn {
+.delete-btn,
+.pickup-btn,
+.comment-btn,
+.view-comment-btn {
   padding: 5px 12px;
   border-radius: 2px;
   font-size: 12px;
@@ -774,6 +1015,33 @@ async function rebuyItem(productId) {
   background: white;
   border: 1px solid #ddd;
   color: #666;
+}
+
+.view-comment-item-btn {
+  padding: 5px 12px;
+  border-radius: 2px;
+  font-size: 12px;
+  background: white;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-comment-item-btn:hover:not(:disabled) {
+  background: #e6f7ff;
+}
+
+.view-comment-item-btn:active:not(:disabled) {
+  background: #1890ff;
+  color: white;
+}
+
+.view-comment-item-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ddd;
+  color: #999;
 }
 
 .detail-btn:hover {
@@ -844,6 +1112,47 @@ async function rebuyItem(productId) {
   color: #52c41a;
   border-color: #52c41a;
   background: #f6ffed;
+}
+
+.pickup-btn {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+
+.pickup-btn:hover {
+  color: #1890ff;
+  border-color: #1890ff;
+  background: #e6f7ff;
+}
+
+.comment-btn {
+  color: #f26371;
+  border-color: #f26371;
+}
+
+.comment-btn:hover:not(:disabled) {
+  color: #f26371;
+  border-color: #f26371;
+  background: #fff1f0;
+}
+
+.commented-btn {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f5f5f5;
+  color: #999;
+  border-color: #ddd;
+}
+
+.view-comment-btn {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+
+.view-comment-btn:hover {
+  color: #1890ff;
+  border-color: #1890ff;
+  background: #e6f7ff;
 }
 
 .cancel-btn:hover,
