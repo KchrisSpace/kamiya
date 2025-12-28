@@ -5,9 +5,28 @@ import { ElMessage } from "element-plus";
 
 export const useUserStore = defineStore("user", () => {
   const userInfo = ref(null);
-  const token = ref(localStorage.getItem("token") || null);
-  const userId = ref(localStorage.getItem("userId") || null);
   const loading = ref(false);
+
+  // 根据当前路由上下文获取登录状态
+  const getCurrentContext = () => {
+    const currentPath = window.location.pathname;
+    return currentPath.startsWith("/admin") ? "admin" : "user";
+  };
+
+  // 动态获取token和userId（根据当前路由上下文）
+  const token = computed(() => {
+    const context = getCurrentContext();
+    return context === "admin" 
+      ? localStorage.getItem("adminToken") 
+      : localStorage.getItem("userToken");
+  });
+
+  const userId = computed(() => {
+    const context = getCurrentContext();
+    return context === "admin"
+      ? localStorage.getItem("adminUserId")
+      : localStorage.getItem("userId");
+  });
 
   const isLoggedIn = computed(() => !!token.value);
   const userAvatar = computed(
@@ -33,12 +52,14 @@ export const useUserStore = defineStore("user", () => {
           },
         };
 
+        // 管理员登录：保存到admin相关的localStorage键
         setUserInfo(adminUser);
-        setToken("admin-token");
-        setUserId("admin");
+        localStorage.setItem("adminToken", "admin-token");
+        localStorage.setItem("adminUserId", "admin");
+        localStorage.setItem("adminUserInfo", JSON.stringify(adminUser));
 
         if (remember) {
-          localStorage.setItem("remember", "true");
+          localStorage.setItem("adminRemember", "true");
         }
 
         ElMessage.success("登录成功");
@@ -74,12 +95,14 @@ export const useUserStore = defineStore("user", () => {
       }
 
       if (user) {
+        // 普通用户登录：保存到user相关的localStorage键
         setUserInfo(user);
-        setToken("user-token");
-        setUserId(user.id);
+        localStorage.setItem("userToken", "user-token");
+        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userInfo", JSON.stringify(user));
 
         if (remember) {
-          localStorage.setItem("remember", "true");
+          localStorage.setItem("userRemember", "true");
         }
 
         ElMessage.success("登录成功");
@@ -97,15 +120,33 @@ export const useUserStore = defineStore("user", () => {
   }
 
   async function getUserInfo() {
-    if (!token.value || !userId.value) return;
+    const currentToken = token.value;
+    const currentUserId = userId.value;
+    
+    if (!currentToken || !currentUserId) return;
 
     loading.value = true;
     try {
+      // 如果是admin，从localStorage恢复
+      if (currentUserId === "admin") {
+        const adminInfo = localStorage.getItem("adminUserInfo");
+        if (adminInfo) {
+          setUserInfo(JSON.parse(adminInfo));
+          return;
+        }
+      }
+
+      // 普通用户从API获取
       const response = await axios.get(
-        `http://localhost:3001/users/${userId.value}`
+        `http://localhost:3001/users/${currentUserId}`
       );
       if (response.data) {
         setUserInfo(response.data);
+        // 更新localStorage中的用户信息
+        const context = getCurrentContext();
+        if (context === "user") {
+          localStorage.setItem("userInfo", JSON.stringify(response.data));
+        }
       } else {
         throw new Error("用户信息不存在");
       }
@@ -125,20 +166,38 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function setToken(newToken) {
-    token.value = newToken;
+    // 根据当前上下文设置token
+    const context = getCurrentContext();
     if (newToken) {
-      localStorage.setItem("token", newToken);
+      if (context === "admin") {
+        localStorage.setItem("adminToken", newToken);
+      } else {
+        localStorage.setItem("userToken", newToken);
+      }
     } else {
-      localStorage.removeItem("token");
+      if (context === "admin") {
+        localStorage.removeItem("adminToken");
+      } else {
+        localStorage.removeItem("userToken");
+      }
     }
   }
 
   function setUserId(newUserId) {
-    userId.value = newUserId;
+    // 根据当前上下文设置userId
+    const context = getCurrentContext();
     if (newUserId) {
-      localStorage.setItem("userId", newUserId);
+      if (context === "admin") {
+        localStorage.setItem("adminUserId", newUserId);
+      } else {
+        localStorage.setItem("userId", newUserId);
+      }
     } else {
-      localStorage.removeItem("userId");
+      if (context === "admin") {
+        localStorage.removeItem("adminUserId");
+      } else {
+        localStorage.removeItem("userId");
+      }
     }
   }
 
@@ -186,16 +245,51 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function logout() {
+    // 根据当前上下文清除登录状态
+    const context = getCurrentContext();
     userInfo.value = null;
-    setToken(null);
-    setUserId(null);
-    localStorage.removeItem("remember");
+    
+    if (context === "admin") {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminUserId");
+      localStorage.removeItem("adminUserInfo");
+      localStorage.removeItem("adminRemember");
+    } else {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("userRemember");
+    }
   }
 
-  // Initial load of user info if token and userId exist
-  if (token.value && userId.value) {
-    getUserInfo();
+  // 初始化：根据当前路由加载对应的登录状态
+  function initUserInfo() {
+    const context = getCurrentContext();
+    const currentToken = context === "admin" 
+      ? localStorage.getItem("adminToken")
+      : localStorage.getItem("userToken");
+    const currentUserId = context === "admin"
+      ? localStorage.getItem("adminUserId")
+      : localStorage.getItem("userId");
+
+    if (currentToken && currentUserId) {
+      // 如果是admin，从localStorage恢复
+      if (currentUserId === "admin" && context === "admin") {
+        const adminInfo = localStorage.getItem("adminUserInfo");
+        if (adminInfo) {
+          setUserInfo(JSON.parse(adminInfo));
+          return;
+        }
+      }
+      // 普通用户从API获取
+      if (context === "user" && currentUserId !== "admin") {
+        getUserInfo();
+      }
+    }
   }
+
+  // 初始化加载用户信息
+  initUserInfo();
 
   return {
     userInfo,
@@ -213,5 +307,6 @@ export const useUserStore = defineStore("user", () => {
     setUserId,
     updateUserInfo,
     logout,
+    initUserInfo, // 导出初始化函数，供路由切换时调用
   };
 });

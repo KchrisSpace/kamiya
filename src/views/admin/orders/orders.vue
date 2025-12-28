@@ -38,6 +38,7 @@
 
     <el-table :data="orders" style="width: 100%" v-loading="loading">
       <el-table-column prop="orderNo" label="订单号" width="180" />
+      <el-table-column prop="userId" label="用户ID" width="120" />
       <el-table-column prop="createTime" label="下单时间" width="180" />
       <el-table-column prop="totalAmount" label="订单金额" width="120">
         <template #default="{ row }"> ¥{{ row.totalAmount }} </template>
@@ -140,6 +141,7 @@ const formatOrder = (order) => {
   return {
     id: order.id,
     orderNo: `ORDER${String(order.id).padStart(6, "0")}`,
+    userId: order.user_id || "未知",
     createTime: order.created_at
       ? new Date(order.created_at).toLocaleString("zh-CN")
       : "",

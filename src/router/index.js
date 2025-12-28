@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Layout from "../layout/front/Layout.vue";
+import { useUserStore } from "../data_stores/user";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -7,6 +8,12 @@ const router = createRouter({
     {
       path: "/",
       component: Layout,
+      beforeEnter: (to, from, next) => {
+        // 前台路由：确保使用普通用户登录上下文
+        const userStore = useUserStore();
+        userStore.initUserInfo();
+        next();
+      },
       children: [
         {
           path: "",
@@ -117,6 +124,41 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+// 全局路由守卫：根据路由切换登录上下文
+router.beforeEach((to, from, next) => {
+  const isAdminRoute = to.path.startsWith("/admin");
+  const userStore = useUserStore();
+  
+  // 根据路由切换登录上下文
+  if (isAdminRoute) {
+    // 访问后台：检查admin登录状态
+    const adminToken = localStorage.getItem("adminToken");
+    const adminUserId = localStorage.getItem("adminUserId");
+    
+    if (!adminToken || adminUserId !== "admin") {
+      // 未登录admin，跳转到登录页
+      next("/login");
+      return;
+    }
+    // 已登录admin，重新初始化admin用户信息
+    userStore.initUserInfo();
+  } else {
+    // 访问前台：检查普通用户登录状态
+    const userToken = localStorage.getItem("userToken");
+    const userId = localStorage.getItem("userId");
+    
+    // 如果userId是admin，说明是admin用户访问前台，不加载admin信息
+    if (userId === "admin") {
+      userStore.setUserInfo(null);
+    } else if (userToken && userId) {
+      // 普通用户已登录，重新初始化用户信息
+      userStore.initUserInfo();
+    }
+  }
+  
+  next();
 });
 
 export default router;

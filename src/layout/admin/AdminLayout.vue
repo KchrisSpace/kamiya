@@ -72,10 +72,25 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const activeMenu = computed(() => route.path);
-const username = computed(() => userStore.userInfo?.username || "管理员");
-const userAvatar = computed(
-  () => userStore.userInfo?.avatar || "/images/default-avatar.png"
-);
+
+// 后台使用admin登录信息
+const username = computed(() => {
+  const adminInfo = localStorage.getItem("adminUserInfo");
+  if (adminInfo) {
+    const admin = JSON.parse(adminInfo);
+    return admin.username || admin.user_info?.nickname || "管理员";
+  }
+  return userStore.userInfo?.username || "管理员";
+});
+
+const userAvatar = computed(() => {
+  const adminInfo = localStorage.getItem("adminUserInfo");
+  if (adminInfo) {
+    const admin = JSON.parse(adminInfo);
+    return admin.user_info?.avatar || admin.avatar || "/images/default-avatar.png";
+  }
+  return userStore.userInfo?.user_info?.avatar || userStore.userInfo?.avatar || "/images/default-avatar.png";
+});
 
 const handleLogout = () => {
   userStore.logout();

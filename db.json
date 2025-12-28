@@ -60,7 +60,7 @@
         "current_price": 559.9,
         "original_price": 399
       },
-      "stock": 10,
+      "stock": 9,
       "description": "feivhangthdd",
       "images": "https://photo.yannick.com.tw/photo/0201039/%E7%94%9F%E6%97%A5%E8%9B%8B%E7%B3%95_%E6%88%80%E8%8E%93%E7%99%BD%E7%99%BD.jpg",
       "promotion": {
@@ -79,7 +79,7 @@
       "favorites": 0,
       "status": "1",
       "created_at": "2025-01-01T00:00:00Z",
-      "updated_at": "2025-01-01T00:00:00Z"
+      "updated_at": "2025-12-28T11:29:54.584Z"
     },
     {
       "id": "P02",
@@ -92,7 +92,7 @@
         "current_price": 199
       },
       "score": 2,
-      "stock": 15,
+      "stock": 14,
       "promotion": {
         "is_hot": true,
         "material": "新鲜草莓，蓝莓果酱，低脂奶油，戚风蛋糕胚",
@@ -103,7 +103,8 @@
           "清新"
         ]
       },
-      "status": "1"
+      "status": "1",
+      "updated_at": "2025-12-28T11:28:22.646Z"
     },
     {
       "id": "P03",
@@ -268,7 +269,7 @@
         "current_price": 460
       },
       "score": 10,
-      "stock": 3,
+      "stock": 2,
       "promotion": {
         "is_hot": false,
         "material": "新鲜草莓，香草奶油，酥脆塔皮，糖粉装饰",
@@ -279,7 +280,8 @@
           "下午茶"
         ]
       },
-      "status": "1"
+      "status": "1",
+      "updated_at": "2025-12-28T11:38:40.128Z"
     },
     {
       "id": "P10",
@@ -307,26 +309,26 @@
     },
     {
       "id": "P11",
-      "main_category": "特价出售",
-      "category": "冷品",
-      "images": "https://img.cloudimg.in/uploads/shops/27978/products/76/76c01e68c8e256440f596808cd9bb485.jpg",
       "title": "草莓塔",
+      "main_category": "特价出售",
       "price_info": {
-        "original_price": 530,
-        "current_price": 420
+        "current_price": 420,
+        "original_price": 530
       },
-      "score": 21,
-      "stock": 1,
+      "stock": 10,
+      "description": "甜的hhhhhhjjjjj",
+      "images": "https://img.cloudimg.in/uploads/shops/27978/products/76/76c01e68c8e256440f596808cd9bb485.jpg",
       "promotion": {
-        "is_hot": false,
-        "material": "新鲜草莓，卡仕达酱，酥脆塔皮，糖粉装饰",
         "keywords": [
           "草莓",
           "法式",
           "甜点",
           "下午茶"
-        ]
+        ],
+        "material": "新鲜草莓，卡仕达酱，酥脆塔皮，糖粉装饰"
       },
+      "category": "冷品",
+      "sales": 0,
       "status": "1"
     },
     {
@@ -636,6 +638,89 @@
           "created_at": "2025-12-28T09:23:44.552Z"
         }
       ]
+    },
+    {
+      "user_id": "admin",
+      "items": [
+        {
+          "product_id": "P02",
+          "product_name": "莓*夹心蛋糕*少奶油",
+          "quantity": 1,
+          "single_price": 199
+        }
+      ],
+      "total_price": 199,
+      "shipping_fee": 0,
+      "delivery_time": "2025-12-30Tmorning:00Z",
+      "consignee": "小梅",
+      "phone": "11111111111",
+      "remark": "duh",
+      "status": "已出餐",
+      "payment_method": "wechat",
+      "payment_time": null,
+      "shipped_time": "2025-12-28T11:37:23.165Z",
+      "completed_time": null,
+      "created_at": "2025-12-28T11:28:22.646Z",
+      "updated_at": "2025-12-28T11:37:23.165Z",
+      "id": 4,
+      "communications": [
+        {
+          "role": "admin",
+          "text": "草莓没有了换成蓝莓可以吗",
+          "images": [],
+          "created_at": "2025-12-28T11:28:54.923Z"
+        }
+      ]
+    },
+    {
+      "user_id": "user1",
+      "items": [
+        {
+          "product_id": "P01",
+          "product_name": "星与你皆浪漫",
+          "quantity": 1,
+          "single_price": 559.9
+        }
+      ],
+      "total_price": 559.9,
+      "shipping_fee": 0,
+      "delivery_time": "2025-12-29Tmorning:00Z",
+      "consignee": "1111",
+      "phone": "11111111111",
+      "remark": "ok",
+      "status": "已完成",
+      "payment_method": "wechat",
+      "payment_time": null,
+      "shipped_time": "2025-12-28T11:30:18.403Z",
+      "completed_time": "2025-12-28T11:34:50.197Z",
+      "created_at": "2025-12-28T11:29:54.584Z",
+      "updated_at": "2025-12-28T11:34:50.197Z",
+      "id": 5
+    },
+    {
+      "user_id": "user1",
+      "items": [
+        {
+          "product_id": "P09",
+          "product_name": "草莓蕾塔",
+          "quantity": 1,
+          "single_price": 460
+        }
+      ],
+      "total_price": 460,
+      "shipping_fee": 0,
+      "delivery_time": "2025-12-31Tmorning:00Z",
+      "consignee": "琳琳",
+      "phone": "12311331332",
+      "remark": "好的",
+      "status": "预备出餐中",
+      "payment_method": "wechat",
+      "payment_time": null,
+      "shipped_time": null,
+      "completed_time": null,
+      "created_at": "2025-12-28T11:38:40.128Z",
+      "updated_at": "2025-12-28T11:38:40.128Z",
+      "id": 6
     }
   ],
   "carousel": [
@@ -656,19 +741,7 @@
       "img": "/images/carousel-img/carousel-4.png"
     }
   ],
-  "cart": [
-    {
-      "quantity": 2,
-      "id": "cart_1"
-    },
-    {
-      "id": "cart_1766913801877_338rme1ss",
-      "user_id": "user1",
-      "product_id": "P01",
-      "quantity": 1,
-      "created_at": "2025-12-28T09:23:21.877Z"
-    }
-  ],
+  "cart": [],
   "custom": [
     {
       "id": "1",

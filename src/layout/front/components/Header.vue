@@ -34,8 +34,8 @@
       <template v-else>
         <el-dropdown trigger="hover" @command="handleCommand">
           <span class="menu-item">
-            <el-avatar :size="24" :src="userStore.userAvatar" />
-            <span>{{ userStore.userNickname }}</span>
+            <el-avatar :size="24" :src="currentUserAvatar" />
+            <span>{{ currentUserNickname }}</span>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -68,11 +68,52 @@ const router = useRouter();
 const userStore = useUserStore();
 const activeIndex = ref(route.path);
 
-const isLoggedIn = computed(() => userStore.isLoggedIn);
+// 前台只显示普通用户登录状态
+const isLoggedIn = computed(() => {
+  // 前台只检查普通用户登录状态
+  const userToken = localStorage.getItem("userToken");
+  const userId = localStorage.getItem("userId");
+  
+  // 如果是admin用户ID，前台不显示为已登录
+  if (userId === "admin") {
+    return false;
+  }
+  
+  return !!(userToken && userId);
+});
+
+// 获取当前用户头像和昵称（前台只显示普通用户）
+const currentUserAvatar = computed(() => {
+  const userInfoStr = localStorage.getItem("userInfo");
+  if (userInfoStr) {
+    const userInfo = JSON.parse(userInfoStr);
+    return userInfo?.user_info?.avatar || userInfo?.["user-info"]?.avatar || "/images/users/avater/user1.png";
+  }
+  return userStore.userAvatar || "/images/users/avater/user1.png";
+});
+
+const currentUserNickname = computed(() => {
+  const userInfoStr = localStorage.getItem("userInfo");
+  if (userInfoStr) {
+    const userInfo = JSON.parse(userInfoStr);
+    return userInfo?.user_info?.nickname || userInfo?.["user-info"]?.nickname || "用户";
+  }
+  return userStore.userNickname || "用户";
+});
 
 onMounted(async () => {
-  if (userStore.isLoggedIn) {
-    await userStore.getUserInfo();
+  // 前台只加载普通用户信息
+  const userToken = localStorage.getItem("userToken");
+  const userId = localStorage.getItem("userId");
+  
+  if (userToken && userId && userId !== "admin") {
+    // 从localStorage恢复用户信息
+    const userInfoStr = localStorage.getItem("userInfo");
+    if (userInfoStr) {
+      userStore.setUserInfo(JSON.parse(userInfoStr));
+    } else {
+      await userStore.getUserInfo();
+    }
   }
 });
 
