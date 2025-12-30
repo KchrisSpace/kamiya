@@ -1,13 +1,13 @@
 <template>
   <div class="header">
-    <div class="logo">
+    <div class="logo" @click="goToHome">
       <img src="/logo.png" alt="logo" />
     </div>
     <el-menu
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      :router="true"
+      @select="handleMenuSelect"
     >
       <el-menu-item index="/">首页</el-menu-item>
       <el-menu-item index="/store">商店</el-menu-item>
@@ -137,6 +137,22 @@ const handleCommand = (command) => {
 
 const goToCart = () => {
   router.push("/cart");
+};
+
+const goToHome = () => {
+  router.push("/");
+};
+
+const handleMenuSelect = (index) => {
+  console.log("Menu selected:", index); // 调试用
+  if (index) {
+    router.push(index).catch(err => {
+      // 忽略重复导航错误
+      if (err.name !== 'NavigationDuplicated') {
+        console.error("Navigation error:", err);
+      }
+    });
+  }
 };
 
 watch(
@@ -425,6 +441,9 @@ watch(
   font-family: "Nunito", sans-serif;
   letter-spacing: 0.3px;
   position: relative;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 :deep(.el-menu-item::before) {
@@ -439,7 +458,8 @@ watch(
   );
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 :deep(.el-menu-item:hover) {
@@ -476,6 +496,15 @@ watch(
 :deep(.el-menu-item:focus) {
   outline: none;
   background: transparent;
+}
+
+:deep(.el-menu-item a) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
 }
 
 /* 下拉组件样式 */

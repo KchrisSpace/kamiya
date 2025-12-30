@@ -39,7 +39,7 @@ const isAuthPage = computed(() => {
 }
 
 .main-content.with-header {
-  margin-top: 40px; /* 只在有header时添加上边距 */
+  margin-top: 75px; /* header高度 */
 }
 
 .content-wrapper {
