@@ -44,36 +44,36 @@
           >
             <div class="order-item" @click="goToDetail(item.product_id)">
               <img
-                :src="getProductImage(item.product_id)"
-                :alt="getProductName(item.product_id)"
+                :src="getProductImage(item.product_id, item)"
+                :alt="getProductName(item.product_id, item)"
                 class="product-image"
               />
               <div class="item-info">
                 <div class="item-name">
-                  {{ getProductName(item.product_id) }}
+                  {{ getProductName(item.product_id, item) }}
                 </div>
                 <div class="item-desc">
-                  {{ getProductDesc(item.product_id) }}
+                  {{ getProductDesc(item.product_id, item) }}
                 </div>
               </div>
               <div class="item-price-quantity">
                 <span class="item-price"
                   >¥{{
-                    item.single_price || getProductPrice(item.product_id)
+                    item.single_price || getProductPrice(item.product_id, item)
                   }}</span
                 >
                 <span class="item-quantity">x{{ item.quantity }}</span>
               </div>
               <div class="item-actions">
                 <button
-                  v-if="order.status !== '已取消'"
+                  v-if="order.status !== '已取消' && item.product_id !== 'custom'"
                   class="rebuy-btn"
                   @click.stop="rebuyItem(item.product_id)"
                 >
                   再买一单
                 </button>
                 <button
-                  v-if="order.status === '已完成'"
+                  v-if="order.status === '已完成' && item.product_id !== 'custom'"
                   class="view-comment-item-btn"
                   @click.stop="viewProductComment(item.product_id)"
                   :disabled="!isProductCommented(item.product_id)"
@@ -462,34 +462,58 @@ function calcTotal(items) {
     .toFixed(2);
 }
 
-// 获取商品信息
-function getProductInfo(productId) {
+// 获取商品信息（支持定制订单的虚拟商品）
+function getProductInfo(productId, orderItem) {
+  // 定制订单中的虚拟商品
+  if (productId === "custom" && orderItem) {
+    return {
+      id: "custom",
+      title:
+        orderItem.custom_mode === "image" ? "来图定制甜品" : "AI定制甜品",
+      images:
+        (orderItem.custom_reference_images &&
+          orderItem.custom_reference_images[0]) ||
+        orderItem.custom_design_image ||
+        "",
+      promotion: {
+        main_description:
+          orderItem.custom_description ||
+          orderItem.custom_remark ||
+          "定制需求已提交，商家会与您确认具体细节",
+      },
+      price_info: {
+        current_price: orderItem.single_price || 0,
+      },
+    };
+  }
+
+  // 普通商品
   return (
     productsStore.products.find((product) => product.id === productId) || null
   );
 }
 
 // 获取商品图片
-function getProductImage(productId) {
-  const product = getProductInfo(productId);
+function getProductImage(productId, orderItem) {
+  const product = getProductInfo(productId, orderItem);
   return product?.images || "";
 }
 
 // 获取商品名称
-function getProductName(productId) {
-  const product = getProductInfo(productId);
+function getProductName(productId, orderItem) {
+  const product = getProductInfo(productId, orderItem);
   return product?.title || `商品 ${productId}`;
 }
 
 // 获取商品价格
-function getProductPrice(productId) {
-  const product = getProductInfo(productId);
+function getProductPrice(productId, orderItem) {
+  const product = getProductInfo(productId, orderItem);
   return product?.price_info?.current_price || 0;
 }
 
 // 获取商品描述
-function getProductDesc(productId) {
-  const product = getProductInfo(productId);
+function getProductDesc(productId, orderItem) {
+  const product = getProductInfo(productId, orderItem);
   return product?.promotion?.main_description || "暂无描述";
 }
 

@@ -52,9 +52,15 @@
       >
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="title" label="商品名称" />
-        <el-table-column prop="main_category" label="分类" width="120">
+        <el-table-column prop="main_category" label="销售类型" width="120">
           <template #default="{ row }">
             <el-tag>{{ row.main_category }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="category" label="商品类型" width="120">
+          <template #default="{ row }">
+            <el-tag v-if="row.category">{{ row.category }}</el-tag>
+            <span v-else>未设置</span>
           </template>
         </el-table-column>
         <el-table-column

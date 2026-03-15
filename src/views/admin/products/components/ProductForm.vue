@@ -21,6 +21,17 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item label="商品类型">
+      <el-select v-model="form.category" placeholder="请选择类型">
+        <el-option
+          v-for="type in productTypes"
+          :key="type"
+          :label="type"
+          :value="type"
+        />
+      </el-select>
+    </el-form-item>
+
     <el-form-item label="原价" prop="price_info.original_price">
       <el-input-number
         v-model="form.price_info.original_price"
@@ -152,7 +163,8 @@ const emit = defineEmits(["submit", "cancel"]);
 const formRef = ref(null);
 const dialogVisible = ref(false);
 const dialogImageUrl = ref("");
-const categories = ["热销", "上新", "特价出售"];
+const categories = ["热销", "上新", "特价出售"]; // 销售类型（首页三类）
+const productTypes = ["单品", "冷品", "暖品", "套餐"]; // 商品类型（与前台“类别”对应）
 
 const form = reactive({
   id: "",

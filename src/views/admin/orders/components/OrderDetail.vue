@@ -55,16 +55,35 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="商品名称" />
-        <el-table-column prop="price" label="单价" width="120">
-          <template #default="{ row }"> ¥{{ row.price }} </template>
+        <el-table-column prop="price" label="单价" width="160">
+          <template #default="{ row, $index }">
+            <div v-if="isCustomItem(row)">
+              <el-input-number
+                v-model="editableProducts[$index].price"
+                :min="0"
+                :step="10"
+                size="small"
+              />
+            </div>
+            <div v-else>¥{{ row.price }}</div>
+          </template>
         </el-table-column>
         <el-table-column prop="quantity" label="数量" width="120" />
         <el-table-column label="小计" width="120">
-          <template #default="{ row }">
-            ¥{{ (row.price * row.quantity).toFixed(2) }}
+          <template #default="{ row, $index }">
+            <span v-if="isCustomItem(row)">
+              ¥{{ (editableProducts[$index].price * row.quantity).toFixed(2) }}
+            </span>
+            <span v-else>¥{{ (row.price * row.quantity).toFixed(2) }}</span>
           </template>
         </el-table-column>
       </el-table>
+      <div
+        v-if="hasCustomItem"
+        class="custom-price-tip"
+      >
+        提示：可在此调整个性化定制商品的价格，保存时将同步更新订单金额。
+      </div>
     </div>
 
     <div class="mt-20" v-if="order.remark">
@@ -311,6 +330,29 @@ const order = computed(() => {
   }
   return o;
 });
+
+// 个性化定制商品检测
+const hasCustomItem = computed(() =>
+  (order.value.products || []).some((p) => p.product_id === "custom")
+);
+
+const editableProducts = ref(
+  (order.value.products || []).map((p) => ({
+    ...p,
+  }))
+);
+
+watch(
+  () => order.value.products,
+  (newVal) => {
+    editableProducts.value = (newVal || []).map((p) => ({ ...p }));
+  },
+  { immediate: true }
+);
+
+function isCustomItem(row) {
+  return row.product_id === "custom";
+}
 
 // 格式化时间
 const formatTime = (timeStr) => {

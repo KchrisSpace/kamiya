@@ -40,6 +40,12 @@
             end-placeholder="结束日期"
           />
         </el-form-item>
+        <el-form-item label="排序">
+          <el-select v-model="filterForm.sortOrder" placeholder="按时间排序">
+            <el-option label="时间倒序（最新在前）" value="desc" />
+            <el-option label="时间正序（最早在前）" value="asc" />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="resetFilter">重置</el-button>
@@ -47,7 +53,12 @@
       </el-form>
     </el-card>
 
-    <el-table :data="orders" style="width: 100%" v-loading="loading">
+    <el-table
+      :data="orders"
+      style="width: 100%"
+      v-loading="loading"
+      :row-class-name="getRowClass"
+    >
       <el-table-column prop="orderNo" label="订单号" width="180" />
       <el-table-column prop="userId" label="用户ID" width="120" />
       <el-table-column prop="createTime" label="下单时间" width="180" />
@@ -146,6 +157,7 @@ const filterForm = reactive({
   orderNo: "",
   status: "",
   dateRange: [],
+  sortOrder: "desc",
 });
 
 // 格式化订单数据，转换为表格需要的格式
@@ -184,6 +196,15 @@ const getStatusType = (status) => {
 
 const getStatusName = (status) => {
   return status || "未知";
+};
+
+// 行样式：个性化定制订单底色粉色
+const getRowClass = ({ row }) => {
+  const originalOrder = row.originalOrder || row;
+  const hasCustomItem = Array.isArray(originalOrder.items)
+    ? originalOrder.items.some((item) => item.product_id === "custom")
+    : false;
+  return hasCustomItem ? "custom-order-row" : "";
 };
 
 // 过滤后的订单列表
@@ -236,6 +257,17 @@ const filteredOrders = computed(() => {
       return orderDate >= startDate && orderDate <= endDate;
     });
   }
+
+  // 按下单时间排序（可选正序 / 倒序）
+  result.sort((a, b) => {
+    const dateA = a.originalOrder?.created_at
+      ? new Date(a.originalOrder.created_at).getTime()
+      : 0;
+    const dateB = b.originalOrder?.created_at
+      ? new Date(b.originalOrder.created_at).getTime()
+      : 0;
+    return filterForm.sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+  });
 
   return result;
 });
@@ -344,9 +376,29 @@ const handleViewDetail = (row) => {
   // 格式化订单数据供详情页使用
   const originalOrder = row.originalOrder || row;
 
-  // 获取商品信息
+  // 获取商品信息（包含定制订单的虚拟商品）
   const products =
     originalOrder.items?.map((item) => {
+      // 定制订单的虚拟商品
+      if (item.product_id === "custom") {
+        const name =
+          item.custom_mode === "image" ? "来图定制甜品" : "AI定制甜品";
+        const image =
+          (item.custom_reference_images &&
+            item.custom_reference_images[0]) ||
+          item.custom_design_image ||
+          "";
+        const price = item.single_price || 0;
+        return {
+          name,
+          price,
+          quantity: item.quantity,
+          image,
+          product_id: item.product_id,
+        };
+      }
+
+      // 普通商品
       const product = productsStore.products.find(
         (p) => p.id === item.product_id
       );
@@ -516,6 +568,15 @@ onMounted(() => {
 .customer-contact {
   font-size: 12px;
   color: #666;
+}
+
+/* 个性化定制订单行底色 */
+.custom-order-row {
+  background-color: #fff5f7;
+}
+
+.custom-order-row:hover > td.el-table__cell {
+  background-color: #ffe6ee !important;
 }
 
 .pagination {

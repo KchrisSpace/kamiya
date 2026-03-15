@@ -6,28 +6,50 @@
     <div class="payment-left">
       <div class="order-items">
         <h3>当前订单商品</h3>
-        <div class="items-list">
-          <div
-            v-for="item in cartStore.cartItems"
-            :key="item.id"
-            class="order-item"
-          >
-            <img
-              :src="item.product?.images"
-              :alt="item.product?.title"
-              class="item-image"
-            />
-            <div class="item-info">
-              <div class="item-name-price">
-                <p class="item-name">{{ item.product?.title }}</p>
-                <p class="item-price">
-                  ¥{{ item.product?.price_info?.current_price }}
-                </p>
+        <!-- 定制订单显示 -->
+        <template v-if="isCustomOrder">
+          <div class="items-list">
+            <div class="order-item">
+              <img
+                :src="customDisplay.image"
+                :alt="customDisplay.title"
+                class="item-image"
+              />
+              <div class="item-info">
+                <div class="item-name-price">
+                  <p class="item-name">{{ customDisplay.title }}</p>
+                  <p class="item-price">¥{{ totalPrice }}</p>
+                </div>
+                <p class="item-quantity">x1</p>
               </div>
-              <p class="item-quantity">x{{ item.quantity }}</p>
             </div>
           </div>
-        </div>
+        </template>
+        <!-- 普通购物车订单显示 -->
+        <template v-else>
+          <div class="items-list">
+            <div
+              v-for="item in cartStore.cartItems"
+              :key="item.id"
+              class="order-item"
+            >
+              <img
+                :src="item.product?.images"
+                :alt="item.product?.title"
+                class="item-image"
+              />
+              <div class="item-info">
+                <div class="item-name-price">
+                  <p class="item-name">{{ item.product?.title }}</p>
+                  <p class="item-price">
+                    ¥{{ item.product?.price_info?.current_price }}
+                  </p>
+                </div>
+                <p class="item-quantity">x{{ item.quantity }}</p>
+              </div>
+            </div>
+          </div>
+        </template>
         <div class="order-summary">
           <div class="summary-item total">
             <span>应付金额</span>
@@ -140,6 +162,9 @@ const selectedTime = ref("");
 const phoneError = ref("");
 const userid = localStorage.getItem("userId");
 
+// 从定制页面传来的定制数据（如果有）
+const customOrderData = ref(null);
+
 // 订单信息
 const orderInfo = ref({
   name: "",
@@ -158,8 +183,36 @@ const timeSlots = [
   { label: "18:00-21:00", value: "evening" },
 ];
 
+// 是否为定制订单
+const isCustomOrder = computed(() => !!customOrderData.value);
+
+// 定制订单展示信息
+const customDisplay = computed(() => {
+  if (!customOrderData.value) {
+    return { title: "", image: "" };
+  }
+  const data = customOrderData.value;
+  const title =
+    data.mode === "image" ? "来图定制甜品" : "AI定制甜品";
+  const image =
+    data.mode === "image"
+      ? (data.referenceImages && data.referenceImages[0]) || ""
+      : data.designImage || "";
+  return { title, image };
+});
+
 // 计算总价
 const totalPrice = computed(() => {
+  // 定制订单：使用用户预算的最大值或最小值
+  if (isCustomOrder.value) {
+    const data = customOrderData.value;
+    const max = Number(data.budgetMax || 0);
+    const min = Number(data.budgetMin || 0);
+    const price = max || min || 0;
+    return price.toFixed(2);
+  }
+
+  // 普通购物车订单
   return cartStore.cartItems
     .reduce((total, item) => {
       return (
@@ -203,6 +256,66 @@ const createOrder = async () => {
   }
 
   try {
+    const now = new Date().toISOString();
+
+    // 如果是定制订单，不占用商品库存，只生成包含定制信息的订单
+    if (isCustomOrder.value) {
+      const data = customOrderData.value;
+      const orderData = {
+        user_id: userid,
+        items: [
+          {
+            product_id: "custom",
+            product_name:
+              data.mode === "image" ? "来图定制甜品" : "AI定制甜品",
+            quantity: 1,
+            single_price: parseFloat(totalPrice.value),
+            custom_mode: data.mode,
+            custom_description: data.description || "",
+            custom_tags: data.tags || [],
+            custom_budget_min: data.budgetMin || "",
+            custom_budget_max: data.budgetMax || "",
+            custom_expected_time: data.expectedTime || "",
+            custom_remark: data.remark || "",
+            custom_reference_images: data.referenceImages || [],
+            custom_design_image: data.designImage || "",
+          },
+        ],
+        total_price: parseFloat(totalPrice.value),
+        shipping_fee: 0,
+        delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
+        consignee: orderInfo.value.name,
+        phone: orderInfo.value.phone.replace(/\D/g, ""),
+        remark: orderInfo.value.remark || "",
+        status: "待商家确认",
+        payment_method: "wechat",
+        payment_time: null,
+        shipped_time: null,
+        completed_time: null,
+        created_at: now,
+        updated_at: now,
+      };
+
+      const result = await normalOrdersStore.addOrder(orderData);
+      if (result) {
+        // 清理定制数据
+        sessionStorage.removeItem("customOrderData");
+        customOrderData.value = null;
+
+        ElMessage.success("定制订单创建成功，商家会尽快与您确认");
+        selectedDate.value = "";
+        selectedTime.value = "";
+        orderInfo.value = {
+          name: "",
+          phone: "",
+          remark: "",
+        };
+        router.push("/order");
+      }
+      return;
+    }
+
+    // 普通购物车订单：需要检查库存并扣减
     // 检查所有商品的库存
     const stockCheckPromises = cartStore.cartItems.map(async (item) => {
       const productId = item.product_id || item.id;
@@ -210,20 +323,24 @@ const createOrder = async () => {
         `http://localhost:3001/products_list/${productId}`
       );
       const product = productResponse.data;
-      
+
       if (!product) {
         throw new Error(`商品 ${productId} 不存在`);
       }
 
       // 检查商品是否上架
       if (product.status !== "1") {
-        throw new Error(`商品 "${product.title || productId}" 已下架，无法下单`);
+        throw new Error(
+          `商品 "${product.title || productId}" 已下架，无法下单`
+        );
       }
 
       // 检查库存
       const currentStock = product.stock || 0;
       if (currentStock < item.quantity) {
-        throw new Error(`商品 "${product.title || productId}" 库存不足，当前库存为 ${currentStock}，您需要 ${item.quantity} 件`);
+        throw new Error(
+          `商品 "${product.title || productId}" 库存不足，当前库存为 ${currentStock}，您需要 ${item.quantity} 件`
+        );
       }
 
       return { productId, product, quantity: item.quantity };
@@ -232,7 +349,6 @@ const createOrder = async () => {
     const stockCheckResults = await Promise.all(stockCheckPromises);
 
     // 所有库存检查通过，创建订单并扣减库存
-    const now = new Date().toISOString();
     const orderData = {
       user_id: userid,
       items: cartStore.cartItems.map((item) => {
@@ -264,13 +380,18 @@ const createOrder = async () => {
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
       // 扣减库存
-      const stockUpdatePromises = stockCheckResults.map(async ({ productId, product, quantity }) => {
-        const newStock = (product.stock || 0) - quantity;
-        await axios.patch(`http://localhost:3001/products_list/${productId}`, {
-          stock: Math.max(0, newStock), // 确保库存不为负数
-          updated_at: now,
-        });
-      });
+      const stockUpdatePromises = stockCheckResults.map(
+        async ({ productId, product, quantity }) => {
+          const newStock = (product.stock || 0) - quantity;
+          await axios.patch(
+            `http://localhost:3001/products_list/${productId}`,
+            {
+              stock: Math.max(0, newStock), // 确保库存不为负数
+              updated_at: now,
+            }
+          );
+        }
+      );
 
       await Promise.all(stockUpdatePromises);
 
@@ -335,11 +456,23 @@ const validatePhone = () => {
 
 onMounted(async () => {
   try {
-    // 确保购物车数据已加载
-    if (!cartStore.cartItems.length) {
-      await cartStore.fetchCartData(userid);
+    // 读取定制订单数据（如果有）
+    const stored = sessionStorage.getItem("customOrderData");
+    if (stored) {
+      try {
+        customOrderData.value = JSON.parse(stored);
+      } catch {
+        customOrderData.value = null;
+      }
     }
-    cartItems.value = [...cartStore.cartItems];
+
+    // 只有在非定制订单时才需要加载购物车数据
+    if (!isCustomOrder.value) {
+      if (!cartStore.cartItems.length) {
+        await cartStore.fetchCartData(userid);
+      }
+      cartItems.value = [...cartStore.cartItems];
+    }
   } catch (error) {
     console.error("初始化数据失败:", error);
     ElMessage.error("加载数据失败，请重试");
