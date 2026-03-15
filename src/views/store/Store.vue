@@ -102,8 +102,6 @@ const categories = ["全部", "单品", "冷品", "暖品", "套餐"];
 
 // 计算属性
 const filteredGoods = computed(() => {
-  if (isLoading.value) return [];
-
   const filtered = goods.value.filter((item) => {
     // 只显示上架的商品（status === "1"）
     const statusMatch = item.status === "1" || item.status === 1;

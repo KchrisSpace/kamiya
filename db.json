@@ -27,11 +27,11 @@
       "status": "1",
       "createTime": "2025/12/28 17:41:57",
       "user_info": {
-        "nickname": "小美",
+        "nickname": "我是用户1号",
         "avatar": ""
       },
       "created_at": "2025-12-28T09:41:57.374Z",
-      "updated_at": "2025-12-28T10:58:40.305Z"
+      "updated_at": "2026-03-15T13:13:32.938Z"
     },
     {
       "id": "user2",
@@ -44,11 +44,11 @@
       "phone_verified": false,
       "account_status": "active",
       "user_info": {
-        "nickname": "小草",
+        "nickname": "我是用户2号",
         "avatar": "/images/users/avater/user1.png"
       },
       "created_at": "2025-01-01T00:00:00Z",
-      "updated_at": "2025-01-01T00:00:00Z"
+      "updated_at": "2026-03-14T10:18:16.113Z"
     }
   ],
   "products_list": [
@@ -74,7 +74,7 @@
       },
       "category": "单品",
       "sales": 0,
-      "status": "1",
+      "status": "0",
       "hasDiscount": true,
       "discount": 10
     },
@@ -150,7 +150,7 @@
           "粉色"
         ]
       },
-      "status": "0",
+      "status": "1",
       "views": 0,
       "favorites": 0,
       "created_at": "2025-01-01T00:00:00Z",
@@ -202,7 +202,7 @@
           "日式"
         ]
       },
-      "status": "0",
+      "status": "1",
       "views": 0,
       "favorites": 0,
       "created_at": "2025-01-01T00:00:00Z",
@@ -260,7 +260,7 @@
       "id": "P09",
       "main_category": "特价出售",
       "category": "冷品",
-      "images": "https://s.yimg.com/ut/api/res/1.2/kdl.L6ACNDv97XZdX768sg--~B/YXBwaWQ9eXR3bWFsbDtjYz0zMTUzNjAwMDtoPTYwMDtxPTEwMDt3PTYwMA--/https://s.yimg.com/fy/47ce/item/p0084224280761-item-5019xf4x0601x0600-m.jpg",
+      "images": "https://photo.yannick.com.tw/photo/0201112/%E8%8D%89%E8%8E%93%E5%A4%8F%E6%B4%9B%E7%89%B9.jpg",
       "title": "草莓蕾塔",
       "price_info": {
         "original_price": 510,
@@ -317,6 +317,7 @@
       "description": "甜的hhhhhhjjjjj",
       "images": "https://img.cloudimg.in/uploads/shops/27978/products/76/76c01e68c8e256440f596808cd9bb485.jpg",
       "promotion": {
+        "is_hot": false,
         "keywords": [
           "草莓",
           "法式",
@@ -443,8 +444,10 @@
       "rating": 4,
       "useful_count": 1,
       "created_at": "2025-04-27T12:02:04.634Z",
-      "updated_at": "2025-04-27T12:02:04.634Z",
-      "is_audited": true
+      "updated_at": "2026-03-14T10:03:27.667Z",
+      "is_audited": true,
+      "reply": "感谢您的支持",
+      "reply_time": "2026-03-14T10:03:27.667Z"
     },
     {
       "id": "b985",
@@ -495,8 +498,10 @@
       "rating": 3,
       "useful_count": 0,
       "created_at": "2025-04-27T12:25:21.284Z",
-      "updated_at": "2025-04-27T12:25:21.284Z",
-      "is_audited": true
+      "updated_at": "2026-03-14T11:55:25.119Z",
+      "is_audited": true,
+      "reply": "烦死了",
+      "reply_time": "2026-03-14T11:55:25.119Z"
     },
     {
       "product_id": "P05",
@@ -527,8 +532,26 @@
       "useful_count": 0,
       "is_audited": true,
       "created_at": "2025-12-28T10:50:26.802Z",
-      "updated_at": "2025-12-28T10:50:26.802Z",
-      "id": "o9oDc7h"
+      "updated_at": "2026-03-14T10:03:12.235Z",
+      "id": "o9oDc7h",
+      "is_visible": true
+    },
+    {
+      "product_id": "P09",
+      "user_id": "user1",
+      "user_name": "小美",
+      "avatar": "/images/users/avater/user1.png",
+      "content": "啦啦啦，好好吃，sjaya",
+      "rating": 4,
+      "tags": [
+        "分量很足"
+      ],
+      "images": [],
+      "useful_count": 0,
+      "is_audited": true,
+      "created_at": "2026-03-15T13:13:09.666Z",
+      "updated_at": "2026-03-15T13:13:09.666Z",
+      "id": "WLDW60y"
     }
   ],
   "normal_orders": [
@@ -647,13 +670,13 @@
       "consignee": "琳琳",
       "phone": "12311331332",
       "remark": "好的",
-      "status": "预备出餐中",
+      "status": "已完成",
       "payment_method": "wechat",
       "payment_time": null,
-      "shipped_time": null,
-      "completed_time": null,
+      "shipped_time": "2026-03-14T08:56:45.494Z",
+      "completed_time": "2026-03-15T13:10:43.611Z",
       "created_at": "2025-12-28T11:38:40.128Z",
-      "updated_at": "2025-12-28T11:38:40.128Z",
+      "updated_at": "2026-03-15T13:10:43.611Z",
       "id": 6
     }
   ],
@@ -689,6 +712,24 @@
       "product_id": "P03",
       "quantity": 1,
       "created_at": "2025-12-28T14:55:53.852Z"
+    },
+    {
+      "quantity": 1,
+      "id": "cart_1767433003238_firds3o72"
+    },
+    {
+      "id": "cart_1773478389976_cg5mxuocx",
+      "user_id": "user2",
+      "product_id": "P01",
+      "quantity": 1,
+      "created_at": "2026-03-14T08:53:09.976Z"
+    },
+    {
+      "id": "cart_1773489167046_umwe0ucip",
+      "user_id": "user2",
+      "product_id": "P10",
+      "quantity": 1,
+      "created_at": "2026-03-14T11:52:47.046Z"
     }
   ],
   "custom": [
@@ -742,7 +783,8 @@
       "phone": "14726839224",
       "feedback_message": "1",
       "created_at": "2025-04-25T18:15:35.320Z",
-      "updated_at": "2025-04-25T18:15:35.320Z"
+      "updated_at": "2026-03-14T08:58:16.030Z",
+      "status": "processed"
     },
     {
       "id": "14ee",
@@ -773,6 +815,28 @@
       "feedback_message": "晚上关店之前能打折吗",
       "created_at": "2025-12-28T12:35:34.660Z",
       "id": "h_d379h"
+    },
+    {
+      "user_id": "user1",
+      "name": "shaya",
+      "email": "chris514863@gmail.com",
+      "phone": "13540604635",
+      "feedback_message": "毕设写成这样已经很不错啦",
+      "created_at": "2026-03-15T13:04:33.465Z",
+      "id": "SjHxx-L",
+      "status": "processed",
+      "updated_at": "2026-03-15T13:05:30.349Z"
+    }
+  ],
+  "shop_settings": [
+    {
+      "shopName": "Kamiya甜品店",
+      "logo": "/images/brand/brand_1773579757111.jpg",
+      "description": "专业制作精美甜品，为您带来甜蜜时光",
+      "phone": "400-123-4567",
+      "email": "service@kamiya.com",
+      "address": "北京市朝阳区xxx街道xxx号",
+      "id": 1
     }
   ]
 }

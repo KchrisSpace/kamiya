@@ -55,14 +55,31 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
-const imageUrl = ref("@/assets/images/about-banner.jpg");
+const defaultImage = "";
+const imageUrl = ref(defaultImage);
 const imageError = ref(false);
 
 const handleImageError = () => {
   imageError.value = true;
 };
+
+// 从店铺设置中加载品牌形象 / Logo
+onMounted(async () => {
+  try {
+    const res = await axios.get("http://localhost:3001/shop_settings");
+    const data = res.data;
+    const settings = Array.isArray(data) ? data[0] : data;
+    if (settings && settings.logo) {
+      imageUrl.value = settings.logo;
+      imageError.value = false;
+    }
+  } catch (error) {
+    console.error("加载店铺设置失败：", error);
+  }
+});
 </script>
 
 <style scoped>
@@ -132,7 +149,9 @@ const handleImageError = () => {
   flex: 1;
   border-radius: 16px;
   overflow: hidden;
-  min-height: 400px;
+  /* 固定展示区域尺寸 */
+  width: 520px;
+  height: 320px;
   position: relative;
 }
 
@@ -228,7 +247,6 @@ const handleImageError = () => {
 .image-placeholder {
   width: 100%;
   height: 100%;
-  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -264,7 +282,9 @@ const handleImageError = () => {
   }
 
   .intro-image {
-    min-height: 300px;
+    width: 100%;
+    max-width: 100%;
+    height: 260px;
   }
 
   .section-title {

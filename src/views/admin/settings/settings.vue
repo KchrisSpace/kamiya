@@ -70,6 +70,7 @@
                   :show-file-list="false"
                   :on-success="handleLogoSuccess"
                   :before-upload="beforeLogoUpload"
+                  name="logo"
                 >
                   <img v-if="shopForm.logo" :src="shopForm.logo" class="logo-preview" />
                   <el-icon v-else class="logo-uploader-icon"><Plus /></el-icon>
@@ -338,7 +339,7 @@ import axios from "axios";
 
 const activeCategory = ref("shop");
 const saving = ref(false);
-const uploadUrl = "http://localhost:3002/upload"; // 使用现有的上传服务器
+const uploadUrl = "http://localhost:3002/api/upload/logo"; // 店铺 Logo / 品牌图片上传地址
 
 // 表单引用
 const shopFormRef = ref(null);
@@ -428,17 +429,23 @@ function beforeLogoUpload(file) {
   return true;
 }
 
-// 保存店铺信息
+// 保存店铺信息（持久化到 json-server）
 async function handleShopSubmit() {
   if (!shopFormRef.value) return;
-  await shopFormRef.value.validate((valid) => {
-    if (valid) {
+  await shopFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+    try {
       saving.value = true;
-      // 模拟API请求
-      setTimeout(() => {
-        saving.value = false;
-        ElMessage.success("店铺信息保存成功");
-      }, 1000);
+      // json-server 中使用 /shop_settings/1 作为店铺配置
+      await axios.put("http://localhost:3001/shop_settings/1", {
+        ...shopForm,
+      });
+      ElMessage.success("店铺信息保存成功");
+    } catch (error) {
+      console.error("保存店铺信息失败：", error);
+      ElMessage.error("保存店铺信息失败，请稍后重试");
+    } finally {
+      saving.value = false;
     }
   });
 }
@@ -545,9 +552,16 @@ function formatLogTime(date) {
   });
 }
 
-// 初始化
-onMounted(() => {
-  // 可以在这里加载保存的设置
+// 初始化：加载已保存的设置
+onMounted(async () => {
+  try {
+    const res = await axios.get("http://localhost:3001/shop_settings/1");
+    if (res && res.data) {
+      Object.assign(shopForm, res.data);
+    }
+  } catch (error) {
+    console.error("加载店铺设置失败：", error);
+  }
 });
 </script>
 

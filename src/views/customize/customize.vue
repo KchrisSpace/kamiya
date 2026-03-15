@@ -14,322 +14,377 @@
     </div>
 
     <!-- 定制内容（仅登录后显示） -->
-    <div v-else class="customize-content">
-      <!-- 顶部模式切换按钮 -->
-      <div class="top-actions">
-        <el-button
-          :class="['upload-btn', { active: customizeMode === 'image' }]"
-          :type="customizeMode === 'image' ? 'primary' : ''"
-          @click="switchMode('image')"
-        >
-          <el-icon><Picture /></el-icon>
-          <span>上传参考图</span>
-        </el-button>
-        <el-button
-          :class="['ai-btn', { active: customizeMode === 'ai' }]"
-          :type="customizeMode === 'ai' ? 'primary' : ''"
-          @click="switchMode('ai')"
-        >
-          <el-icon><MagicStick /></el-icon>
-          <span>AI灵感设计</span>
-        </el-button>
+    <div v-else class="customize-wrapper">
+      <!-- 缩放控制栏 -->
+      <div class="zoom-controls">
+        <div class="zoom-label">缩放：{{ Math.round(zoomLevel * 100) }}%</div>
+        <div class="zoom-buttons">
+          <el-button
+            :icon="ZoomOut"
+            circle
+            size="small"
+            @click="zoomOut"
+            :disabled="zoomLevel <= 0.5"
+            title="缩小"
+          />
+          <el-button
+            :icon="RefreshLeft"
+            circle
+            size="small"
+            @click="resetZoom"
+            title="重置"
+          />
+          <el-button
+            :icon="ZoomIn"
+            circle
+            size="small"
+            @click="zoomIn"
+            :disabled="zoomLevel >= 1.5"
+            title="放大"
+          />
+        </div>
+        <el-slider
+          v-model="zoomLevel"
+          :min="0.5"
+          :max="1.5"
+          :step="0.1"
+          :format-tooltip="formatZoomTooltip"
+          class="zoom-slider"
+          @change="onZoomChange"
+        />
       </div>
 
-      <!-- 来图定制模式：您的需求和上传图片 -->
-      <template v-if="customizeMode === 'image'">
-        <!-- 您的需求 -->
-        <div class="requirement-section">
-          <h3 class="section-title">您的需求</h3>
-          <div class="requirement-fields">
-            <div class="field-item budget-range">
-              <el-icon class="field-icon"><Money /></el-icon>
-              <div class="budget-inputs">
-                <el-input
-                  v-model="requirements.budgetMin"
-                  placeholder="最低预算"
-                  class="budget-input"
-                  type="number"
-                />
-                <span class="budget-separator">至</span>
-                <el-input
-                  v-model="requirements.budgetMax"
-                  placeholder="最高预算"
-                  class="budget-input"
-                  type="number"
-                />
-              </div>
-            </div>
-            <div class="field-item">
-              <el-icon class="field-icon"><Calendar /></el-icon>
-              <el-date-picker
-                v-model="requirements.expectedTime"
-                type="date"
-                placeholder="选择预期时间"
-                format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD"
-                class="requirement-date-picker"
-                :disabled-date="disabledDate"
-              />
-            </div>
-          </div>
-          <div class="remark-field">
-            <el-input
-              v-model="requirements.remark"
-              type="textarea"
-              :rows="3"
-              placeholder="请输入备注信息（选填）"
-              maxlength="200"
-              show-word-limit
-              class="remark-textarea"
-            />
-          </div>
-        </div>
-
-        <!-- 上传图片区域 -->
-        <div class="image-upload-section">
-          <div v-if="uploadedImages.length === 0" class="upload-area">
-            <el-upload
-              class="image-uploader"
-              drag
-              :auto-upload="false"
-              :on-change="handleImageChange"
-              :file-list="fileList"
-              accept="image/*"
-              :show-file-list="false"
-              multiple
-            >
-              <el-icon class="upload-icon"><UploadFilled /></el-icon>
-              <div class="el-upload__text">
-                将图片拖到此处，或<em>点击上传</em>
-              </div>
-              <template #tip>
-                <div class="el-upload__tip">
-                  支持 jpg/png 格式，文件大小不超过 5MB，可上传多张图片
-                </div>
-              </template>
-            </el-upload>
-          </div>
-
-          <!-- 上传后的图片预览 -->
-          <div v-else class="uploaded-images-preview">
-            <div class="images-grid">
-              <div
-                v-for="(image, index) in uploadedImages"
-                :key="index"
-                class="image-preview-item"
-              >
-                <div class="image-wrapper">
-                  <img
-                    :src="image.url"
-                    :alt="`参考图 ${index + 1}`"
-                    class="preview-image"
-                  />
-                  <div class="image-overlay">
-                    <el-button
-                      type="danger"
-                      :icon="Delete"
-                      circle
-                      size="small"
-                      @click="handleRemoveImage(index)"
-                      class="remove-btn"
-                    />
-                  </div>
-                </div>
-              </div>
-              <!-- 继续添加图片按钮 -->
-              <div class="add-more-image" @click="triggerFileInput">
-                <el-upload
-                  ref="uploadRef"
-                  class="hidden-upload"
-                  :auto-upload="false"
-                  :on-change="handleImageChange"
-                  :file-list="fileList"
-                  accept="image/*"
-                  :show-file-list="false"
-                  multiple
-                >
-                  <div class="add-more-content">
-                    <el-icon class="add-icon"><Plus /></el-icon>
-                    <span>添加更多图片</span>
-                  </div>
-                </el-upload>
-              </div>
-            </div>
-            <div class="preview-actions">
-              <el-button @click="handleClearAllImages">清空所有图片</el-button>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <!-- AI定制模式：描述和生成部分 -->
-      <template v-if="customizeMode === 'ai'">
-        <!-- 您的需求 -->
-        <div class="requirement-section">
-          <h3 class="section-title">您的需求</h3>
-          <div class="requirement-fields">
-            <div class="field-item budget-range">
-              <el-icon class="field-icon"><Money /></el-icon>
-              <div class="budget-inputs">
-                <el-input
-                  v-model="requirements.budgetMin"
-                  placeholder="最低预算"
-                  class="budget-input"
-                  type="number"
-                />
-                <span class="budget-separator">至</span>
-                <el-input
-                  v-model="requirements.budgetMax"
-                  placeholder="最高预算"
-                  class="budget-input"
-                  type="number"
-                />
-              </div>
-            </div>
-            <div class="field-item">
-              <el-icon class="field-icon"><Calendar /></el-icon>
-              <el-date-picker
-                v-model="requirements.expectedTime"
-                type="date"
-                placeholder="选择预期时间"
-                format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD"
-                class="requirement-date-picker"
-                :disabled-date="disabledDate"
-              />
-            </div>
-          </div>
-          <div class="remark-field">
-            <el-input
-              v-model="requirements.remark"
-              type="textarea"
-              :rows="3"
-              placeholder="请输入备注信息（选填）"
-              maxlength="200"
-              show-word-limit
-              class="remark-textarea"
-            />
-          </div>
-        </div>
-
-        <!-- 描述您梦想中的甜品 -->
-        <div class="description-section">
-          <h3 class="section-title">描述您梦想中的甜品</h3>
-          <el-input
-            v-model="description"
-            type="textarea"
-            :rows="6"
-            placeholder="例如:一个粉色城堡蛋糕,有草莓和云朵装饰..."
-            class="description-textarea"
-            maxlength="500"
-            show-word-limit
-          />
-
-          <!-- 标签选择 -->
-          <div class="tag-list">
-            <el-tag
-              v-for="tag in tags"
-              :key="tag.value"
-              :class="[
-                'tag-item',
-                { active: selectedTags.includes(tag.value) },
-              ]"
-              @click="toggleTag(tag.value)"
-            >
-              <el-icon class="tag-icon"><component :is="tag.icon" /></el-icon>
-              <span>{{ tag.label }}</span>
-            </el-tag>
-          </div>
-
-          <!-- 生成设计灵感按钮 -->
+      <!-- 定制内容区域（可缩放） -->
+      <div
+        class="customize-content"
+        :style="{
+          transform: `scale(${zoomLevel})`,
+          transformOrigin: 'top center',
+        }"
+      >
+        <!-- 顶部模式切换按钮 -->
+        <div class="top-actions">
           <el-button
-            type="primary"
-            class="generate-btn"
-            @click="handleGenerateDesign"
+            :class="['upload-btn', { active: customizeMode === 'image' }]"
+            :type="customizeMode === 'image' ? 'primary' : ''"
+            @click="switchMode('image')"
+          >
+            <el-icon><Picture /></el-icon>
+            <span>上传参考图</span>
+          </el-button>
+          <el-button
+            :class="['ai-btn', { active: customizeMode === 'ai' }]"
+            :type="customizeMode === 'ai' ? 'primary' : ''"
+            @click="switchMode('ai')"
           >
             <el-icon><MagicStick /></el-icon>
-            <span>生成设计灵感</span>
+            <span>AI灵感设计</span>
           </el-button>
         </div>
 
-        <!-- AI 设计方案 -->
-        <div class="design-section">
-          <h3 class="section-title">AI 设计方案</h3>
-
-          <!-- 暂无设计方案 -->
-          <div v-if="designPreviews.length === 0" class="no-design-placeholder">
-            <span class="no-design-text">暂无</span>
-          </div>
-
-          <!-- 设计方案列表 -->
-          <div v-else class="design-preview-list">
-            <div
-              v-for="(design, index) in designPreviews"
-              :key="index"
-              :class="[
-                'design-preview-item',
-                { selected: selectedDesignIndex === index },
-              ]"
-              @click="selectDesign(index)"
-            >
-              <div class="design-image-wrapper">
-                <img
-                  v-if="design.image"
-                  :src="design.image"
-                  :alt="`设计方案 ${index + 1}`"
-                  class="design-image"
-                />
-                <div v-else class="design-placeholder">
-                  <el-icon class="placeholder-icon"><Picture /></el-icon>
-                </div>
-                <div
-                  v-if="selectedDesignIndex === index"
-                  class="selected-badge"
-                >
-                  <el-icon><Check /></el-icon>
+        <!-- 来图定制模式：您的需求和上传图片 -->
+        <template v-if="customizeMode === 'image'">
+          <!-- 您的需求 -->
+          <div class="requirement-section">
+            <h3 class="section-title">您的需求</h3>
+            <div class="requirement-fields">
+              <div class="field-item budget-range">
+                <el-icon class="field-icon"><Money /></el-icon>
+                <div class="budget-inputs">
+                  <el-input
+                    v-model="requirements.budgetMin"
+                    placeholder="最低预算"
+                    class="budget-input"
+                    type="number"
+                  />
+                  <span class="budget-separator">至</span>
+                  <el-input
+                    v-model="requirements.budgetMax"
+                    placeholder="最高预算"
+                    class="budget-input"
+                    type="number"
+                  />
                 </div>
               </div>
+              <div class="field-item">
+                <el-icon class="field-icon"><Calendar /></el-icon>
+                <el-date-picker
+                  v-model="requirements.expectedTime"
+                  type="date"
+                  placeholder="选择预期时间"
+                  format="YYYY-MM-DD"
+                  value-format="YYYY-MM-DD"
+                  class="requirement-date-picker"
+                  :disabled-date="disabledDate"
+                />
+              </div>
+            </div>
+            <div class="remark-field">
+              <el-input
+                v-model="requirements.remark"
+                type="textarea"
+                :rows="3"
+                placeholder="请输入备注信息（选填）"
+                maxlength="200"
+                show-word-limit
+                class="remark-textarea"
+              />
             </div>
           </div>
 
-          <!-- 操作按钮（仅在生成设计方案后显示） -->
-          <div v-if="designPreviews.length > 0" class="design-actions">
-            <el-button class="retry-btn" @click="handleRetry">
-              <el-icon><Refresh /></el-icon>
-              <span>不满意?再试一次</span>
-            </el-button>
+          <!-- 上传图片区域 -->
+          <div class="image-upload-section">
+            <div v-if="uploadedImages.length === 0" class="upload-area">
+              <el-upload
+                class="image-uploader"
+                drag
+                :auto-upload="false"
+                :on-change="handleImageChange"
+                :file-list="fileList"
+                accept="image/*"
+                :show-file-list="false"
+                multiple
+              >
+                <el-icon class="upload-icon"><UploadFilled /></el-icon>
+                <div class="el-upload__text">
+                  将图片拖到此处，或<em>点击上传</em>
+                </div>
+                <template #tip>
+                  <div class="el-upload__tip">
+                    支持 jpg/png 格式，文件大小不超过 5MB，可上传多张图片
+                  </div>
+                </template>
+              </el-upload>
+            </div>
+
+            <!-- 上传后的图片预览 -->
+            <div v-else class="uploaded-images-preview">
+              <div class="images-grid">
+                <div
+                  v-for="(image, index) in uploadedImages"
+                  :key="index"
+                  class="image-preview-item"
+                >
+                  <div class="image-wrapper">
+                    <img
+                      :src="image.url"
+                      :alt="`参考图 ${index + 1}`"
+                      class="preview-image"
+                    />
+                    <div class="image-overlay">
+                      <el-button
+                        type="danger"
+                        :icon="Delete"
+                        circle
+                        size="small"
+                        @click="handleRemoveImage(index)"
+                        class="remove-btn"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!-- 继续添加图片按钮 -->
+                <div class="add-more-image" @click="triggerFileInput">
+                  <el-upload
+                    ref="uploadRef"
+                    class="hidden-upload"
+                    :auto-upload="false"
+                    :on-change="handleImageChange"
+                    :file-list="fileList"
+                    accept="image/*"
+                    :show-file-list="false"
+                    multiple
+                  >
+                    <div class="add-more-content">
+                      <el-icon class="add-icon"><Plus /></el-icon>
+                      <span>添加更多图片</span>
+                    </div>
+                  </el-upload>
+                </div>
+              </div>
+              <div class="preview-actions">
+                <el-button @click="handleClearAllImages"
+                  >清空所有图片</el-button
+                >
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- AI定制模式：描述和生成部分 -->
+        <template v-if="customizeMode === 'ai'">
+          <!-- 您的需求 -->
+          <div class="requirement-section">
+            <h3 class="section-title">您的需求</h3>
+            <div class="requirement-fields">
+              <div class="field-item budget-range">
+                <el-icon class="field-icon"><Money /></el-icon>
+                <div class="budget-inputs">
+                  <el-input
+                    v-model="requirements.budgetMin"
+                    placeholder="最低预算"
+                    class="budget-input"
+                    type="number"
+                  />
+                  <span class="budget-separator">至</span>
+                  <el-input
+                    v-model="requirements.budgetMax"
+                    placeholder="最高预算"
+                    class="budget-input"
+                    type="number"
+                  />
+                </div>
+              </div>
+              <div class="field-item">
+                <el-icon class="field-icon"><Calendar /></el-icon>
+                <el-date-picker
+                  v-model="requirements.expectedTime"
+                  type="date"
+                  placeholder="选择预期时间"
+                  format="YYYY-MM-DD"
+                  value-format="YYYY-MM-DD"
+                  class="requirement-date-picker"
+                  :disabled-date="disabledDate"
+                />
+              </div>
+            </div>
+            <div class="remark-field">
+              <el-input
+                v-model="requirements.remark"
+                type="textarea"
+                :rows="3"
+                placeholder="请输入备注信息（选填）"
+                maxlength="200"
+                show-word-limit
+                class="remark-textarea"
+              />
+            </div>
+          </div>
+
+          <!-- 描述您梦想中的甜品 -->
+          <div class="description-section">
+            <h3 class="section-title">描述您梦想中的甜品</h3>
+            <el-input
+              v-model="description"
+              type="textarea"
+              :rows="6"
+              placeholder="例如:一个粉色城堡蛋糕,有草莓和云朵装饰..."
+              class="description-textarea"
+              maxlength="500"
+              show-word-limit
+            />
+
+            <!-- 标签选择 -->
+            <div class="tag-list">
+              <el-tag
+                v-for="tag in tags"
+                :key="tag.value"
+                :class="[
+                  'tag-item',
+                  { active: selectedTags.includes(tag.value) },
+                ]"
+                @click="toggleTag(tag.value)"
+              >
+                <el-icon class="tag-icon"><component :is="tag.icon" /></el-icon>
+                <span>{{ tag.label }}</span>
+              </el-tag>
+            </div>
+
+            <!-- 生成设计灵感按钮 -->
             <el-button
               type="primary"
-              class="create-order-btn"
-              @click="handleCreateOrder"
+              class="generate-btn"
+              @click="handleGenerateDesign"
             >
-              <el-icon><ShoppingCart /></el-icon>
-              <span>选择此图创建订单</span>
+              <el-icon><MagicStick /></el-icon>
+              <span>生成设计灵感</span>
             </el-button>
           </div>
-        </div>
-      </template>
 
-      <!-- 来图定制模式：创建订单按钮 -->
-      <div
-        v-if="customizeMode === 'image' && uploadedImages.length > 0"
-        class="image-order-actions"
-      >
-        <el-button
-          type="primary"
-          class="create-order-btn"
-          @click="handleCreateOrderFromImage"
+          <!-- AI 设计方案 -->
+          <div class="design-section">
+            <h3 class="section-title">AI 设计方案</h3>
+
+            <!-- 暂无设计方案 -->
+            <div
+              v-if="designPreviews.length === 0"
+              class="no-design-placeholder"
+            >
+              <span class="no-design-text">暂无</span>
+            </div>
+
+            <!-- 设计方案列表 -->
+            <div v-else class="design-preview-list">
+              <div
+                v-for="(design, index) in designPreviews"
+                :key="index"
+                :class="[
+                  'design-preview-item',
+                  { selected: selectedDesignIndex === index },
+                ]"
+                @click="selectDesign(index)"
+              >
+                <div class="design-image-wrapper">
+                  <img
+                    v-if="design.image"
+                    :src="design.image"
+                    :alt="`设计方案 ${index + 1}`"
+                    class="design-image"
+                  />
+                  <div v-else class="design-placeholder">
+                    <el-icon class="placeholder-icon"><Picture /></el-icon>
+                  </div>
+                  <div
+                    v-if="selectedDesignIndex === index"
+                    class="selected-badge"
+                  >
+                    <el-icon><Check /></el-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 操作按钮（仅在生成设计方案后显示） -->
+            <div v-if="designPreviews.length > 0" class="design-actions">
+              <el-button class="retry-btn" @click="handleRetry">
+                <el-icon><Refresh /></el-icon>
+                <span>不满意?再试一次</span>
+              </el-button>
+              <el-button
+                type="primary"
+                class="create-order-btn"
+                @click="handleCreateOrder"
+              >
+                <el-icon><ShoppingCart /></el-icon>
+                <span>选择此图创建订单</span>
+              </el-button>
+            </div>
+          </div>
+        </template>
+
+        <!-- 来图定制模式：创建订单按钮 -->
+        <div
+          v-if="customizeMode === 'image' && uploadedImages.length > 0"
+          class="image-order-actions"
         >
-          <el-icon><ShoppingCart /></el-icon>
-          <span>创建订单</span>
-        </el-button>
+          <el-button
+            type="primary"
+            class="create-order-btn"
+            @click="handleCreateOrderFromImage"
+          >
+            <el-icon><ShoppingCart /></el-icon>
+            <span>创建订单</span>
+          </el-button>
+        </div>
       </div>
+      <!-- customize-content 结束 -->
     </div>
+    <!-- customize-wrapper 结束 -->
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import {
@@ -348,6 +403,9 @@ import {
   Setting,
   Delete,
   Plus,
+  ZoomIn,
+  ZoomOut,
+  RefreshLeft,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
@@ -359,6 +417,54 @@ const userid = localStorage.getItem("userId");
 function goToLogin() {
   router.push("/login");
 }
+
+// 缩放功能
+const zoomLevel = ref(1.0); // 默认缩放比例
+
+// 从 localStorage 加载保存的缩放比例
+onMounted(() => {
+  const savedZoom = localStorage.getItem("customizeZoomLevel");
+  if (savedZoom) {
+    zoomLevel.value = parseFloat(savedZoom);
+  }
+});
+
+// 放大
+const zoomIn = () => {
+  if (zoomLevel.value < 1.5) {
+    zoomLevel.value = Math.min(zoomLevel.value + 0.1, 1.5);
+    saveZoomLevel();
+  }
+};
+
+// 缩小
+const zoomOut = () => {
+  if (zoomLevel.value > 0.5) {
+    zoomLevel.value = Math.max(zoomLevel.value - 0.1, 0.5);
+    saveZoomLevel();
+  }
+};
+
+// 重置缩放
+const resetZoom = () => {
+  zoomLevel.value = 1.0;
+  saveZoomLevel();
+};
+
+// 滑块变化时保存
+const onZoomChange = () => {
+  saveZoomLevel();
+};
+
+// 保存缩放比例到 localStorage
+const saveZoomLevel = () => {
+  localStorage.setItem("customizeZoomLevel", zoomLevel.value.toString());
+};
+
+// 格式化缩放提示
+const formatZoomTooltip = (val) => {
+  return `${Math.round(val * 100)}%`;
+};
 
 // 定制模式：'image' 来图定制 | 'ai' AI定制
 const customizeMode = ref("ai");
@@ -647,6 +753,81 @@ const handleCreateOrderFromImage = () => {
   transform: translateY(0);
 }
 
+/* 缩放控制包装器 */
+.customize-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 100px; /* 为缩放后的内容预留空间 */
+}
+
+/* 缩放控制栏 */
+.zoom-controls {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+  position: sticky;
+  top: 80px;
+  z-index: 10;
+}
+
+.zoom-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  min-width: 80px;
+  text-align: center;
+}
+
+.zoom-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.zoom-buttons .el-button {
+  border-color: #e0e0e0;
+  color: #666;
+}
+
+.zoom-buttons .el-button:hover:not(:disabled) {
+  border-color: #f26371;
+  color: #f26371;
+}
+
+.zoom-buttons .el-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.zoom-slider {
+  flex: 1;
+  max-width: 300px;
+  margin: 0 10px;
+}
+
+.zoom-slider :deep(.el-slider__runway) {
+  background-color: #e0e0e0;
+}
+
+.zoom-slider :deep(.el-slider__bar) {
+  background-color: #f26371;
+}
+
+.zoom-slider :deep(.el-slider__button) {
+  border-color: #f26371;
+  background-color: #fff;
+}
+
 .customize-content {
   width: 100%;
   max-width: 900px;
@@ -655,6 +836,7 @@ const handleCreateOrderFromImage = () => {
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 顶部操作按钮 */

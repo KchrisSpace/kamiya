@@ -6,8 +6,19 @@
 
     <el-card class="filter-card">
       <el-form :inline="true" :model="filterForm" class="filter-form">
+        <el-form-item label="用户ID">
+          <el-input
+            v-model="filterForm.userId"
+            placeholder="仅输入字母或数字，如 user1"
+            @input="handleUserIdInput"
+          />
+        </el-form-item>
         <el-form-item label="订单号">
-          <el-input v-model="filterForm.orderNo" placeholder="请输入订单号" />
+          <el-input
+            v-model="filterForm.orderNo"
+            placeholder="格式：ORDER000003"
+            @input="handleOrderNoInput"
+          />
         </el-form-item>
         <el-form-item label="订单状态">
           <el-select v-model="filterForm.status" placeholder="请选择状态">
@@ -131,6 +142,7 @@ onMounted(() => {
 });
 
 const filterForm = reactive({
+  userId: "",
   orderNo: "",
   status: "",
   dateRange: [],
@@ -178,12 +190,36 @@ const getStatusName = (status) => {
 const filteredOrders = computed(() => {
   let result = [...allOrders.value];
 
+  // 用户 ID 过滤（支持模糊匹配，限制为字母数字下划线）
+  if (filterForm.userId && filterForm.userId.trim()) {
+    const keyword = filterForm.userId.trim().toLowerCase();
+    result = result.filter((order) =>
+      String(order.userId || "")
+        .toLowerCase()
+        .includes(keyword)
+    );
+  }
+
   // 订单号过滤
   if (filterForm.orderNo && filterForm.orderNo.trim()) {
-    const orderNo = filterForm.orderNo.trim().toLowerCase();
-    result = result.filter((order) =>
-      order.orderNo.toLowerCase().includes(orderNo)
-    );
+    const raw = filterForm.orderNo.trim().toUpperCase();
+
+    // 支持直接输入数字（按 ID 匹配），或完整/部分订单号（ORDER000001）
+    if (/^\d+$/.test(raw)) {
+      // 纯数字：匹配订单 ID
+      const idNum = Number(raw);
+      result = result.filter((order) => Number(order.id) === idNum);
+    } else if (/^ORDER\d{0,6}$/.test(raw)) {
+      // 合法的订单号前缀：按前缀模糊匹配
+      result = result.filter((order) =>
+        order.orderNo.toUpperCase().startsWith(raw)
+      );
+    } else {
+      // 其它情况：做一次安全的包含匹配（防止非法字符）
+      const escaped = raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const reg = new RegExp(escaped, "i");
+      result = result.filter((order) => reg.test(order.orderNo));
+    }
   }
 
   // 状态过滤
@@ -248,14 +284,50 @@ const fetchOrders = async () => {
 
 const handleSearch = () => {
   currentPage.value = 1;
-  fetchOrders();
 };
 
 const resetFilter = () => {
+  filterForm.userId = "";
   filterForm.orderNo = "";
   filterForm.status = "";
   filterForm.dateRange = [];
   handleSearch();
+};
+
+// 输入时正则校验：用户 ID 只允许字母、数字、下划线、连字符
+const handleUserIdInput = (value) => {
+  if (value === undefined || value === null) return;
+  const cleaned = String(value).replace(/[^a-zA-Z0-9_-]/g, "");
+  if (cleaned !== filterForm.userId) {
+    filterForm.userId = cleaned;
+  }
+};
+
+// 输入时正则校验：订单号格式为 ORDER + 最多 6 位数字
+const handleOrderNoInput = (value) => {
+  if (value === undefined || value === null) return;
+  let str = String(value).toUpperCase().replace(/\s+/g, "");
+
+  // 允许直接输入数字，或以 ORDER 开头的数字
+  if (/^\d+$/.test(str)) {
+    // 纯数字，直接保留
+    filterForm.orderNo = str;
+    return;
+  }
+
+  // 如果缺少前缀但用户输入了 "ORDER" 相关字符，自动补全前缀
+  if (!str.startsWith("ORDER") && /ORDER/.test(str)) {
+    const idx = str.indexOf("ORDER");
+    str = str.slice(idx);
+  }
+
+  if (str.startsWith("ORDER")) {
+    const numPart = str.slice(5).replace(/[^\d]/g, "").slice(0, 6);
+    filterForm.orderNo = "ORDER" + numPart;
+  } else {
+    // 其它非法输入直接清空，避免出现奇怪字符
+    filterForm.orderNo = str.replace(/[^A-Z0-9]/g, "").slice(0, 10);
+  }
 };
 
 const handleSizeChange = (val) => {
