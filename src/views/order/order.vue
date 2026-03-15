@@ -25,7 +25,12 @@
         </button>
       </div>
       <!-- 订单卡片列表 -->
-      <div v-for="order in orders" :key="order.id" class="order-card">
+      <div
+        v-for="order in orders"
+        :key="order.id"
+        class="order-card"
+        :id="`order-card-${order.id}`"
+      >
         <div class="order-header">
           <div class="order-info">
             <span class="order-id">订单号：{{ order.id }}</span>
@@ -127,6 +132,14 @@
               确认取餐
             </button>
             <button
+              v-if="order.status === '已完成'"
+              class="share-btn"
+              :disabled="order.has_shared"
+              @click="handleShareOrder(order)"
+            >
+              {{ order.has_shared ? "已分享，优惠券已到账" : "分享订单领优惠券" }}
+            </button>
+            <button
               v-if="
                 order.status === '进行中' ||
                 order.status === '待商家确认' ||
@@ -174,6 +187,26 @@
         @update="handleOrderUpdate"
       />
     </el-dialog>
+
+    <!-- 分享订单截图预览对话框 -->
+    <el-dialog
+      v-model="sharePreviewVisible"
+      title="分享订单预览"
+      width="420px"
+      destroy-on-close
+      center
+    >
+      <div v-if="sharePreviewUrl" class="share-preview-wrapper">
+        <img :src="sharePreviewUrl" alt="订单截图预览" class="share-preview-image" />
+      </div>
+      <div v-else class="share-preview-empty">
+        正在生成订单截图，请稍候...
+      </div>
+      <template #footer>
+        <el-button @click="sharePreviewVisible = false">取消</el-button>
+        <el-button type="primary" @click="downloadShareImage">下载图片并完成分享</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -193,6 +226,7 @@ import { User, Document, ShoppingBag } from "@element-plus/icons-vue";
 import { useProductsStore } from "../../data_stores/products";
 import OrderDetail from "../admin/orders/components/OrderDetail.vue";
 import axios from "axios";
+import html2canvas from "html2canvas";
 
 const router = useRouter();
 const normalOrdersStore = useNormalOrdersStore();
@@ -208,6 +242,10 @@ const currentOrderDetail = ref(null);
 
 // 用户评论列表
 const userComments = ref([]);
+
+// 分享订单截图预览
+const sharePreviewVisible = ref(false);
+const sharePreviewUrl = ref("");
 
 // 跳转到登录页
 function goToLogin() {
@@ -264,6 +302,16 @@ const orders = computed(() => {
   });
 });
 console.log(orders);
+
+// 生成随机折扣码（字母 + 数字）
+function generateCouponCode(len = 10) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < len; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
 
 // 删除订单
 async function deleteOrder(orderId) {
@@ -323,6 +371,7 @@ async function confirmPickup(orderId) {
       status: "已完成",
       completed_time: completedTime,
       updated_at: completedTime,
+      has_shared: false,
     });
     
     ElMessage.success("取餐确认成功，订单已完成");
@@ -331,6 +380,101 @@ async function confirmPickup(orderId) {
       console.error("确认取餐失败:", error);
       ElMessage.error("确认取餐失败，请稍后重试");
     }
+  }
+}
+
+// 分享订单并发放优惠券
+async function handleShareOrder(order) {
+  if (!userid) {
+    ElMessage.error("请先登录");
+    return;
+  }
+
+  if (order.has_shared) {
+    ElMessage.info("该订单已分享，优惠券已到账");
+    return;
+  }
+
+  try {
+    await ElMessageBox.confirm(
+      "确认分享该订单吗？分享后将为您发放一张 9 折优惠券。",
+      "分享订单",
+      {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info",
+      }
+    );
+
+    const now = new Date().toISOString();
+    const code = generateCouponCode(10);
+
+    // 写入用户优惠券表
+    await axios.post("http://localhost:3001/user_coupons", {
+      user_id: userid,
+      order_id: order.id,
+      code,
+      discount_rate: 10,
+      status: "unused",
+      created_at: now,
+      used_at: null,
+      expired_at: null,
+    });
+
+    // 更新订单标记为已分享
+    await normalOrdersStore.updateOrder(order.id, {
+      has_shared: true,
+      updated_at: now,
+    });
+
+    // 生成订单截图并展示预览
+    const cardElement = document.getElementById(`order-card-${order.id}`);
+    if (!cardElement) {
+      ElMessage.warning("未找到订单内容，已为您发放优惠券");
+      return;
+    }
+
+    try {
+      const canvas = await html2canvas(cardElement, {
+        backgroundColor: "#ffffff",
+        scale: window.devicePixelRatio || 2,
+        useCORS: true,
+      });
+      sharePreviewUrl.value = canvas.toDataURL("image/png");
+      sharePreviewVisible.value = true;
+      ElMessage.success("优惠券已发放，订单截图已生成，请预览后下载完成分享");
+    } catch (e) {
+      console.error("生成订单截图失败:", e);
+      ElMessage.success("优惠券已发放，但生成截图失败，请稍后重试");
+    }
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("分享订单失败:", error);
+      ElMessage.error("分享失败，请稍后重试");
+    }
+  }
+}
+
+// 下载分享截图并提示分享完成
+function downloadShareImage() {
+  if (!sharePreviewUrl.value) {
+    ElMessage.error("当前没有可下载的订单截图");
+    return;
+  }
+
+  try {
+    const link = document.createElement("a");
+    link.href = sharePreviewUrl.value;
+    link.download = `order-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    sharePreviewVisible.value = false;
+    ElMessage.success("图片已下载，分享完成");
+  } catch (error) {
+    console.error("下载分享图片失败:", error);
+    ElMessage.error("下载图片失败，请稍后重试");
   }
 }
 
@@ -1166,6 +1310,45 @@ async function rebuyItem(productId) {
   background: #f5f5f5;
   color: #999;
   border-color: #ddd;
+}
+
+/* 分享订单按钮样式 */
+.share-btn {
+  color: #ff9a3b;
+  border-color: #ff9a3b;
+  background: #fffaf2;
+}
+
+.share-btn:hover:not(:disabled) {
+  color: #ff9a3b;
+  border-color: #ff9a3b;
+  background: #ffe9c7;
+}
+
+.share-btn:disabled {
+  opacity: 0.7;
+  background: #fff5e6;
+  color: #cc8a40;
+  border-color: #ffcf8a;
+  cursor: default;
+}
+
+.share-preview-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-preview-image {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.share-preview-empty {
+  text-align: center;
+  padding: 24px 0;
+  color: #999;
 }
 
 .view-comment-btn {

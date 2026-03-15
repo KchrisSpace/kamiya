@@ -51,9 +51,27 @@
           </div>
         </template>
         <div class="order-summary">
+          <div class="summary-item coupon">
+            <span>折扣码</span>
+            <input
+              v-model="couponCode"
+              type="text"
+              class="coupon-input"
+              placeholder="请输入折扣码"
+            />
+            <button class="coupon-apply-btn" @click="applyCoupon">
+              使用
+            </button>
+          </div>
+          <div v-if="appliedCoupon" class="summary-item coupon-info">
+            <span>已使用优惠券：</span>
+            <span class="coupon-tag">
+              {{ appliedCoupon.code }}（{{ appliedCoupon.discount_rate }}% 折扣）
+            </span>
+          </div>
           <div class="summary-item total">
             <span>应付金额</span>
-            <span class="final-price">¥{{ totalPrice }}</span>
+            <span class="final-price">¥{{ finalPayable }}</span>
           </div>
         </div>
       </div>
@@ -183,6 +201,10 @@ const timeSlots = [
   { label: "18:00-21:00", value: "evening" },
 ];
 
+// 优惠券相关
+const couponCode = ref("");
+const appliedCoupon = ref(null);
+
 // 是否为定制订单
 const isCustomOrder = computed(() => !!customOrderData.value);
 
@@ -201,7 +223,7 @@ const customDisplay = computed(() => {
   return { title, image };
 });
 
-// 计算总价
+// 原始总价（未打折）
 const totalPrice = computed(() => {
   // 定制订单：使用用户预算的最大值或最小值
   if (isCustomOrder.value) {
@@ -220,6 +242,15 @@ const totalPrice = computed(() => {
       );
     }, 0)
     .toFixed(2);
+});
+
+// 实际应付金额（应用折扣码后）
+const finalPayable = computed(() => {
+  const base = parseFloat(totalPrice.value) || 0;
+  if (!appliedCoupon.value) return base.toFixed(2);
+  const rate = Number(appliedCoupon.value.discount_rate || 0);
+  const pay = base * (rate / 100);
+  return pay.toFixed(2);
 });
 
 // 创建订单
@@ -281,7 +312,7 @@ const createOrder = async () => {
             custom_design_image: data.designImage || "",
           },
         ],
-        total_price: parseFloat(totalPrice.value),
+        total_price: parseFloat(finalPayable.value),
         shipping_fee: 0,
         delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
         consignee: orderInfo.value.name,
@@ -361,7 +392,7 @@ const createOrder = async () => {
           single_price: product?.price_info?.current_price || 0,
         };
       }),
-      total_price: parseFloat(totalPrice.value),
+      total_price: parseFloat(finalPayable.value),
       shipping_fee: 0,
       delivery_time: `${selectedDate.value}T${selectedTime.value}:00Z`,
       consignee: orderInfo.value.name,
@@ -379,6 +410,17 @@ const createOrder = async () => {
     // 先创建订单
     const result = await normalOrdersStore.addOrder(orderData);
     if (result) {
+      // 如果使用了优惠券，标记为已使用
+      if (appliedCoupon.value && appliedCoupon.value.id) {
+        await axios.patch(
+          `http://localhost:3001/user_coupons/${appliedCoupon.value.id}`,
+          {
+            status: "used",
+            used_at: now,
+            updated_at: now,
+          }
+        );
+      }
       // 扣减库存
       const stockUpdatePromises = stockCheckResults.map(
         async ({ productId, product, quantity }) => {
@@ -451,6 +493,38 @@ const validatePhone = () => {
     phoneError.value = "请输入有效的手机号码（11位数字，以1开头）";
   } else {
     phoneError.value = "";
+  }
+};
+
+// 使用折扣码
+const applyCoupon = async () => {
+  if (!userid) {
+    ElMessage.error("请先登录");
+    return;
+  }
+  const code = couponCode.value.trim();
+  if (!code) {
+    ElMessage.error("请输入折扣码");
+    return;
+  }
+
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/user_coupons?user_id=${userid}&code=${encodeURIComponent(
+        code
+      )}&status=unused`
+    );
+    const list = res.data || [];
+    if (!list.length) {
+      ElMessage.error("折扣码无效或已使用");
+      appliedCoupon.value = null;
+      return;
+    }
+    appliedCoupon.value = list[0];
+    ElMessage.success("折扣码已应用");
+  } catch (error) {
+    console.error("验证折扣码失败:", error);
+    ElMessage.error("验证折扣码失败，请稍后重试");
   }
 };
 
@@ -597,6 +671,54 @@ onMounted(async () => {
   bottom: 0;
   background: white;
   margin-top: auto;
+}
+
+.summary-item.coupon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ffd2d6;
+  outline: none;
+}
+
+.coupon-input:focus {
+  border-color: #ff9a9e;
+  box-shadow: 0 0 0 2px rgba(255, 154, 158, 0.15);
+}
+
+.coupon-apply-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.coupon-apply-btn:hover {
+  opacity: 0.9;
+}
+
+.coupon-info {
+  font-size: 13px;
+  color: #999;
+}
+
+.coupon-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fff5f6;
+  color: #ff6b81;
+  margin-left: 4px;
 }
 
 .summary-item {

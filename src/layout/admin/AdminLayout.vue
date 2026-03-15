@@ -23,6 +23,10 @@
             <el-icon><List /></el-icon>
             <span>订单管理</span>
           </el-menu-item>
+          <el-menu-item index="/admin/coupons">
+            <el-icon><Ticket /></el-icon>
+            <span>折扣码管理</span>
+          </el-menu-item>
           <el-menu-item index="/admin/users">
             <el-icon><User /></el-icon>
             <span>用户管理</span>
@@ -73,7 +77,16 @@
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "../../data_stores/user";
-import { Monitor, Goods, List, User, Setting, ChatDotRound, Message } from "@element-plus/icons-vue";
+import {
+  Monitor,
+  Goods,
+  List,
+  User,
+  Setting,
+  ChatDotRound,
+  Message,
+  Ticket,
+} from "@element-plus/icons-vue";
 
 const route = useRoute();
 const router = useRouter();

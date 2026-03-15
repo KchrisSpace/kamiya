@@ -98,7 +98,7 @@ const priceRange = ref([0, 600]);
 const searchKeyword = ref("");
 const searchResult = ref([]);
 const isLoading = ref(false);
-const categories = ["全部", "单品", "冷品", "暖品", "套餐"];
+const categories = ["全部", "单品", "套餐", "冷品", "暖品"];
 
 // 计算属性
 const filteredGoods = computed(() => {
@@ -199,7 +199,7 @@ const handleSearch = () => {
         // 检查所有搜索词是否都在合并的文本中
         // 所有词都必须匹配才返回 true
         const allTermsMatch = searchTerms.every((term) =>
-          combinedText.includes(term)
+          combinedText.includes(term),
         );
 
         return allTermsMatch;
@@ -261,7 +261,7 @@ const debouncedSearch = debounce(handleSearch, 500);
   transform: translateY(-8px);
   position: fixed;
   left: 96px;
-  top: 10vh;
+  top: 16vh;
   z-index: 1;
   overflow: hidden;
   overflow-y: hidden;
@@ -423,36 +423,37 @@ const debouncedSearch = debounce(handleSearch, 500);
 }
 
 .category-list {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 16px 0 0;
 }
 
 .category-btn {
-  font-size: 20px;
-  padding: 12px 16px;
+  font-size: 16px;
+  padding: 8px 10px;
   color: var(--color-font-thirth);
   font-weight: 500;
-  margin-bottom: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background: none;
-  border: none;
-  border-radius: 12px;
-  width: 100%;
-  text-align: left;
+  transition: all 0.25s ease;
+  background: #ffffff;
+  border: 1px solid rgba(242, 99, 113, 0.15);
+  border-radius: 999px;
+  text-align: center;
 }
 
 .category-btn:hover {
-  background-color: rgba(242, 99, 113, 0.1);
+  background: rgba(242, 99, 113, 0.06);
+  border-color: rgba(242, 99, 113, 0.4);
   color: var(--color-font-primary);
-  transform: translateX(8px);
+  transform: translateX(4px);
 }
 
 .category-btn.active {
-  background-color: rgba(242, 99, 113, 0.15);
+  background: rgba(242, 99, 113, 0.18);
+  border-color: rgba(242, 99, 113, 0.6);
   color: var(--color-font-primary);
-  transform: translateX(8px);
+  transform: translateX(4px);
 }
 
 .product-grid {

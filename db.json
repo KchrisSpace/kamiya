@@ -28,10 +28,10 @@
       "createTime": "2025/12/28 17:41:57",
       "user_info": {
         "nickname": "我是用户1号",
-        "avatar": ""
+        "avatar": "/images/users/avater/user_1773590259612.png"
       },
       "created_at": "2025-12-28T09:41:57.374Z",
-      "updated_at": "2026-03-15T13:13:32.938Z"
+      "updated_at": "2026-03-15T15:57:41.156Z"
     },
     {
       "id": "user2",
@@ -287,27 +287,29 @@
     },
     {
       "id": "P10",
-      "main_category": "特价出售",
-      "category": "单品",
-      "images": "https://mi-journey.jp/foodie/wp-content/uploads/2025/04/250410hahanohi1.jpg",
       "title": "花甜酥酥",
+      "main_category": "特价出售",
       "price_info": {
-        "original_price": 520,
-        "current_price": 400
+        "current_price": "416.00",
+        "original_price": 520
       },
-      "score": 23,
       "stock": 2,
+      "description": "",
+      "images": "https://mi-journey.jp/foodie/wp-content/uploads/2025/04/250410hahanohi1.jpg",
       "promotion": {
-        "is_hot": false,
-        "material": "玫瑰花瓣，杏仁粉，黄油酥皮，糖霜装饰",
         "keywords": [
           "花朵",
           "酥脆",
           "浪漫",
           "手工"
-        ]
+        ],
+        "material": "玫瑰花瓣，杏仁粉，黄油酥皮，糖霜装饰"
       },
-      "status": "1"
+      "category": "套餐",
+      "sales": 0,
+      "status": "1",
+      "hasDiscount": true,
+      "discount": 20
     },
     {
       "id": "P11",
@@ -587,7 +589,7 @@
       "shipped_time": "2025-12-28T09:36:16.396Z",
       "completed_time": "2025-12-28T10:41:10.796Z",
       "created_at": "2025-12-22T02:22:33.672Z",
-      "updated_at": "2025-12-28T10:41:10.796Z",
+      "updated_at": "2026-03-15T15:17:12.126Z",
       "id": 3,
       "communications": [
         {
@@ -598,7 +600,8 @@
           ],
           "created_at": "2025-12-28T09:23:44.552Z"
         }
-      ]
+      ],
+      "has_shared": true
     },
     {
       "user_id": "admin",
@@ -655,8 +658,9 @@
       "shipped_time": "2025-12-28T11:30:18.403Z",
       "completed_time": "2025-12-28T11:34:50.197Z",
       "created_at": "2025-12-28T11:29:54.584Z",
-      "updated_at": "2025-12-28T11:34:50.197Z",
-      "id": 5
+      "updated_at": "2026-03-15T15:31:19.064Z",
+      "id": 5,
+      "has_shared": true
     },
     {
       "user_id": "user1",
@@ -680,8 +684,9 @@
       "shipped_time": "2026-03-14T08:56:45.494Z",
       "completed_time": "2026-03-15T13:10:43.611Z",
       "created_at": "2025-12-28T11:38:40.128Z",
-      "updated_at": "2026-03-15T13:10:43.611Z",
-      "id": 6
+      "updated_at": "2026-03-15T15:22:31.296Z",
+      "id": 6,
+      "has_shared": true
     },
     {
       "id": 7,
@@ -788,13 +793,13 @@
       "consignee": "shaya",
       "phone": "12345678910",
       "remark": "钱不够可以加",
-      "status": "预备出餐中",
+      "status": "已完成",
       "payment_method": "wechat",
       "payment_time": null,
-      "shipped_time": null,
-      "completed_time": null,
+      "shipped_time": "2026-03-15T15:15:18.133Z",
+      "completed_time": "2026-03-15T15:15:25.331Z",
       "created_at": "2026-03-15T13:52:41.116Z",
-      "updated_at": "2026-03-15T13:52:41.116Z",
+      "updated_at": "2026-03-15T15:22:27.835Z",
       "id": 8,
       "communications": [
         {
@@ -817,7 +822,8 @@
           "images": [],
           "created_at": "2026-03-15T13:54:17.391Z"
         }
-      ]
+      ],
+      "has_shared": true
     }
   ],
   "carousel": [
@@ -840,44 +846,12 @@
   ],
   "cart": [
     {
-      "id": "cart_1766933750829_vox1n1xrd",
-      "user_id": "user1",
-      "product_id": "P01",
-      "quantity": 2,
-      "created_at": "2025-12-28T14:55:50.829Z",
-      "product": {
-        "id": "P01",
-        "title": "星与你皆浪漫",
-        "main_category": "热销",
-        "price_info": {
-          "current_price": "359.10",
-          "original_price": 399
-        },
-        "stock": 9,
-        "description": "feivhangthdd",
-        "images": "https://photo.yannick.com.tw/photo/0201039/%E7%94%9F%E6%97%A5%E8%9B%8B%E7%B3%95_%E6%88%80%E8%8E%93%E7%99%BD%E7%99%BD.jpg",
-        "promotion": {
-          "keywords": [
-            "星空",
-            "浪漫",
-            "情人节",
-            "告白"
-          ],
-          "material": "安佳动物奶油，比利时巧克力，食用金箔，星空糖珠"
-        },
-        "category": "单品",
-        "sales": 0,
-        "status": "1",
-        "hasDiscount": true,
-        "discount": 10
-      }
+      "quantity": 1,
+      "id": "cart_1766933750829_vox1n1xrd"
     },
     {
-      "id": "cart_1766933753852_cutgz9lla",
-      "user_id": "user1",
-      "product_id": "P03",
       "quantity": 1,
-      "created_at": "2025-12-28T14:55:53.852Z"
+      "id": "cart_1766933753852_cutgz9lla"
     },
     {
       "quantity": 1,
@@ -896,6 +870,13 @@
       "product_id": "P10",
       "quantity": 1,
       "created_at": "2026-03-14T11:52:47.046Z"
+    },
+    {
+      "id": "cart_1773588920094_xhl37lz4k",
+      "user_id": "user1",
+      "product_id": "P09",
+      "quantity": 1,
+      "created_at": "2026-03-15T15:35:20.094Z"
     }
   ],
   "custom": [
@@ -1003,6 +984,87 @@
       "email": "service@kamiya.com",
       "address": "北京市朝阳区xxx街道xxx号",
       "id": 1
+    }
+  ],
+  "user_coupons": [
+    {
+      "user_id": "user1",
+      "order_id": 3,
+      "code": "7G61ZY1MKW",
+      "discount_rate": 10,
+      "status": "unused",
+      "created_at": "2026-03-15T15:17:12.126Z",
+      "used_at": null,
+      "expired_at": null,
+      "id": 1
+    },
+    {
+      "user_id": "user1",
+      "order_id": 8,
+      "code": "9U4M5C2R9M",
+      "discount_rate": 10,
+      "status": "unused",
+      "created_at": "2026-03-15T15:22:27.835Z",
+      "used_at": null,
+      "expired_at": null,
+      "id": 2
+    },
+    {
+      "user_id": "user1",
+      "order_id": 6,
+      "code": "1I4DDGFP7Z",
+      "discount_rate": 10,
+      "status": "unused",
+      "created_at": "2026-03-15T15:22:31.296Z",
+      "used_at": null,
+      "expired_at": null,
+      "id": 3
+    },
+    {
+      "user_id": "user1",
+      "order_id": 5,
+      "code": "P1LN95VG53",
+      "discount_rate": 10,
+      "status": "unused",
+      "created_at": "2026-03-15T15:31:19.064Z",
+      "used_at": null,
+      "expired_at": null,
+      "id": 4
+    },
+    {
+      "user_id": "use1",
+      "order_id": null,
+      "code": "GQZFQ77HRK",
+      "discount_rate": 1,
+      "status": "expired",
+      "created_at": "2026-03-15T15:46:25.053Z",
+      "used_at": null,
+      "expired_at": "2026-03-15T15:46:33.414Z",
+      "id": 5,
+      "updated_at": "2026-03-15T15:46:33.414Z"
+    },
+    {
+      "user_id": "use1",
+      "order_id": null,
+      "code": "PDYXNATMAN",
+      "discount_rate": 1,
+      "status": "expired",
+      "created_at": "2026-03-15T15:46:37.312Z",
+      "used_at": null,
+      "expired_at": "2026-03-15T16:01:55.927Z",
+      "id": 6,
+      "updated_at": "2026-03-15T16:01:55.927Z"
+    },
+    {
+      "user_id": "user1",
+      "order_id": null,
+      "code": "AXWDU6S9S9",
+      "discount_rate": 15,
+      "status": "unused",
+      "created_at": "2026-03-15T15:51:28.765Z",
+      "used_at": null,
+      "expired_at": null,
+      "id": 7
     }
   ]
 }

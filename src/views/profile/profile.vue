@@ -144,6 +144,51 @@
             <p class="stat-label">购物车</p>
           </div>
         </div>
+        <div class="stat-card" @click="showCoupons = !showCoupons">
+          <div class="stat-icon">
+            <el-icon :size="32"><Ticket /></el-icon>
+          </div>
+          <div class="stat-info">
+            <p class="stat-value">{{ availableCouponCount }}</p>
+            <p class="stat-label">我的优惠券</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的优惠券 -->
+      <div v-if="showCoupons" class="coupons-section">
+        <h3 class="section-title">我的优惠券</h3>
+        <div v-if="userCoupons.length === 0" class="empty-comments">
+          <p>暂无可用优惠券</p>
+        </div>
+        <div v-else class="coupons-list">
+          <div
+            v-for="coupon in userCoupons"
+            :key="coupon.id"
+            class="coupon-item"
+            :class="coupon.status !== 'unused' ? 'coupon-item-used' : ''"
+          >
+            <div class="coupon-main">
+              <div class="coupon-discount">
+                <span class="coupon-rate">{{ coupon.discount_rate }}%</span>
+                <span class="coupon-text">折扣券</span>
+              </div>
+              <div class="coupon-info">
+                <p class="coupon-code">折扣码：{{ coupon.code }}</p>
+                <p class="coupon-meta">
+                  状态：{{
+                    coupon.status === "used"
+                      ? "已使用"
+                      : coupon.status === "expired"
+                      ? "已过期"
+                      : "未使用"
+                  }}
+                </p>
+                <p class="coupon-meta">发放时间：{{ formatDate(coupon.created_at) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 我的评价板块 -->
@@ -239,6 +284,7 @@ import {
   ChatDotRound,
   Upload,
   Lock,
+  Ticket,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
@@ -276,6 +322,14 @@ const saving = ref(false);
 
 // 我的评价
 const userComments = ref([]);
+
+// 我的优惠券
+const userCoupons = ref([]);
+const showCoupons = ref(false);
+
+const availableCouponCount = computed(
+  () => userCoupons.value.filter((c) => c.status === "unused").length
+);
 
 // 跳转到登录页
 function goToLogin() {
@@ -565,6 +619,21 @@ async function fetchUserComments() {
   }
 }
 
+// 获取我的优惠券
+async function fetchUserCoupons() {
+  if (!userid.value) return;
+  try {
+    const res = await axios.get(
+      `http://localhost:3001/user_coupons?user_id=${userid.value}`
+    );
+    userCoupons.value = (res.data || []).sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+  } catch (error) {
+    console.error("获取优惠券失败:", error);
+  }
+}
+
 // 退出登录
 async function handleLogout() {
   try {
@@ -612,6 +681,8 @@ onMounted(async () => {
     }
     // 获取我的评价
     await fetchUserComments();
+    // 获取我的优惠券
+    await fetchUserCoupons();
   }
 });
 </script>
@@ -836,6 +907,79 @@ onMounted(async () => {
   padding: 30px;
   box-shadow: 0 8px 32px rgba(255, 182, 193, 0.15);
   border: 2px solid rgba(255, 182, 193, 0.2);
+}
+
+.coupons-section {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #fff9fb 0%, #ffffff 100%);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(255, 182, 193, 0.15);
+  border: 2px solid rgba(255, 182, 193, 0.2);
+}
+
+.coupons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.coupon-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px dashed rgba(255, 182, 193, 0.6);
+}
+
+.coupon-item-used {
+  opacity: 0.6;
+}
+
+.coupon-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.coupon-discount {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffb6c1 0%, #ff91a4 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nunito", sans-serif;
+}
+
+.coupon-rate {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.coupon-text {
+  font-size: 12px;
+}
+
+.coupon-info {
+  flex: 1;
+}
+
+.coupon-code {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.coupon-meta {
+  font-size: 13px;
+  color: #777;
+  margin: 0;
 }
 
 .section-title {
