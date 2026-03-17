@@ -387,6 +387,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import axios from "axios";
 import {
   Picture,
   MagicStick,
@@ -503,6 +504,8 @@ const fileList = ref([]);
 const uploadedImages = ref([]); // 存储多张图片：[{ url, file }]
 const uploadRef = ref(null);
 
+const isGeneratingDesign = ref(false);
+
 // 切换模式
 const switchMode = (mode) => {
   customizeMode.value = mode;
@@ -579,28 +582,75 @@ const triggerFileInput = () => {
 };
 
 // 生成设计灵感
-const handleGenerateDesign = () => {
+const handleGenerateDesign = async () => {
   if (!description.value.trim() && selectedTags.value.length === 0) {
     ElMessage.warning("请描述您的需求或选择标签");
     return;
   }
 
-  ElMessage.info("正在生成设计方案...");
+  if (isGeneratingDesign.value) return;
+  isGeneratingDesign.value = true;
+  ElMessage.info("正在生成设计方案，请稍候...");
 
-  // 模拟生成设计预览图
-  setTimeout(() => {
-    // 这里应该调用AI生成接口
-    // 暂时使用占位图（实际项目中应该返回真实的图片URL）
-    // 为了演示，我们使用null，这样会显示占位符
+  try {
+    // 把标签 value 转成中文标签名，便于模型理解
+    const tagLabels = selectedTags.value
+      .map((v) => tags.find((t) => t.value === v)?.label)
+      .filter(Boolean);
+
+    const promptParts = [];
+    if (description.value.trim()) promptParts.push(description.value.trim());
+    if (tagLabels.length) promptParts.push(`标签：${tagLabels.join("、")}`);
+    // 给一点通用的“甜品设计图”约束，让出图更稳定
+    promptParts.push("用途：甜品/花卉主题产品海报或设计灵感图，风格清新可爱，高清细节");
+    const prompt = promptParts.join("；");
+
+    // SiliconFlow：一次请求直接返回图片URL（有效期约 1 小时）
+    const genRes = await axios.post("http://localhost:3002/api/ai/generate", {
+      model: "Kwai-Kolors/Kolors",
+      prompt,
+      image_size: "1024x1024",
+      batch_size: 3,
+      num_inference_steps: 20,
+      guidance_scale: 7.5,
+    });
+
+    const data = genRes.data?.data;
+    const httpStatus = genRes.data?.http_status;
+    const traceId = genRes.data?.trace_id;
+    if (!genRes.data?.success) {
+      const hs = httpStatus ? `HTTP ${httpStatus} ` : "";
+      const tid = traceId ? `（trace_id：${traceId}）` : "";
+      const msg =
+        (typeof data === "string" && data) ||
+        data?.message ||
+        data?.error ||
+        "生成失败";
+      throw new Error(`${hs}${msg}${tid}`);
+    }
+
+    const urls = Array.isArray(data?.images) ? data.images.map((i) => i?.url).filter(Boolean) : [];
+    if (!urls.length) {
+      const tid = traceId ? `（trace_id：${traceId}）` : "";
+      throw new Error(`未获取到图片URL${tid}`);
+    }
+
+    const top3 = urls.slice(0, 3);
     designPreviews.value = [
-      { image: null }, // 实际项目中替换为真实图片URL
-      { image: null },
-      { image: null },
+      { image: top3[0] || null },
+      { image: top3[1] || null },
+      { image: top3[2] || null },
     ];
-    ElMessage.success("设计方案生成成功！");
-    // 默认选中第一个
     selectedDesignIndex.value = 0;
-  }, 2000);
+    ElMessage.success("设计方案生成成功！");
+  } catch (error) {
+    console.error("生成设计方案失败:", error);
+    ElMessage.error(error?.message || "生成失败，请稍后重试");
+    designPreviews.value = [{ image: null }, { image: null }, { image: null }];
+    selectedDesignIndex.value = -1;
+  } finally {
+    isGeneratingDesign.value = false;
+  }
 };
 
 // 选择设计
